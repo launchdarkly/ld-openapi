@@ -27,16 +27,17 @@ PatchRequest:
   name: patchDelta
   in: body
   required: true
-  description: http://jsonpatch.com/
+  description: 'http://jsonpatch.com/'
   schema:
-    properties:
-      op:
-        type: string
-      path:
-        type: string
-      value:
-        type: object
-    required:
-      - op
-      - path
-      - value
+    items:
+      properties:
+        op:
+          type: string
+        path:
+          type: string
+        value:
+          type: object
+      required:
+        - op
+        - path
+        - value
