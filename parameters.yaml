@@ -23,11 +23,11 @@ WebhookPostRequest:
       - url
       - sign
       - on
-WebhookPatchRequest:
-  name: webhookPatch
+PatchRequest:
+  name: patchDelta
   in: body
   required: true
-  description: Webhook delta
+  description: http://jsonpatch.com/
   schema:
     properties:
       op:
@@ -35,7 +35,7 @@ WebhookPatchRequest:
       path:
         type: string
       value:
-        type: boolean
+        type: object
     required:
       - op
       - path

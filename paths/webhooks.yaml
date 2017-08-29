@@ -45,7 +45,7 @@ Webhook:
     operationId: patchWebhook
     parameters:
       - $ref: '#/parameters/WebhookId'
-      - $ref: '#/parameters/WebhookPatchRequest'
+      - $ref: '#/parameters/PatchRequest'
     responses:
       '400':
         $ref: '#/responses/Standard400'
