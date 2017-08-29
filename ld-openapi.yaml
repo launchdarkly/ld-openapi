@@ -1,182 +1,209 @@
-openapi: '3.0.0'
+swagger: '2.0'
 info:
-  version: 'v2'
   title: LaunchDarkly REST API
-  description: | 
-    We have an API-first philosophy at LaunchDarkly. Every product feature is built API-first, and our entire product is driven by our REST API, so it's heavily tested and complete.
-    
-    If you want to build a custom integration, export your data, or build custom scripts to automate your feature flag workflow, this API guide is the place to start.
+  description: Build custom integrations with the LaunchDarkly REST API
   termsOfService: https://launchdarkly.com/terms
   contact:
-    name: LaunchDarkly Support Team
+    name: LaunchDarkly Support
+    url: https://support.launchdarkly.com
     email: support@launchdarkly.com
-    url: http://support.launchdarkly.com
   license:
-    name: Apache
-    url: http://www.apache.org/licenses/LICENSE-2.0
-servers:
-  - url: https://app.launchdarkly.com/api/v2
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 2.0.0
+host: app.launchdarkly.com
+basePath: /api/v2
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  Token:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: https://app.launchdarkly.com/settings#/tokens
+security:
+  - Token: []
 paths:
+  /:
+    get:
+      summary: Get the root resource
+      operationId: getRoot
+      tags:
+        - root
+      responses:
+        '200':
+          $ref: '#/responses/Root200'
+        '401':
+          $ref: '#/responses/Standard401'
   /webhooks:
     get:
       summary: Fetch a list of all webhooks
       operationId: getWebhooks
+      tags:
+        - webhooks
       responses:
         '200':
           description: Webhooks response
-          content:
-            application/json:
-              schema:
-                 $ref: '#/components/schemas/Webhooks'
+          schema:
+            $ref: '#/definitions/Webhooks'
         '401':
-          $ref: '#/components/responses/401'
+          $ref: '#/responses/Standard401'
     post:
       summary: Create a webhook
       operationId: postWebhook
+      tags:
+        - webhooks
+      parameters:
+        - $ref: '#/parameters/WebhookPostRequest'
       responses:
         '201':
-          $ref: '#/components/responses/201'
+          $ref: '#/responses/Standard201'
         '400':
-          $ref: '#/components/responses/400'
+          $ref: '#/responses/Standard400'
         '401':
-          $ref: '#/components/responses/401'
-      requestBody:
-        $ref: '#/components/requestBodies/WebhookPost'
-  /webhooks/{id}:
+          $ref: '#/responses/Standard401'
+  /webhooks/{webhookId}:
     get:
-      summary: Get a single webhook by ID
+      summary: Get a webhook by ID
       operationId: getWebhook
       parameters:
-        - $ref: '#/components/parameters/ID'
+        - $ref: '#/parameters/WebhookId'
       responses:
         '200':
-          description: Webhook response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Webhook'
+          $ref: '#/responses/Webhooks200'
         '401':
-          $ref: '#/components/responses/401'
+          $ref: '#/responses/Standard401'
         '404':
-          $ref: '#/components/responses/404'
+          $ref: '#/responses/Standard404'
     patch:
-      summary: Modify a single webhook by ID
+      summary: Modify a webhook by ID
       operationId: patchWebhook
       parameters:
-        - $ref: '#/components/parameters/ID'
+        - $ref: '#/parameters/WebhookId'
+        - $ref: '#/parameters/WebhookPatchRequest'
       responses:
         '400':
-          $ref: '#/components/responses/400'
+          $ref: '#/responses/Standard400'
         '401':
-          $ref: '#/components/responses/401'
+          $ref: '#/responses/Standard401'
         '404':
-          $ref: '#/components/responses/404'
+          $ref: '#/responses/Standard404'
         '409':
-          $ref: '#/components/responses/409'
-      requestBody:
-        $ref: '#/components/requestBodies/WebhookPatch'
+          $ref: '#/responses/Standard409'
     delete:
-      summary: Delete a single webhook by ID
+      summary: Delete a webhook by ID
       operationId: deleteWebhook
       parameters:
-        - $ref: '#/components/parameters/ID'
+        - $ref: '#/parameters/WebhookId'
       responses:
         '204':
-          $ref: '#/components/responses/204'
+          $ref: '#/responses/Standard204'
         '401':
-          $ref: '#/components/responses/401'
+          $ref: '#/responses/Standard401'
         '404':
-          $ref: '#/components/responses/404'
-components:
-  securitySchemes:
-    accessToken:
-      type: apiKey
-      name: Authorization
-      in: header
-  schemas:
-    Webhook:
-      properties:
-        _links:
-          $ref: '#/components/schemas/Links'
-        _id:
-          type: string
-        url:
-          type: string
-        secret:
-          type: string
-        on:
-          type: boolean
-        tags:
-          type: array
-          items: 
-            type: string
-    Webhooks:
-      properties:
-        _links:
-          $ref: '#components/schemas/Links'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Webhook'
-    Link:
-      properties:
-        href:
-          type: string     
-        'type':
-          type: string
-    Links:
-      properties:
-        'parent':
-          $ref: '#/components/schemas/Link'
-        'self':
-          $ref: '#/components/schemas/Link'
-  parameters:
-    ID:
-      name: id
-      in: path
-      description: 'The resource ID'
-      required: true
-      schema:
+          $ref: '#/responses/Standard404'
+definitions:
+  Webhook:
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      _id:
         type: string
-  responses:
-    '201':
-      description: Resource created
-    '204':
-      description: Action completed successfully
-    '400':
-      description: Invalid request body
-    '401':
-      description: Invalid access token
-    '404':
-      description: Invalid ID
-    '409':
-      description: Status conflict
-  requestBodies:
-    WebhookPost:
-      description: Webhook to be created
-      content:
-        application/json:
-          schema:
-            properties:
-              url:
-                type: string
-              secret:
-                type: string
-              sign: 
-                type: boolean
-              on: 
-                type: boolean
+      url:
+        type: string
+      secret:
+        type: string
+      on:
+        type: boolean
+      tags:
+        type: array
+        items: 
+          type: string
+  Webhooks:
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Webhook'
+  Link:
+    properties:
+      href:
+        type: string     
+      type:
+        type: string
+  Links:
+    properties:
+      'parent':
+        $ref: '#/definitions/Link'
+      'self':
+        $ref: '#/definitions/Link'
+responses:
+  Standard201:
+    description: Resource created
+  Standard204:
+    description: Action completed successfully
+  Standard400:
+    description: Invalid request body
+  Standard401:
+    description: Invalid access token
+  Standard404:
+    description: Invalid resource specifier
+  Standard409:
+    description: Status conflict
+  Root200:
+    description: A list of links to available resources in the API
+    schema:
+      $ref: '#/definitions/Links'
+  Webhooks200:
+    description: Webhook response
+    schema:
+      $ref: '#/definitions/Webhook'
+parameters:
+    WebhookId:
+      name: webhookId
+      in: path
       required: true
-    WebhookPatch:
-      description: Webhook patch delta
-      content:
-        application/json:
-          schema:
-            properties:
-              op:
-                type: string
-              path:
-                type: string
-              value:
-                type: boolean
+      description: The webhook ID
+      type: string
+    WebhookPostRequest:
+      name: webhookPost
+      in: body
       required: true
+      description: New webhook
+      schema:
+        properties:
+          url:
+            type: string
+          secret:
+            type: string
+          sign: 
+            type: boolean
+          on: 
+            type: boolean
+        required:
+          - url
+          - sign
+          - on
+    WebhookPatchRequest:
+      name: webhookPatch
+      in: body
+      required: true
+      description: Webhook delta
+      schema:
+        properties:
+          op:
+            type: string
+          path:
+            type: string
+          value:
+            type: boolean
+        required:
+          - op
+          - path
+          - value

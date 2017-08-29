@@ -6,7 +6,7 @@ As of now, this repo provides specs for the [Webhooks endpoint](https://apidocs.
 
 **Current Action Items (Port these to clubhouse)**: 
 - Create a template/style guide using the current spec as a baseline. This will require adding better descriptions and examples to the Webhooks spec.
-- Server auto-generation
+- Server auto-generation: https://github.com/swagger-api/swagger-codegen
 - Define release/update process
 
 ## Development
