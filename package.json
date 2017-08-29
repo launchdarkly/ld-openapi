@@ -1,0 +1,18 @@
+{
+  "name": "ld-openapi",
+  "version": "1.0.0",
+  "description": "This repository contains an OpenAPI specification for LaunchDarkly's REST API.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/launchdarkly/ld-openapi-private.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/launchdarkly/ld-openapi-private/issues"
+  },
+  "homepage": "https://github.com/launchdarkly/ld-openapi-private#readme",
+  "dependencies": {
+    "multi-file-swagger": "2.2.0"
+  }
+}

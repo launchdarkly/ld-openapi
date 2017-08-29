@@ -1,0 +1,11 @@
+Root:
+  get:
+    summary: Get the root resource
+    operationId: getRoot
+    responses:
+      '200':
+        $ref: '#/responses/Root200'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - root

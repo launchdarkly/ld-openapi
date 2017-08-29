@@ -1,0 +1,6 @@
+/: 
+  $ref: ./paths/root.yaml#/Root
+/webhooks: 
+  $ref: ./paths/webhooks.yaml#/Webhooks
+/webhooks/{webhookId}: 
+  $ref: ./paths/webhooks.yaml#/Webhook

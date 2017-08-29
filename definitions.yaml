@@ -1,0 +1,36 @@
+Link:
+  properties:
+    href:
+      type: string     
+    type:
+      type: string
+Links:
+  properties:
+    'parent':
+      $ref: '#/definitions/Link'
+    'self':
+      $ref: '#/definitions/Link'
+Webhook:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    url:
+      type: string
+    secret:
+      type: string
+    on:
+      type: boolean
+    tags:
+      type: array
+      items: 
+        type: string
+Webhooks:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/Webhook'

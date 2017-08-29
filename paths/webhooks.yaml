@@ -1,0 +1,73 @@
+Webhooks:
+  get:
+    summary: Fetch a list of all webhooks
+    operationId: getWebhooks
+    responses:
+      '200':
+        description: Webhooks response
+        schema:
+          $ref: '#/definitions/Webhooks'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - webhooks
+  post:
+    summary: Create a webhook
+    operationId: postWebhook
+    parameters:
+      - $ref: '#/parameters/WebhookPostRequest'
+    responses:
+      '201':
+        $ref: '#/responses/Standard201'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - webhooks
+Webhook:
+  get:
+    summary: Get a webhook by ID
+    operationId: getWebhook
+    parameters:
+      - $ref: '#/parameters/WebhookId'
+    responses:
+      '200':
+        $ref: '#/responses/Webhooks200'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - webhooks
+  patch:
+    summary: Modify a webhook by ID
+    operationId: patchWebhook
+    parameters:
+      - $ref: '#/parameters/WebhookId'
+      - $ref: '#/parameters/PatchRequest'
+    responses:
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - webhooks
+  delete:
+    summary: Delete a webhook by ID
+    operationId: deleteWebhook
+    parameters:
+      - $ref: '#/parameters/WebhookId'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - webhooks
