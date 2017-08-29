@@ -1,0 +1,42 @@
+WebhookId:
+  name: webhookId
+  in: path
+  required: true
+  description: The webhook ID
+  type: string
+WebhookPostRequest:
+  name: webhookPost
+  in: body
+  required: true
+  description: New webhook
+  schema:
+    properties:
+      url:
+        type: string
+      secret:
+        type: string
+      sign: 
+        type: boolean
+      on: 
+        type: boolean
+    required:
+      - url
+      - sign
+      - on
+WebhookPatchRequest:
+  name: webhookPatch
+  in: body
+  required: true
+  description: Webhook delta
+  schema:
+    properties:
+      op:
+        type: string
+      path:
+        type: string
+      value:
+        type: boolean
+    required:
+      - op
+      - path
+      - value
