@@ -34,3 +34,142 @@ Webhooks:
       type: array
       items:
         $ref: '#/definitions/Webhook'
+FeatureFlag:
+  properties:
+    key:
+      type: string
+    name:
+      type: string
+    kind:
+      type: string
+    creationDate:
+      type: number
+    includeInSnippet:
+      type: boolean
+    temporary:
+      type: boolean
+    maintainerId:
+      type: string
+    tags: 
+      type: array
+      items:
+        type: string
+    variations:
+      type: array
+      items:
+        $ref: '#/definitions/Variation'
+    _links:
+      $ref: '#/definitions/Links'
+    _maintainer:
+      $ref: '#/definitions/Member'
+    environments:
+      type: object
+      additionalProperties:
+        $ref: '#/definitions/FeatureFlagConfig'
+FeatureFlags:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/FeatureFlag'
+Member:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    role:
+      type: string
+    email: 
+      type: string
+    _pendingInvite: 
+      type: boolean
+    isBeta:
+      type: boolean
+    customRoles:
+      type: array
+      items:
+        type: string
+FeatureFlagConfig:
+  properties:
+    'on':
+      type: boolean
+    archived:
+      type: boolean
+    salt:
+      type: string
+    sel:
+      type: string
+    lastModified:
+      type: integer
+    version:
+      type: integer
+    targets:
+      type: array
+      items:
+        $ref: '#/definitions/Target'
+    rules:
+      type: array
+      items:
+        $ref: '#/definitions/Rule'
+    fallthrough:
+      type: object
+      properties:
+        variation:
+          type: integer
+        rollout:
+          $ref: '#/definitions/Rollout'
+Target:
+  properties:
+    values:
+      type: array
+      items:
+        type: string
+    variation:
+      type: integer
+Rule:
+  properties:
+    variation:
+      type: integer
+    rollout:
+      $ref: '#/definitions/Rollout'
+    clauses:
+      type: array
+      items:
+        $ref: '#/definitions/Clause'
+Rollout:
+  properties:
+    variations:
+      type: array
+      items:
+        $ref: '#/definitions/WeightedVariation'
+WeightedVariation:
+  properties:
+    variation:
+      type: integer
+    weight:
+      type: integer
+Clause:
+  properties:
+    attribute:
+      type: string
+    op:
+      type: string
+    values:
+      type: array
+      items:
+        type: string
+    negate:
+      type: boolean
+Variation:
+  required:
+    - value
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+    value:
+      type: object

@@ -5,7 +5,7 @@ WebhookId:
   description: The webhook ID
   type: string
 WebhookPostRequest:
-  name: webhookPost
+  name: webhookBody
   in: body
   required: true
   description: New webhook
@@ -23,6 +23,63 @@ WebhookPostRequest:
       - url
       - sign
       - on
+FeatureFlagPostRequest:
+  name: featureFlagBody
+  in: body
+  required: true
+  description: New feature flag
+  schema:
+    properties:
+      name:
+        type: string
+        description: A human-friendly name for the feature flag
+      key:
+        type: string
+        description: A unique key that will be used to reference the flag in your code
+      variations:
+        type: array
+        items:
+          $ref: '#/definitions/Variation'
+        description: An array of possible variations for the flag.
+      temporary: 
+        type: boolean
+        description: Whether or not the flag is a temporary flag
+      tags:
+        type: array
+        items:
+          type: string
+        description: Tags for the feature flag
+      includeInSnippet:
+        type: boolean
+        description: Whether or not this flag should be made available to the client-side JavaScript SDK
+    required:
+      - name
+      - key
+      - variations
+ProjectKey:
+  name: projectKey
+  in: path
+  required: true
+  description: The project key
+  type: string
+EnvironmentKeyQuery:
+  name: environmentKeyQuery
+  in: query
+  required: false
+  description: The environment key
+  type: string
+FeatureFlagKey:
+  name: featureFlagKey
+  in: path
+  required: true
+  description: The feature flag's key
+  type: string
+Tag:
+  name: tag
+  in: query
+  required: false
+  description: Filter by tag
+  type: string
 PatchRequest:
   name: patchDelta
   in: body

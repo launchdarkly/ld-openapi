@@ -18,3 +18,7 @@
     description: Webhook response
     schema:
       $ref: '#/definitions/Webhook'
+  FeatureFlags200:
+    description: Feature flag response
+    schema:
+      $ref: '#/definitions/FeatureFlag'
