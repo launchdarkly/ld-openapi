@@ -62,6 +62,12 @@ ProjectKey:
   required: true
   description: The project key
   type: string
+EnvironmentKey:
+  name: environmentKey
+  in: path
+  required: true
+  description: The environment key
+  type: string
 EnvironmentKeyQuery:
   name: environmentKeyQuery
   in: query

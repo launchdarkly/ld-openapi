@@ -86,3 +86,36 @@ Flag:
         $ref: '#/responses/Standard404'
     tags:
       - flags
+FlagStatuses:
+  get:
+    summary: Get a list of statuses for all feature flags
+    operationId: getFeatureFlagStatus
+    parameters:
+    - $ref: '#/parameters/ProjectKey'
+    - $ref: '#/parameters/EnvironmentKey'
+    responses:
+      '200':
+        description: List of feature flag statuses
+        schema:
+          $ref: '#/definitions/FeatureFlagStatuses'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - flags
+FlagStatus:
+  get:
+    summary: Get a list of statuses for all feature flags
+    operationId: getFeatureFlagStatuses
+    parameters:
+    - $ref: '#/parameters/ProjectKey'
+    - $ref: '#/parameters/EnvironmentKey'
+    - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        description: Feature flag status by flag key
+        schema:
+          $ref: '#/definitions/FeatureFlagStatus'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - flags

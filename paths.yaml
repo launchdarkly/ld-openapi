@@ -8,3 +8,7 @@
   $ref: ./paths/flags.yaml#/Flags
 /flags/{projectKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/Flag
+/flag-statuses/{projectKey}/{environmentKey}:
+  $ref: ./paths/flags.yaml#/FlagStatuses
+/flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
+  $ref: ./paths/flags.yaml#/FlagStatus

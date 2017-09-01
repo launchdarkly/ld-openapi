@@ -18,6 +18,7 @@ Webhook:
       type: string
     url:
       type: string
+      example: "webhookgrabber.com/mywebhookurl"
     secret:
       type: string
     on:
@@ -173,3 +174,21 @@ Variation:
       type: string
     value:
       type: object
+FeatureFlagStatus:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    name:
+      type: string
+    lastRequested:
+      type: string
+    default:
+      type: boolean
+FeatureFlagStatuses:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/FeatureFlagStatus'
