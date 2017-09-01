@@ -18,7 +18,6 @@ Webhook:
       type: string
     url:
       type: string
-      example: "webhookgrabber.com/mywebhookurl"
     secret:
       type: string
     on:
@@ -192,3 +191,53 @@ FeatureFlagStatuses:
       type: array
       items:
         $ref: '#/definitions/FeatureFlagStatus'
+Project:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/Environment'
+Projects:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    key:
+      type: string
+    name:
+      type: string
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/Project'
+Environment:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    key:
+      type: string
+    name:
+      type: string
+    apiKey:
+      type: string
+    mobileKey:
+      type: string
+    color:
+      type: string
+    defaultTtl:
+      type: number
+    secureMode:
+      type: boolean
+Environments:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/Environment'

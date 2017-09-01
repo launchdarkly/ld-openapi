@@ -1,0 +1,77 @@
+Projects:
+  get:
+    summary: Returns a list of all projects in the account.
+    operationId: getProjects
+    responses:
+      '200':
+        description: Projects response
+        schema:
+          $ref: '#/definitions/Projects'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - projects
+  post:
+    summary: Create a project
+    operationId: postProject
+    parameters:
+      - $ref: '#/parameters/ProjectPostRequest'
+    responses:
+      '201':
+        $ref: '#/responses/Standard201'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - projects
+Project:
+  get:
+    summary: Get a project by key.
+    operationId: getProject
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+    responses:
+      '200':
+        description: Project response
+        schema:
+          $ref: '#/definitions/Project'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - projects
+  patch:
+    summary: Modify a project by ID
+    operationId: patchProject
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/PatchRequest'
+    responses:
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - projects
+  delete:
+    summary: Delete a project by ID
+    operationId: deleteProject
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - projects

@@ -12,3 +12,11 @@
   $ref: ./paths/flags.yaml#/FlagStatuses
 /flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/FlagStatus
+/projects:
+  $ref: ./paths/projects.yaml#/Projects
+/projects/{projectKey}:
+  $ref: ./paths/projects.yaml#/Project
+/environments/{projectKey}:
+  $ref: ./paths/environments.yaml#/Environments
+/environments/{projectKey}/{environmentKey}:
+  $ref: ./paths/environments.yaml#/Environment

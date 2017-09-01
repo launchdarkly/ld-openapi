@@ -56,6 +56,40 @@ FeatureFlagPostRequest:
       - name
       - key
       - variations
+ProjectPostRequest:
+  name: projectBody
+  in: body
+  required: true
+  description: New project
+  schema:
+    properties:
+      name:
+        type: string
+      key:
+        type: string
+    required:
+      - name
+      - key
+EnvironmentPostRequest:
+  name: environmentBody
+  in: body
+  required: true
+  description: New environment
+  schema:
+    properties:
+      name:
+        type: string
+      key:
+        type: string
+      color:
+        type: string
+        description: A color swatch (as an RGB hex value with no leading '#', e.g. C8C8C8)
+      defaultTtl:
+        type: number
+    required:
+      - name
+      - key
+      - color
 ProjectKey:
   name: projectKey
   in: path

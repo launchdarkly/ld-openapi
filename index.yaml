@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  $ref: ./info.yaml
+  $ref: ./commons/info.yaml
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -18,10 +18,10 @@ securityDefinitions:
 security:
   - Token: []
 paths:
-  $ref: ./paths.yaml
+  $ref: ./commons/paths.yaml
 definitions:
-  $ref: ./definitions.yaml
+  $ref: ./commons/definitions.yaml
 responses:
-  $ref: ./responses.yaml
+  $ref: ./commons/responses.yaml
 parameters:
-  $ref: ./parameters.yaml
+  $ref: ./commons/parameters.yaml
