@@ -233,11 +233,25 @@ Environment:
       type: number
     secureMode:
       type: boolean
-Environments:
+User:
+  properties:
+    lastPing:
+      type: string
+    environmentId:
+      type: string
+    user:
+      type: object
+    avatar:
+      type: string
+    custom:
+      type: object
+Users:
   properties:
     _links:
       $ref: '#/definitions/Links'
+    totalCount:
+      type: number
     items:
       type: array
       items:
-        $ref: '#/definitions/Environment'
+        $ref: '#/definitions/User'
