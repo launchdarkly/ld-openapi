@@ -47,6 +47,8 @@ Webhook:
       - $ref: '#/parameters/WebhookId'
       - $ref: '#/parameters/PatchRequest'
     responses:
+      '200':
+        $ref: '#/responses/Webhooks200'
       '400':
         $ref: '#/responses/Standard400'
       '401':

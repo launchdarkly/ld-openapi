@@ -4,3 +4,7 @@
   $ref: ./paths/webhooks.yaml#/Webhooks
 /webhooks/{webhookId}: 
   $ref: ./paths/webhooks.yaml#/Webhook
+/flags/{projectKey}:
+  $ref: ./paths/flags.yaml#/Flags
+/flags/{projectKey}/{featureFlagKey}:
+  $ref: ./paths/flags.yaml#/Flag
