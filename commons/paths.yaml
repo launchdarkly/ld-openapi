@@ -18,9 +18,9 @@
   $ref: ./paths/users.yaml#/UsersSearch
 /users/{projectKey}/{environmentKey}/{userKey}:
   $ref: ./paths/users.yaml#/User
-/: 
-  $ref: ./paths/root.yaml#/Root
 /webhooks: 
   $ref: ./paths/webhooks.yaml#/Webhooks
 /webhooks/{webhookId}: 
   $ref: ./paths/webhooks.yaml#/Webhook
+/: 
+  $ref: ./paths/root.yaml#/Root
