@@ -6,8 +6,6 @@ Link:
       type: string
 Links:
   properties:
-    'parent':
-      $ref: '#/definitions/Link'
     'self':
       $ref: '#/definitions/Link'
 Webhook:
@@ -255,3 +253,19 @@ Users:
       type: array
       items:
         $ref: '#/definitions/User'
+UserFlagSetting:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _value:
+      type: boolean
+    setting:
+      type: boolean
+UserFlagSettings:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: object
+      items:
+        $ref: '#/definitions/UserFlagSetting'

@@ -168,3 +168,14 @@ PatchRequest:
         - op
         - path
         - value
+UserSettingsPutRequest:
+  name: userSettingsBody
+  in: body
+  required: true
+  schema:
+    properties:
+      setting:
+        type: boolean
+        description: >-
+          The variation value to set for the user. Must match the variation type of
+          the flag.
