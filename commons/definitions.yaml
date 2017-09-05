@@ -241,3 +241,49 @@ Environments:
       type: array
       items:
         $ref: '#/definitions/Environment'
+AuditLogEntry:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    date:
+      type: number
+    accesses:
+      type: object
+      properties:
+        action:
+          type: string
+        resource:
+          type: string
+    kind:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+    member:
+      $ref: '#/definitions/Member'
+    titleVerb:
+      type: string
+    title:
+      type: string
+    target:
+      type: object
+      properties:
+        _links:
+          $ref: '#/definitions/Links'
+        name:
+          type: string
+        resources:
+          type: array
+          items:
+            type: string
+AuditLogEntries:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/AuditLogEntry'

@@ -30,7 +30,7 @@ Webhook:
     summary: Get a webhook by ID
     operationId: getWebhook
     parameters:
-      - $ref: '#/parameters/WebhookId'
+      - $ref: '#/parameters/ResourceId'
     responses:
       '200':
         $ref: '#/responses/Webhooks200'
@@ -44,7 +44,7 @@ Webhook:
     summary: Modify a webhook by ID
     operationId: patchWebhook
     parameters:
-      - $ref: '#/parameters/WebhookId'
+      - $ref: '#/parameters/ResourceId'
       - $ref: '#/parameters/PatchRequest'
     responses:
       '200':
@@ -63,7 +63,7 @@ Webhook:
     summary: Delete a webhook by ID
     operationId: deleteWebhook
     parameters:
-      - $ref: '#/parameters/WebhookId'
+      - $ref: '#/parameters/ResourceId'
     responses:
       '204':
         $ref: '#/responses/Standard204'
