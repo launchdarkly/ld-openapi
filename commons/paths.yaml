@@ -15,6 +15,8 @@
 /flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/FlagStatus
 /users/{projectKey}/{environmentKey}:
+  $ref: ./paths/users.yaml#/Users
+/user-search/{projectKey}/{environmentKey}:
   $ref: ./paths/users.yaml#/UsersSearch
 /users/{projectKey}/{environmentKey}/{userKey}:
   $ref: ./paths/users.yaml#/User
