@@ -249,13 +249,6 @@ AuditLogEntry:
       type: string
     date:
       type: number
-    accesses:
-      type: object
-      properties:
-        action:
-          type: string
-        resource:
-          type: string
     kind:
       type: string
     name:
