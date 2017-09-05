@@ -237,12 +237,17 @@ User:
       type: string
     environmentId:
       type: string
+    ownerId:
+      type: string
     user:
       type: object
+      example:
+        key: a00bea
+        name: Bob Loblaw
+        custom:
+          company: example.com
     avatar:
       type: string
-    custom:
-      type: object
 Users:
   properties:
     _links:
@@ -261,11 +266,25 @@ UserFlagSetting:
       type: boolean
     setting:
       type: boolean
-UserFlagSettings:
-  properties:
-    _links:
-      $ref: '#/definitions/Links'
-    items:
-      type: object
+  # This definition relies on it's "example" property to define it's structure.
+  UserFlagSettings:
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
       items:
-        $ref: '#/definitions/UserFlagSetting'
+        type: object
+        example:
+          sort.order:
+            _links:
+              self:
+                href: /api/v2/users/lacuna/production/Abbie_Braun/flags/sort.order
+                type: application/json
+              _value: true
+              setting: null
+          alternate.page:
+            _links:
+              self:
+                href: /api/v2/users/lacuna/production/Abbie_Braun/flags/alternate.page
+                type: application/json
+            _value: false,
+            setting: null
