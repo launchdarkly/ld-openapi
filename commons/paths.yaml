@@ -30,7 +30,7 @@
   $ref: ./paths/audit.yaml#/AuditLogEntry
 /webhooks: 
   $ref: ./paths/webhooks.yaml#/Webhooks
-/webhooks/{webhookId}: 
+/webhooks/{resourceId}: 
   $ref: ./paths/webhooks.yaml#/Webhook
 /: 
   $ref: ./paths/root.yaml#/Root
