@@ -6,8 +6,6 @@ Link:
       type: string
 Links:
   properties:
-    'parent':
-      $ref: '#/definitions/Link'
     'self':
       $ref: '#/definitions/Link'
 Webhook:
@@ -233,10 +231,29 @@ Environment:
       type: number
     secureMode:
       type: boolean
-Environments:
+User:
+  properties:
+    lastPing:
+      type: string
+    environmentId:
+      type: string
+    ownerId:
+      type: string
+    user:
+      type: object
+      example:
+        key: a00bea
+        name: Bob Loblaw
+        custom:
+          company: example.com
+    avatar:
+      type: string
+Users:
   properties:
     _links:
       $ref: '#/definitions/Links'
+    totalCount:
+      type: number
     items:
       type: array
       items:
@@ -280,3 +297,34 @@ AuditLogEntries:
       type: array
       items:
         $ref: '#/definitions/AuditLogEntry'
+        $ref: '#/definitions/User'
+UserFlagSetting:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _value:
+      type: boolean
+    setting:
+      type: boolean
+# This definition relies on it's "example" property to define it's structure.
+UserFlagSettings:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: object
+      example:
+        sort.order:
+          _links:
+            self:
+              href: /api/v2/users/lacuna/production/Abbie_Braun/flags/sort.order
+              type: application/json
+            _value: true
+            setting: null
+        alternate.page:
+          _links:
+            self:
+              href: /api/v2/users/lacuna/production/Abbie_Braun/flags/alternate.page
+              type: application/json
+          _value: false,
+          setting: null

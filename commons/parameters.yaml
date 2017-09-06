@@ -114,12 +114,42 @@ FeatureFlagKey:
   required: true
   description: The feature flag's key
   type: string
+UserKey:
+  name: userKey
+  in: path
+  required: true
+  description: The user's key
+  type: string
 Tag:
   name: tag
   in: query
   required: false
   description: Filter by tag
   type: string
+Limit:
+  name: limit
+  in: query
+  required: false
+  description: Pagination limit
+  type: number
+Query:
+  name: q
+  in: query
+  required: false
+  description: Search query
+  type: string
+Offset:
+  name: offset
+  in: query
+  required: false
+  description: Specifies the first item to return in the collection
+  type: number
+After:
+  name: after
+  in: query
+  required: false
+  description: A unix epoch time in milliseconds specifying the maximum last time a user requested a feature flag
+  type: number
 PatchRequest:
   name: patchDelta
   in: body
@@ -138,3 +168,14 @@ PatchRequest:
         - op
         - path
         - value
+UserSettingsPutRequest:
+  name: userSettingsBody
+  in: body
+  required: true
+  schema:
+    properties:
+      setting:
+        type: boolean
+        description: >-
+          The variation value to set for the user. Must match the variation type of
+          the flag.
