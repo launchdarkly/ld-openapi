@@ -27,12 +27,12 @@ FeatureFlagPostRequest:
   name: featureFlagBody
   in: body
   required: true
-  description: New feature flag
+  description: Create a new feature flag
   schema:
     properties:
       name:
         type: string
-        description: A human-friendly name for the feature flag
+        description: A human-friendly name for the feature flag. Remember to note if this flag is intended to be temporary or permanent.
       key:
         type: string
         description: A unique key that will be used to reference the flag in your code
