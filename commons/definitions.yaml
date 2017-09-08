@@ -257,7 +257,7 @@ Users:
     items:
       type: array
       items:
-        $ref: '#/definitions/Environment'
+        $ref: '#/definitions/User'
 AuditLogEntry:
   properties:
     _links:
@@ -297,7 +297,6 @@ AuditLogEntries:
       type: array
       items:
         $ref: '#/definitions/AuditLogEntry'
-        $ref: '#/definitions/User'
 UserFlagSetting:
   properties:
     _links:
