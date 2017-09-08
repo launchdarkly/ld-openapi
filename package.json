@@ -14,5 +14,8 @@
   "homepage": "https://github.com/launchdarkly/ld-openapi-private#readme",
   "dependencies": {
     "multi-file-swagger": "2.2.0"
+  },
+  "scripts": {
+    "compile": "multi-file-swagger -o yaml index.yaml > compiled.yaml"
   }
 }
