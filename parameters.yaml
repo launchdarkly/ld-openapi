@@ -12,8 +12,10 @@ WebhookPostRequest:
   schema:
     properties:
       url:
+        example: https://example.com/example
         type: string
       secret:
+        example: <password> 
         type: string
       sign: 
         type: boolean
@@ -60,7 +62,7 @@ ProjectKey:
   name: projectKey
   in: path
   required: true
-  description: The project key
+  description: The project key, used to tie the flags together under one project so they can be managed together.
   type: string
 EnvironmentKey:
   name: environmentKey
@@ -78,13 +80,14 @@ FeatureFlagKey:
   name: featureFlagKey
   in: path
   required: true
-  description: The feature flag's key
+  description: The feature flag's key. The key identifies the flag in your code.
   type: string
 Tag:
   name: tag
   in: query
   required: false
-  description: Filter by tag
+  description: Filter by tag. A tag can be used to group flags across projects.
+  example: usability_flags
   type: string
 PatchRequest:
   name: patchDelta
