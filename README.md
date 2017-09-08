@@ -15,14 +15,13 @@ This project uses JSON file pointers to create the directory architecture descri
 
 ### Compile to single file
 Compiling to a single file can be useful if you'd like to use the online editor. To do so follow these instructions:
-Install dependencies:
-```bash
-  npm install
-```
 
-Compile to yaml:
-```bash
-  multi-file-swagger -o yaml index.yaml > compiled.yaml
-```
+  1. Install dependencies:
+
+        npm install
+
+  2. Compile to a single yaml:
+
+        npm run compile
 
 Alternatively, you can test a multi-file Swagger spec using VSCode, or by following these instructions for the online editor: https://apihandyman.io/writing-openapi-swagger-specification-tutorial-part-8-splitting-specification-file/#editing-splitted-local-files-with-the-online-editor
