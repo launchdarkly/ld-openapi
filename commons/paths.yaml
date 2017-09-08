@@ -1,0 +1,36 @@
+/projects:
+  $ref: ./paths/projects.yaml#/Projects
+/projects/{projectKey}:
+  $ref: ./paths/projects.yaml#/Project
+/environments/{projectKey}:
+  $ref: ./paths/environments.yaml#/Environments
+/environments/{projectKey}/{environmentKey}:
+  $ref: ./paths/environments.yaml#/Environment
+/flags/{projectKey}:
+  $ref: ./paths/flags.yaml#/Flags
+/flags/{projectKey}/{featureFlagKey}:
+  $ref: ./paths/flags.yaml#/Flag
+/flag-statuses/{projectKey}/{environmentKey}:
+  $ref: ./paths/flags.yaml#/FlagStatuses
+/flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
+  $ref: ./paths/flags.yaml#/FlagStatus
+/users/{projectKey}/{environmentKey}:
+  $ref: ./paths/users.yaml#/Users
+/user-search/{projectKey}/{environmentKey}:
+  $ref: ./paths/users.yaml#/UsersSearch
+/users/{projectKey}/{environmentKey}/{userKey}:
+  $ref: ./paths/users.yaml#/User
+/users/{projectKey}/{environmentKey}/{userKey}/flags:
+  $ref: ./paths/users.yaml#/UserFlagSettings
+/users/{projectKey}/{environmentKey}/{userKey}/flags/{featureFlagKey}:
+  $ref: ./paths/users.yaml#/UserFlagSetting
+/auditlog:
+  $ref: ./paths/audit.yaml#/AuditLogEntries
+/auditlog/{resourceId}:
+  $ref: ./paths/audit.yaml#/AuditLogEntry
+/webhooks: 
+  $ref: ./paths/webhooks.yaml#/Webhooks
+/webhooks/{resourceId}: 
+  $ref: ./paths/webhooks.yaml#/Webhook
+/: 
+  $ref: ./paths/root.yaml#/Root

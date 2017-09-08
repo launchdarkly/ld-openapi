@@ -1,0 +1,69 @@
+Environments:
+  post:
+    summary: Create an environment
+    operationId: postEnvironment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentPostRequest'
+    responses:
+      '201':
+        $ref: '#/responses/Standard201'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - environments
+Environment:
+  get:
+    summary: Get an environment by key.
+    operationId: getEnvironment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+    responses:
+      '200':
+        description: Environment response
+        schema:
+          $ref: '#/definitions/Environment'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - environments
+  patch:
+    summary: Modify an environment by ID
+    operationId: patchEnvironment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/PatchRequest'
+    responses:
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - environments
+  delete:
+    summary: Delete an environment by ID
+    operationId: deleteEnvironment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - environments

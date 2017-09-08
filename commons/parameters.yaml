@@ -1,8 +1,8 @@
-WebhookId:
-  name: webhookId
+ResourceId:
+  name: resourceId
   in: path
   required: true
-  description: The webhook ID
+  description: The resource ID
   type: string
 WebhookPostRequest:
   name: webhookBody
@@ -27,12 +27,12 @@ FeatureFlagPostRequest:
   name: featureFlagBody
   in: body
   required: true
-  description: New feature flag
+  description: Create a new feature flag
   schema:
     properties:
       name:
         type: string
-        description: A human-friendly name for the feature flag
+        description: A human-friendly name for the feature flag. Remember to note if this flag is intended to be temporary or permanent.
       key:
         type: string
         description: A unique key that will be used to reference the flag in your code
@@ -56,6 +56,40 @@ FeatureFlagPostRequest:
       - name
       - key
       - variations
+ProjectPostRequest:
+  name: projectBody
+  in: body
+  required: true
+  description: New project
+  schema:
+    properties:
+      name:
+        type: string
+      key:
+        type: string
+    required:
+      - name
+      - key
+EnvironmentPostRequest:
+  name: environmentBody
+  in: body
+  required: true
+  description: New environment
+  schema:
+    properties:
+      name:
+        type: string
+      key:
+        type: string
+      color:
+        type: string
+        description: A color swatch (as an RGB hex value with no leading '#', e.g. C8C8C8)
+      defaultTtl:
+        type: number
+    required:
+      - name
+      - key
+      - color
 ProjectKey:
   name: projectKey
   in: path
@@ -80,12 +114,42 @@ FeatureFlagKey:
   required: true
   description: The feature flag's key
   type: string
+UserKey:
+  name: userKey
+  in: path
+  required: true
+  description: The user's key
+  type: string
 Tag:
   name: tag
   in: query
   required: false
   description: Filter by tag
   type: string
+Limit:
+  name: limit
+  in: query
+  required: false
+  description: Pagination limit
+  type: number
+Query:
+  name: q
+  in: query
+  required: false
+  description: Search query
+  type: string
+Offset:
+  name: offset
+  in: query
+  required: false
+  description: Specifies the first item to return in the collection
+  type: number
+After:
+  name: after
+  in: query
+  required: false
+  description: A unix epoch time in milliseconds specifying the maximum last time a user requested a feature flag
+  type: number
 PatchRequest:
   name: patchDelta
   in: body
@@ -104,3 +168,14 @@ PatchRequest:
         - op
         - path
         - value
+UserSettingsPutRequest:
+  name: userSettingsBody
+  in: body
+  required: true
+  schema:
+    properties:
+      setting:
+        type: boolean
+        description: >-
+          The variation value to set for the user. Must match the variation type of
+          the flag.
