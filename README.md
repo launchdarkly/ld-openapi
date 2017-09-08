@@ -1,9 +1,6 @@
 # LaunchDarkly OpenAPI
 This repository contains an OpenAPI specification for LaunchDarkly's REST API.
 
-## Features
-As of now, this repo provides specs for the [Webhooks endpoint](https://apidocs.launchdarkly.com/docs/webhooks-overview).
-
 ## Editors
 - [VSCode Swagger Viewer extension](https://marketplace.visualstudio.com/items?itemName=Arjun.swagger-viewer) 
 - [Swagger Web Editor](http://editor.swagger.io/)

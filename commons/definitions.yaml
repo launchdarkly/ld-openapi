@@ -6,8 +6,6 @@ Link:
       type: string
 Links:
   properties:
-    'parent':
-      $ref: '#/definitions/Link'
     'self':
       $ref: '#/definitions/Link'
 Webhook:
@@ -18,7 +16,6 @@ Webhook:
       type: string
     url:
       type: string
-      example: "webhookgrabber.com/mywebhookurl"
     secret:
       type: string
     on:
@@ -192,3 +189,141 @@ FeatureFlagStatuses:
       type: array
       items:
         $ref: '#/definitions/FeatureFlagStatus'
+Project:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/Environment'
+Projects:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    key:
+      type: string
+    name:
+      type: string
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/Project'
+Environment:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    key:
+      type: string
+    name:
+      type: string
+    apiKey:
+      type: string
+    mobileKey:
+      type: string
+    color:
+      type: string
+    defaultTtl:
+      type: number
+    secureMode:
+      type: boolean
+User:
+  properties:
+    lastPing:
+      type: string
+    environmentId:
+      type: string
+    ownerId:
+      type: string
+    user:
+      type: object
+      example:
+        key: a00bea
+        name: Bob Loblaw
+        custom:
+          company: example.com
+    avatar:
+      type: string
+Users:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    totalCount:
+      type: number
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/User'
+AuditLogEntry:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    date:
+      type: number
+    kind:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+    member:
+      $ref: '#/definitions/Member'
+    titleVerb:
+      type: string
+    title:
+      type: string
+    target:
+      type: object
+      properties:
+        _links:
+          $ref: '#/definitions/Links'
+        name:
+          type: string
+        resources:
+          type: array
+          items:
+            type: string
+AuditLogEntries:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/AuditLogEntry'
+UserFlagSetting:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _value:
+      type: boolean
+    setting:
+      type: boolean
+# This definition relies on it's "example" property to define it's structure.
+UserFlagSettings:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: object
+      example:
+        sort.order:
+          _links:
+            self:
+              href: /api/v2/users/lacuna/production/Abbie_Braun/flags/sort.order
+              type: application/json
+            _value: true
+            setting: null
+        alternate.page:
+          _links:
+            self:
+              href: /api/v2/users/lacuna/production/Abbie_Braun/flags/alternate.page
+              type: application/json
+          _value: false,
+          setting: null

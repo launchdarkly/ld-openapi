@@ -22,3 +22,7 @@
     description: Feature flag response
     schema:
       $ref: '#/definitions/FeatureFlag'
+  Projects200:
+    description: Project response
+    schema:
+      $ref: '#/definitions/Project'

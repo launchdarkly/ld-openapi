@@ -1,21 +1,21 @@
-Webhooks:
+Projects:
   get:
-    summary: Fetch a list of all webhooks
-    operationId: getWebhooks
+    summary: Returns a list of all projects in the account.
+    operationId: getProjects
     responses:
       '200':
-        description: Webhooks response
+        description: Projects response
         schema:
-          $ref: '#/definitions/Webhooks'
+          $ref: '#/definitions/Projects'
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - webhooks
+      - projects
   post:
-    summary: Create a webhook
-    operationId: postWebhook
+    summary: Create a project
+    operationId: postProject
     parameters:
-      - $ref: '#/parameters/WebhookPostRequest'
+      - $ref: '#/parameters/ProjectPostRequest'
     responses:
       '201':
         $ref: '#/responses/Standard201'
@@ -23,32 +23,34 @@ Webhooks:
         $ref: '#/responses/Standard400'
       '401':
         $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
     tags:
-      - webhooks
-Webhook:
+      - projects
+Project:
   get:
-    summary: Get a webhook by ID
-    operationId: getWebhook
+    summary: Get a project by key.
+    operationId: getProject
     parameters:
-      - $ref: '#/parameters/WebhookId'
+      - $ref: '#/parameters/ProjectKey'
     responses:
       '200':
-        $ref: '#/responses/Webhooks200'
+        description: Project response
+        schema:
+          $ref: '#/definitions/Project'
       '401':
         $ref: '#/responses/Standard401'
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - webhooks
+      - projects
   patch:
-    summary: Modify a webhook by ID
-    operationId: patchWebhook
+    summary: Modify a project by ID
+    operationId: patchProject
     parameters:
-      - $ref: '#/parameters/WebhookId'
+      - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/PatchRequest'
     responses:
-      '200':
-        $ref: '#/responses/Webhooks200'
       '400':
         $ref: '#/responses/Standard400'
       '401':
@@ -58,12 +60,12 @@ Webhook:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - webhooks
+      - projects
   delete:
-    summary: Delete a webhook by ID
-    operationId: deleteWebhook
+    summary: Delete a project by ID
+    operationId: deleteProject
     parameters:
-      - $ref: '#/parameters/WebhookId'
+      - $ref: '#/parameters/ProjectKey'
     responses:
       '204':
         $ref: '#/responses/Standard204'
@@ -72,4 +74,4 @@ Webhook:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - webhooks
+      - projects

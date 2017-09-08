@@ -1,0 +1,131 @@
+Users:
+  get:
+    summary: List all users in the environment.
+    operationId: getUsers
+    parameters:
+    - $ref: '#/parameters/ProjectKey'
+    - $ref: '#/parameters/EnvironmentKey'
+    - $ref: '#/parameters/Limit'
+    responses:
+      '200':
+        description: Users response
+        schema:
+          $ref: '#/definitions/Users'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - users
+UsersSearch:
+  get:
+    summary: Search users in LaunchDarkly based on their last active date, or a search query.
+    operationId: getSearchUsers
+    parameters:
+    - $ref: '#/parameters/ProjectKey'
+    - $ref: '#/parameters/EnvironmentKey'
+    - $ref: '#/parameters/Query'
+    - $ref: '#/parameters/Limit'
+    - $ref: '#/parameters/Offset'
+    - $ref: '#/parameters/After'
+    responses:
+      '200':
+        description: Users response
+        schema:
+          $ref: '#/definitions/Users'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - users
+User:
+  get:
+    summary: Get a user by key.
+    operationId: getUser
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+    responses:
+      '200':
+        description: User response
+        schema:
+          $ref: '#/definitions/User'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - users
+  delete:
+    summary: Delete a user by ID
+    operationId: deleteUser
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - users
+UserFlagSettings:
+  get:
+    summary: Lists the current flag settings for a given user. 
+    operationId: getUserFlagSettings
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+    responses:
+      '200':
+        description: User flags settings response
+        schema:
+          $ref: '#/definitions/UserFlagSettings'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - user settings
+UserFlagSetting:
+  get:
+    summary: Get a user by key.
+    operationId: getUserFlagSetting
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        description: User flag setting response
+        schema:
+          $ref: '#/definitions/UserFlagSetting'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - user settings
+  put:
+    summary: Specifically enable or disable a feature flag for a user based on their key.
+    operationId: putFlagSetting
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/UserSettingsPutRequest'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - user settings
