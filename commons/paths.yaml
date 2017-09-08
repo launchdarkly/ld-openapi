@@ -24,9 +24,13 @@
   $ref: ./paths/users.yaml#/UserFlagSettings
 /users/{projectKey}/{environmentKey}/{userKey}/flags/{featureFlagKey}:
   $ref: ./paths/users.yaml#/UserFlagSetting
+/auditlog:
+  $ref: ./paths/audit.yaml#/AuditLogEntries
+/auditlog/{resourceId}:
+  $ref: ./paths/audit.yaml#/AuditLogEntry
 /webhooks: 
   $ref: ./paths/webhooks.yaml#/Webhooks
-/webhooks/{webhookId}: 
+/webhooks/{resourceId}: 
   $ref: ./paths/webhooks.yaml#/Webhook
 /: 
   $ref: ./paths/root.yaml#/Root

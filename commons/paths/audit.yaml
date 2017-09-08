@@ -1,0 +1,32 @@
+AuditLogEntries:
+  get:
+    summary: Fetch a list of all webhooks
+    operationId: getAuditLogEntries
+    responses:
+      '200':
+        description: Audit log entries response
+        schema:
+          $ref: '#/definitions/AuditLogEntries'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - audit log
+AuditLogEntry:
+  get:
+    summary: Get a webhook by ID
+    operationId: getAuditLogEntry
+    parameters:
+      - $ref: '#/parameters/ResourceId'
+    responses:
+      '200':
+        description: Audit log entry response
+        schema:
+          $ref: '#/definitions/AuditLogEntry'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - audit log

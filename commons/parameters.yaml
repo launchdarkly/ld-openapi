@@ -1,8 +1,8 @@
-WebhookId:
-  name: webhookId
+ResourceId:
+  name: resourceId
   in: path
   required: true
-  description: The webhook ID
+  description: The resource ID
   type: string
 WebhookPostRequest:
   name: webhookBody

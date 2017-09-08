@@ -257,6 +257,46 @@ Users:
     items:
       type: array
       items:
+        $ref: '#/definitions/Environment'
+AuditLogEntry:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    _id:
+      type: string
+    date:
+      type: number
+    kind:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+    member:
+      $ref: '#/definitions/Member'
+    titleVerb:
+      type: string
+    title:
+      type: string
+    target:
+      type: object
+      properties:
+        _links:
+          $ref: '#/definitions/Links'
+        name:
+          type: string
+        resources:
+          type: array
+          items:
+            type: string
+AuditLogEntries:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/AuditLogEntry'
         $ref: '#/definitions/User'
 UserFlagSetting:
   properties:
@@ -266,25 +306,25 @@ UserFlagSetting:
       type: boolean
     setting:
       type: boolean
-  # This definition relies on it's "example" property to define it's structure.
-  UserFlagSettings:
-    properties:
-      _links:
-        $ref: '#/definitions/Links'
-      items:
-        type: object
-        example:
-          sort.order:
-            _links:
-              self:
-                href: /api/v2/users/lacuna/production/Abbie_Braun/flags/sort.order
-                type: application/json
-              _value: true
-              setting: null
-          alternate.page:
-            _links:
-              self:
-                href: /api/v2/users/lacuna/production/Abbie_Braun/flags/alternate.page
-                type: application/json
-            _value: false,
+# This definition relies on it's "example" property to define it's structure.
+UserFlagSettings:
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: object
+      example:
+        sort.order:
+          _links:
+            self:
+              href: /api/v2/users/lacuna/production/Abbie_Braun/flags/sort.order
+              type: application/json
+            _value: true
             setting: null
+        alternate.page:
+          _links:
+            self:
+              href: /api/v2/users/lacuna/production/Abbie_Braun/flags/alternate.page
+              type: application/json
+          _value: false,
+          setting: null
