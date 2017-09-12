@@ -35,9 +35,7 @@ Project:
       - $ref: '#/parameters/ProjectKey'
     responses:
       '200':
-        description: Project response
-        schema:
-          $ref: '#/definitions/Project'
+        $ref: '#/responses/Projects200'
       '401':
         $ref: '#/responses/Standard401'
       '404':

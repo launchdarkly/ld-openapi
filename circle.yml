@@ -1,0 +1,9 @@
+deployment:
+  production:
+    branch: master
+    commands:
+    - npm run deploy
+test:
+  production:
+    branch: master
+    - npm run test

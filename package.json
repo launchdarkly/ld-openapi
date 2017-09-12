@@ -13,9 +13,14 @@
   },
   "homepage": "https://github.com/launchdarkly/ld-openapi-private#readme",
   "dependencies": {
-    "multi-file-swagger": "2.2.0"
+    "multi-file-swagger": "2.2.0",
+    "swagger-repo": "^1.4.2",
+    "swagger-ui": "^3.2.0"
   },
   "scripts": {
-    "compile": "multi-file-swagger -o yaml index.yaml > compiled.yaml"
+    "swagger": "swagger-repo",
+    "compile": "cd spec && multi-file-swagger -o yaml ./index.yaml > ./swagger.yaml",
+    "test": "npm run compile && swagger-repo validate",
+    "deploy": "npm run compile && ./scripts/deploy-ghpages.sh"
   }
 }

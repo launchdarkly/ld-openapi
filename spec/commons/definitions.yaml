@@ -1,14 +1,17 @@
 Link:
+  type: object
   properties:
     href:
       type: string     
     type:
       type: string
 Links:
+  type: object
   properties:
     'self':
       $ref: '#/definitions/Link'
 Webhook:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -25,6 +28,7 @@ Webhook:
       items: 
         type: string
 Webhooks:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -33,6 +37,7 @@ Webhooks:
       items:
         $ref: '#/definitions/Webhook'
 FeatureFlag:
+  type: object
   properties:
     key:
       type: string
@@ -65,6 +70,7 @@ FeatureFlag:
       additionalProperties:
         $ref: '#/definitions/FeatureFlagConfig'
 FeatureFlags:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -73,6 +79,7 @@ FeatureFlags:
       items:
         $ref: '#/definitions/FeatureFlag'
 Member:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -91,6 +98,7 @@ Member:
       items:
         type: string
 FeatureFlagConfig:
+  type: object
   properties:
     'on':
       type: boolean
@@ -120,6 +128,7 @@ FeatureFlagConfig:
         rollout:
           $ref: '#/definitions/Rollout'
 Target:
+  type: object
   properties:
     values:
       type: array
@@ -128,6 +137,7 @@ Target:
     variation:
       type: integer
 Rule:
+  type: object
   properties:
     variation:
       type: integer
@@ -138,18 +148,21 @@ Rule:
       items:
         $ref: '#/definitions/Clause'
 Rollout:
+  type: object
   properties:
     variations:
       type: array
       items:
         $ref: '#/definitions/WeightedVariation'
 WeightedVariation:
+  type: object
   properties:
     variation:
       type: integer
     weight:
       type: integer
 Clause:
+  type: object
   properties:
     attribute:
       type: string
@@ -162,6 +175,7 @@ Clause:
     negate:
       type: boolean
 Variation:
+  type: object
   required:
     - value
   properties:
@@ -172,6 +186,7 @@ Variation:
     value:
       type: object
 FeatureFlagStatus:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -182,6 +197,7 @@ FeatureFlagStatus:
     default:
       type: boolean
 FeatureFlagStatuses:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -190,6 +206,7 @@ FeatureFlagStatuses:
       items:
         $ref: '#/definitions/FeatureFlagStatus'
 Project:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -198,6 +215,7 @@ Project:
       items:
         $ref: '#/definitions/Environment'
 Projects:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -212,6 +230,7 @@ Projects:
       items:
         $ref: '#/definitions/Project'
 Environment:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -232,6 +251,7 @@ Environment:
     secureMode:
       type: boolean
 User:
+  type: object
   properties:
     lastPing:
       type: string
@@ -249,6 +269,7 @@ User:
     avatar:
       type: string
 Users:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -259,6 +280,7 @@ Users:
       items:
         $ref: '#/definitions/User'
 AuditLogEntry:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -290,6 +312,7 @@ AuditLogEntry:
           items:
             type: string
 AuditLogEntries:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -298,6 +321,7 @@ AuditLogEntries:
       items:
         $ref: '#/definitions/AuditLogEntry'
 UserFlagSetting:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
@@ -307,6 +331,7 @@ UserFlagSetting:
       type: boolean
 # This definition relies on it's "example" property to define it's structure.
 UserFlagSettings:
+  type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
