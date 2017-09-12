@@ -8,3 +8,8 @@ test:
     branch: master
     commands:
     - npm run test
+machine:
+  node:
+    version: 6.11.0
+  npm:
+    version: 3.10.10
