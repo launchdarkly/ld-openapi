@@ -6,4 +6,5 @@ deployment:
 test:
   production:
     branch: master
+    commands:
     - npm run test
