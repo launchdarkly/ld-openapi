@@ -10,6 +10,7 @@ WebhookPostRequest:
   required: true
   description: New webhook
   schema:
+    type: object
     properties:
       url:
         type: string
@@ -29,6 +30,7 @@ FeatureFlagPostRequest:
   required: true
   description: Create a new feature flag
   schema:
+    type: object
     properties:
       name:
         type: string
@@ -62,6 +64,7 @@ ProjectPostRequest:
   required: true
   description: New project
   schema:
+    type: object
     properties:
       name:
         type: string
@@ -76,6 +79,7 @@ EnvironmentPostRequest:
   required: true
   description: New environment
   schema:
+    type: object
     properties:
       name:
         type: string
@@ -156,7 +160,9 @@ PatchRequest:
   required: true
   description: 'http://jsonpatch.com/'
   schema:
+    type: array
     items:
+      type: object
       properties:
         op:
           type: string
@@ -173,6 +179,7 @@ UserSettingsPutRequest:
   in: body
   required: true
   schema:
+    type: object
     properties:
       setting:
         type: boolean
