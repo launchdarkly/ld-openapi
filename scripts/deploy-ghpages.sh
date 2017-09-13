@@ -37,8 +37,8 @@ cp -R node_modules/swagger-ui/dist web_deploy/swagger-ui
 
 cd web_deploy
 
-git config --global user.name $GH_USER
-git config --global user.email $GH_EMAIL
+git config --global user.email "$GH_EMAIL" > /dev/null 2>&1
+git config --global user.name "$GH_NAME" > /dev/null 2>&1
 
 # stage any changes and new files
 git add -A
