@@ -15,6 +15,23 @@ Flags:
         $ref: '#/responses/Standard401'
     tags:
       - flags
+  post:
+    summary: Create a feature flag
+    operationId: postFeatureFlag
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagPostRequest'
+    responses:
+      '201':
+        $ref: '#/responses/Standard201'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - flags
 Flag:
   get:
     summary: Get a single feature flag by key.
@@ -32,23 +49,6 @@ Flag:
         $ref: '#/responses/Standard401'
       '404':
         $ref: '#/responses/Standard404'
-    tags:
-      - flags
-  post:
-    summary: Create a feature flag
-    operationId: postFeatureFlag
-    parameters:
-      - $ref: '#/parameters/ProjectKey'
-      - $ref: '#/parameters/FeatureFlagPostRequest'
-    responses:
-      '201':
-        $ref: '#/responses/Standard201'
-      '400':
-        $ref: '#/responses/Standard400'
-      '401':
-        $ref: '#/responses/Standard401'
-      '409':
-        $ref: '#/responses/Standard409'
     tags:
       - flags
   patch:

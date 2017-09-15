@@ -1,0 +1,19 @@
+deployment:
+  production:
+    branch: master
+    commands:
+    - npm run deploy
+test:
+  production:
+    branch: master
+    commands:
+    - npm run test
+machine:
+  node:
+    version: 6.11.0
+  npm:
+    version: 3.10.10
+general:
+  branches:
+    ignore:
+      - gh-pages
