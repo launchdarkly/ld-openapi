@@ -131,7 +131,6 @@ Tag:
   in: query
   required: false
   description: Filter by tag. A tag can be used to group flags across projects.
-  example: usability_flags
   type: string
 Limit:
   name: limit
