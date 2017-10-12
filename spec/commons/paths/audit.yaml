@@ -1,6 +1,6 @@
 AuditLogEntries:
   get:
-    summary: Fetch a list of all webhooks
+    summary: Fetch a list of all audit log entries
     operationId: getAuditLogEntries
     responses:
       '200':
@@ -15,7 +15,7 @@ AuditLogEntries:
       - audit log
 AuditLogEntry:
   get:
-    summary: Get a webhook by ID
+    summary: Get an audit log entry by ID
     operationId: getAuditLogEntry
     parameters:
       - $ref: '#/parameters/ResourceId'
