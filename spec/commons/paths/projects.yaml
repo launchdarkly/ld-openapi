@@ -29,7 +29,7 @@ Projects:
       - projects
 Project:
   get:
-    summary: Get a project by key.
+    summary: Fetch a single project by key.
     operationId: getProject
     parameters:
       - $ref: '#/parameters/ProjectKey'
