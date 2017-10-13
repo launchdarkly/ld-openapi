@@ -53,7 +53,7 @@ Environment:
     tags:
       - environments
   delete:
-    summary: Delete an environment by ID
+    summary: 'Delete an environment in a specified project.'
     operationId: deleteEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'
