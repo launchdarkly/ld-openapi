@@ -16,7 +16,7 @@ Flags:
     tags:
       - flags
   post:
-    summary: Create a feature flag
+    summary: Creates a new feature flag.
     operationId: postFeatureFlag
     parameters:
       - $ref: '#/parameters/ProjectKey'
