@@ -1,13 +1,6 @@
-deployment:
-  production:
-    branch: master
-    commands:
-    - npm run deploy
 test:
-  production:
-    branch: master
-    commands:
-    - npm run test
+    override:
+        - npm run test
 machine:
   node:
     version: 6.11.0

@@ -8,8 +8,17 @@ This repository contains an OpenAPI specification for LaunchDarkly's REST API.
 
 ## Code generation
 Server/client code for the API can be automatically generated. Procedure:
-- Port code to http://editor.swagger.io/#/. Use built-in tools to generate code.
-- Follow instructions on https://github.com/swagger-api/swagger-codegen
+
+First, install codegen:
+```bash
+  brew install swagger-codegen
+```
+
+Then run generate
+```bash
+  npm run generate
+```
+
 ## Directory architecture
 This project uses JSON file pointers to create the directory architecture described here: http://azimi.me/2015/07/16/split-swagger-into-smaller-files.html
 
