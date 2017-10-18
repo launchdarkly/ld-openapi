@@ -32,5 +32,8 @@ node_modules
 # Optional REPL history
 .node_repl_history
 
-# Compiled swagger file
-swagger.yaml
+# Built clients and servers
+targets/
+
+# Auto generated files
+.DS_Store
