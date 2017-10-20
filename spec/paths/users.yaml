@@ -1,6 +1,6 @@
 Users:
   get:
-    summary: List all users in the environment.
+    summary: List all users in the environment. Includes the total count of users. In each page, there will be up to 'limit' users returned (default 20). This is useful for exporting all users in the system for further analysis. Paginated collections will include a next link containing a URL with the next set of elements in the collection.
     operationId: getUsers
     parameters:
     - $ref: '#/parameters/ProjectKey'
