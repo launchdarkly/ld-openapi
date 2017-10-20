@@ -106,7 +106,7 @@ EnvironmentKey:
   name: environmentKey
   in: path
   required: true
-  description: The environment key
+  description: The environment key, used to tie together flag configuration and users under one environment so they can be managed together.
   type: string
 EnvironmentKeyQuery:
   name: environmentKeyQuery
