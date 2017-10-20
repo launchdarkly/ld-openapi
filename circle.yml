@@ -1,3 +1,6 @@
+dependencies:
+    override:
+        - npm install
 compile:
     override:
         - npm run generate
