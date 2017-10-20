@@ -327,8 +327,12 @@ UserFlagSetting:
       $ref: '#/definitions/Links'
     _value:
       type: boolean
+      description: The most important attribute in the response. The _value is the current setting that the user will see. For a boolean feature toggle, this will be true, false, or null if there is no defined fallthrough value.
+      example: true
     setting:
       type: boolean
+      description: The setting attribute indicates whether you've explicitly targeted this user to receive a particular variation. For example, if you have explicitly turned off a feature toggle for a user, setting will be false. A setting of null means that you haven't assigned that user to a specific variation.
+      example: null
 # This definition relies on it's "example" property to define it's structure.
 UserFlagSettings:
   type: object
