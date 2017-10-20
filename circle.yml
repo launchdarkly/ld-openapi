@@ -1,6 +1,7 @@
 dependencies:
     override:
         - npm install
+        - brew install swagger-codegen
 compile:
     override:
         - npm run generate
