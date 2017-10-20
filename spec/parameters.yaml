@@ -160,7 +160,7 @@ PatchRequest:
   name: patchDelta
   in: body
   required: true
-  description: 'http://jsonpatch.com/'
+  description: Requires a JSON Patch representation of the desired changes to the project. 'http://jsonpatch.com/'
   schema:
     type: array
     items:
