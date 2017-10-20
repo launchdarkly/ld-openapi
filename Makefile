@@ -21,19 +21,19 @@ LASTHASH := $(shell git rev-parse --short HEAD)
 all: $(TARGETS)
 
 $(TARGETS_PATH):
-    mkdir -p $@
+	mkdir -p $@
 
 $(TARGETS): spec
 	rm -rf $(TARGETS_PATH)/$(PREFIX)-$@
 	mkdir -p $(TARGETS_PATH)/$(PREFIX)-$@
 	swagger-codegen generate --group-id com.launchdarkly --artifact-id $(PREFIX) -i $(TARGETS_PATH)/swagger.yaml -l $@ -o $(TARGETS_PATH)/$(PREFIX)-$@
 	cp ./LICENSE.txt $(TARGETS_PATH)/$(PREFIX)-$@/LICENSE.txt
-	mv $(TARGETS_PATH)/$(PREFIX)-$@/README.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md
-	cat ./README-PREFIX.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md > $(TARGETS_PATH)/$(PREFIX)-$@/README.md
+	mv $(TARGETS_PATH)/$(PREFIX)-$@/README.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md || touch $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md
+	cat ./README-PREFIX.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md > $(TARGETS_PATH)/$(PREFIX)-$@/README.md 
 	rm $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md
 
 spec: $(TARGETS_PATH)
-	multi-file-swagger -o yaml ./index.yaml > $(TARGETS_PATH)/swagger.yaml
+	./node_modules/.bin/multi-file-swagger -o yaml ./index.yaml > $(TARGETS_PATH)/swagger.yaml
 
 clean:
 	rm -rf $(TARGETS_PATH)
