@@ -60,7 +60,7 @@ Project:
     tags:
       - projects
   delete:
-    summary: Delete a project by ID
+    summary: Delete a project by key. Caution-- deleting a project will delete all associated environments and feature flags. You cannot delete the last project in an account.
     operationId: deleteProject
     parameters:
       - $ref: '#/parameters/ProjectKey'
