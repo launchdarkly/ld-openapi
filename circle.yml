@@ -12,3 +12,4 @@ general:
       - gh-pages
   artifacts:
     - "targets"
+
