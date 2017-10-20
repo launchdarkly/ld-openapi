@@ -4,7 +4,7 @@ This repository contains an OpenAPI specification for LaunchDarkly's REST API.
 This REST API is for custom integrations, data export, or automating your feature flag workflows. *DO NOT* use this client library to add feature flags to your web or mobile application. To integrate feature flags with your application, please see the [SDK documentation](https://docs.launchdarkly.com/v2.0/docs)
 
 ## Directory architecture
-This project uses JSON file pointers to create the directory architecture described here: 
+This project uses YAML file pointers to create the directory architecture described here: 
 
 http://azimi.me/2015/07/16/split-swagger-into-smaller-files.html
 
