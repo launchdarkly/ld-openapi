@@ -1,3 +1,6 @@
+compile:
+    override:
+        - npm run generate
 test:
     override:
         - npm run test
