@@ -18,7 +18,7 @@ Environments:
       - environments
 Environment:
   get:
-    summary: Get an environment by key.
+    summary: Get an environment given a project and key.
     operationId: getEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'

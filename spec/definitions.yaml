@@ -236,20 +236,36 @@ Environment:
       $ref: '#/definitions/Links'
     _id:
       type: string
+      example: 57ae15fc40cda6071f6c242e
+      description: The unique id for the environment
     key:
       type: string
+      example: production
+      description: The key for the environment
     name:
       type: string
+      example: Production
+      description: The name of the environment
     apiKey:
       type: string
+      example: XXX
+      description: The SDK key for backend LaunchDarkly SDKs
     mobileKey:
       type: string
+      example: XXX
+      description: The SDK key for mobile LaunchDarkly SDKs
     color:
       type: string
+      example: 417505
+      description: The swatch color for the environment
     defaultTtl:
       type: number
+      example: 0
+      description: The default TTL
     secureMode:
       type: boolean
+      example: false
+      description: Determines if this environment is in safe mode
 User:
   type: object
   properties:
