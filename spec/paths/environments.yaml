@@ -1,6 +1,6 @@
 Environments:
   post:
-    summary: Create an environment
+    summary: Create a new environment in a specified project with a given name, key, and swatch color.
     operationId: postEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'
