@@ -72,7 +72,7 @@ User:
       - users
 UserFlagSettings:
   get:
-    summary: Lists the current flag settings for a given user. 
+    summary: Fetch a single flag setting for a user by key.
     operationId: getUserFlagSettings
     parameters:
       - $ref: '#/parameters/ProjectKey'
