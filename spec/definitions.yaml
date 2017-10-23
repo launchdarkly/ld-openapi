@@ -275,6 +275,7 @@ Users:
       $ref: '#/definitions/Links'
     totalCount:
       type: number
+      example: 3
     items:
       type: array
       items:
