@@ -17,7 +17,7 @@ Users:
       - users
 UsersSearch:
   get:
-    summary: Search users in LaunchDarkly based on their last active date, or a search query.
+    summary: Search users in LaunchDarkly based on their last active date, or a search query. It should not be used to enumerate all users in LaunchDarkly-- use the List users API resource.
     operationId: getSearchUsers
     parameters:
     - $ref: '#/parameters/ProjectKey'
