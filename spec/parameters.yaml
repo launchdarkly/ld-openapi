@@ -162,7 +162,7 @@ After:
   in: query
   required: false
   description: A unix epoch time in milliseconds specifying the maximum last time a user requested a feature flag
-  type: number
+  type: integer
 PatchRequest:
   name: patchDelta
   in: body

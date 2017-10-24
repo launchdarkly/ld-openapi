@@ -46,7 +46,7 @@ FeatureFlag:
     kind:
       type: string
     creationDate:
-      type: number
+      type: integer
     includeInSnippet:
       type: boolean
     temporary:
@@ -193,7 +193,7 @@ FeatureFlagStatus:
     name:
       type: string
     lastRequested:
-      type: string
+      type: integer
     default:
       type: boolean
 FeatureFlagStatuses:
@@ -270,7 +270,7 @@ User:
   type: object
   properties:
     lastPing:
-      type: string
+      type: integer
     environmentId:
       type: string
     ownerId:
@@ -304,7 +304,7 @@ AuditLogEntry:
     _id:
       type: string
     date:
-      type: number
+      type: integer
     kind:
       type: string
     name:
