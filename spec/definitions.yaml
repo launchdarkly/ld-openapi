@@ -46,7 +46,8 @@ FeatureFlag:
     kind:
       type: string
     creationDate:
-      type: number
+      type: integer
+      format: int64
     includeInSnippet:
       type: boolean
     temporary:
@@ -110,6 +111,7 @@ FeatureFlagConfig:
       type: string
     lastModified:
       type: integer
+      format: int64
     version:
       type: integer
     targets:
@@ -193,7 +195,8 @@ FeatureFlagStatus:
     name:
       type: string
     lastRequested:
-      type: string
+      type: integer
+      format: int64
     default:
       type: boolean
 FeatureFlagStatuses:
@@ -270,7 +273,8 @@ User:
   type: object
   properties:
     lastPing:
-      type: string
+      type: integer
+      format: int64
     environmentId:
       type: string
     ownerId:
@@ -304,7 +308,8 @@ AuditLogEntry:
     _id:
       type: string
     date:
-      type: number
+      type: integer
+      format: int64
     kind:
       type: string
     name:
