@@ -26,7 +26,7 @@ $(TARGETS_PATH):
 $(TARGETS): spec
 	rm -rf $(TARGETS_PATH)/$(PREFIX)-$@
 	mkdir -p $(TARGETS_PATH)/$(PREFIX)-$@
-	swagger-codegen generate --group-id com.launchdarkly --artifact-id $(PREFIX) -i $(TARGETS_PATH)/swagger.yaml -l $@ -o $(TARGETS_PATH)/$(PREFIX)-$@
+	swagger-codegen generate --group-id com.launchdarkly --artifact-id $(PREFIX) --artifact-version $(VERSION) -i $(TARGETS_PATH)/swagger.yaml -l $@ -o $(TARGETS_PATH)/$(PREFIX)-$@
 	cp ./LICENSE.txt $(TARGETS_PATH)/$(PREFIX)-$@/LICENSE.txt
 	mv $(TARGETS_PATH)/$(PREFIX)-$@/README.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md || touch $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md > $(TARGETS_PATH)/$(PREFIX)-$@/README.md 
