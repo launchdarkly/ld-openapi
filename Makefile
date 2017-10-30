@@ -34,6 +34,7 @@ $(TARGETS): spec
 
 spec: $(TARGETS_PATH)
 	./node_modules/.bin/multi-file-swagger -o yaml ./index.yaml > $(TARGETS_PATH)/swagger.yaml
+	./node_modules/.bin/swagger validate $(TARGETS_PATH)/swagger.yaml
 
 clean:
 	rm -rf $(TARGETS_PATH)

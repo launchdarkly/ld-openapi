@@ -193,6 +193,32 @@ UserSettingsPutRequest:
     properties:
       setting:
         type: boolean
-        description: >-
+        description: >
           The variation value to set for the user. Must match the variation type of
           the flag.
+MembersPostRequest:
+  name: membersBody
+  in: body
+  required: true
+  description: New members to invite
+  schema:
+    type: array
+    items:
+      type: object
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          $ref: '#/definitions/NonOwnerRole'
+        customRoles:
+          type: array
+          items:
+            $ref: '#/definitions/CustomRoleKeyOrId'
+        inlineRole:
+          $ref: '#/definitions/Statements'
+      required:
+        - email

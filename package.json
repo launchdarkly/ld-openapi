@@ -23,7 +23,7 @@
     "swagger": "swagger-repo",
     "generate": "make all",
     "compile": "make spec",
-    "html": "spectacle -t targets/html ./spec/swagger.yaml",
-    "test": "swagger validate ./spec/swagger.yaml"
+    "html": "spectacle -t targets/html ./targets/swagger.yaml",
+    "test": "swagger validate ./targets/swagger.yaml"
   }
 }

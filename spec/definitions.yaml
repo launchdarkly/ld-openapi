@@ -87,7 +87,7 @@ Member:
     _id:
       type: string
     role:
-      type: string
+      $ref: '#/definitions/Role'
     email: 
       type: string
     _pendingInvite: 
@@ -97,7 +97,14 @@ Member:
     customRoles:
       type: array
       items:
-        type: string
+        $ref: '#/definitions/CustomRoleId'
+Members:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      $ref: '#/definitions/Member'
 FeatureFlagConfig:
   type: object
   properties:
@@ -374,3 +381,71 @@ UserFlagSettings:
               type: application/json
           _value: false,
           setting: null
+
+Statements:
+  type: array
+  items:
+    $ref: '#/definitions/Statement'
+Statement:
+  type: object
+  properties:
+    resources:
+      $ref: '#/definitions/Resources'
+    notresources:
+      $ref: '#/definitions/Resources'
+      description: Targeted resource will be those resources NOT in this list. The "resources`" field must be empty to use this field.
+    actions:
+      $ref: '#/definitions/Actions'
+    notactions:
+      $ref: '#/definitions/Actions'
+      description: Targeted actions will be those actions NOT in this list. The "actions" field must be empty to use this field.
+    effect:
+      type: string
+      enum:
+        - allow
+        - deny
+
+Resources:
+  type: array
+  items:
+    $ref: '#/definitions/Resource'
+
+Resource:
+  type: string
+  description: A resource specifier string
+  example: "proj/*:env/*:flag/my-flag"
+
+Actions:
+  type: array
+  items:
+    $ref: '#/definitions/Action'
+
+Action:
+  type: string
+  description: An action to perform on a resource
+  example: updateOn
+
+NonOwnerRole:
+  type: string
+  enum:
+    - writer
+    - reader
+    - admin
+
+Role:
+  type: string
+  enum:
+    - writer
+    - reader
+    - admin
+    - owner
+
+CustomRoleKeyOrId:
+  type: string
+  description: The 20-hexdigit id or the key for a custom role
+  example: "revenue-team"
+
+CustomRoleId:
+  type: string
+  description: The 20-hexdigit id or the key for a custom role
+  example: "5721124f538714de2896338c"
