@@ -64,7 +64,7 @@ ProjectPostRequest:
   name: projectBody
   in: body
   required: true
-  description: New project
+  description: Project keys must be unique within an account.
   schema:
     type: object
     properties:
