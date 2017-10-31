@@ -1,21 +1,10 @@
-Projects:
-  get:
-    summary: Returns a list of all projects in the account.
-    operationId: getProjects
-    responses:
-      '200':
-        description: Projects response
-        schema:
-          $ref: '#/definitions/Projects'
-      '401':
-        $ref: '#/responses/Standard401'
-    tags:
-      - projects
+Environments:
   post:
-    summary: Create a project
-    operationId: postProject
+    summary: Create a new environment in a specified project with a given name, key, and swatch color.
+    operationId: postEnvironment
     parameters:
-      - $ref: '#/parameters/ProjectPostRequest'
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentPostRequest'
     responses:
       '201':
         $ref: '#/responses/Standard201'
@@ -26,27 +15,31 @@ Projects:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - projects
-Project:
+      - environments
+Environment:
   get:
-    summary: Get a project by key.
-    operationId: getProject
+    summary: Get an environment given a project and key.
+    operationId: getEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
     responses:
       '200':
-        $ref: '#/responses/Projects200'
+        description: Environment response
+        schema:
+          $ref: '#/definitions/Environment'
       '401':
         $ref: '#/responses/Standard401'
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - projects
+      - environments
   patch:
-    summary: Modify a project by ID
-    operationId: patchProject
+    summary: Modify an environment by ID
+    operationId: patchEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/PatchRequest'
     responses:
       '400':
@@ -58,12 +51,13 @@ Project:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - projects
+      - environments
   delete:
-    summary: Delete a project by ID
-    operationId: deleteProject
+    summary: Delete an environment by ID
+    operationId: deleteEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
     responses:
       '204':
         $ref: '#/responses/Standard204'
@@ -72,4 +66,4 @@ Project:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - projects
+      - environments

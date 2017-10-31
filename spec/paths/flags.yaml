@@ -16,7 +16,7 @@ Flags:
     tags:
       - flags
   post:
-    summary: Create a feature flag
+    summary: Creates a new feature flag.
     operationId: postFeatureFlag
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -52,7 +52,7 @@ Flag:
     tags:
       - flags
   patch:
-    summary: Modify a feature flag by ID
+    summary: Perform a partial update to a feature.
     operationId: patchFeatureFlag
     parameters:
       - $ref: '#/parameters/ProjectKey'

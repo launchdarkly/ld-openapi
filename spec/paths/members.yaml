@@ -1,0 +1,29 @@
+Members:
+  get:
+    summary: Returns a list of all members in the account.
+    operationId: getMembers
+    responses:
+      '200':
+        description: Projects response
+        schema:
+          $ref: '#/definitions/Members'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - members
+  post:
+    summary: Invite new members
+    operationId: postMembers
+    parameters:
+      - $ref: '#/parameters/MembersPostRequest'
+    responses:
+      '201':
+        $ref: '#/responses/Standard201'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - members
