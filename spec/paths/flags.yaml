@@ -72,7 +72,7 @@ Flag:
     tags:
       - flags
   delete:
-    summary: Delete a feature flag by ID
+    summary: 'Delete a feature flag in all environments. Be careful-- only delete feature flags that are no longer being used by your application.'
     operationId: deleteFeatureFlag
     parameters:
       - $ref: '#/parameters/ProjectKey'
