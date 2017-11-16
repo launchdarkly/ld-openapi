@@ -23,6 +23,6 @@
     schema:
       $ref: '#/definitions/FeatureFlag'
   Projects200:
-    description: Project response
+    description: Successful Project response
     schema:
       $ref: '#/definitions/Project'
