@@ -161,7 +161,7 @@ After:
   name: after
   in: query
   required: false
-  description: 'A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occurred after this timestamp.'
+  description: 'A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occured after this timestamp.'
   format: int64
   type: number
 PatchRequest:
@@ -206,7 +206,7 @@ Q:
   name: q
   in: query
   required: false
-  description: 'A text search query'
+  description: Text to search for. You can search for the full/partial name of the resource involved or fullpartial email address of the member who made the change
   type: string
 AuditLimit:
   name: limit
