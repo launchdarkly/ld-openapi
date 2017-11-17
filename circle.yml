@@ -1,3 +1,13 @@
+dependencies:
+    override:
+        - npm install
+        - wget http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.2.3/swagger-codegen-cli-2.2.3.jar -O /home/ubuntu/bin/swagger-codegen-cli.jar
+        - printf '#!/bin/bash\nexec java -jar /home/ubuntu/bin/swagger-codegen-cli.jar "$@"\n' > /home/ubuntu/bin/swagger-codegen
+        - chmod +x /home/ubuntu/bin/swagger-codegen
+compile:
+    override:
+        - npm run generate
+        - npm run html
 test:
     override:
         - npm run test
@@ -10,3 +20,6 @@ general:
   branches:
     ignore:
       - gh-pages
+  artifacts:
+    - "targets"
+
