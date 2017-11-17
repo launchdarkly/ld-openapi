@@ -308,12 +308,15 @@ User:
   type: object
   properties:
     lastPing:
-      type: integer
+      type: string
       format: int64
+      example: '2015-03-03T02:37:22.492Z'
     environmentId:
       type: string
+      example: 54ac2d97de674204ddd61096
     ownerId:
       type: string
+      example: 573ca90604a444f18afd651a
     user:
       type: object
       example:
