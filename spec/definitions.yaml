@@ -41,27 +41,43 @@ FeatureFlag:
   properties:
     key:
       type: string
+      example: bob@example.com
     name:
       type: string
+      description: Name of the feature flag
+      example: test-feature
     kind:
       type: string
+      description: Whether the feature flag is a boolean flag or multivariate.
+      example: boolean
     creationDate:
-      type: integer
+      type: number
       format: int64
+      description: A unix epoch time in milliseconds specifying the creation time of this flag.
+      example: 1443652232590
     includeInSnippet:
       type: boolean
+      example: false
     temporary:
       type: boolean
+      description: Whether or not this flag is temporary.
+      example: false
     maintainerId:
       type: string
+      description: The ID of the member that should maintain this flag.
+      example: 561c579cd8fd5c2704000001
     tags: 
       type: array
+      description: An array of tags for this feature flag.
       items:
         type: string
+      example: '[]'
     variations:
       type: array
+      description: The variations for this feature flag.
       items:
         $ref: '#/definitions/Variation'
+      example: '[ { "value": "a" }, { "value": "b" } ]'
     _links:
       $ref: '#/definitions/Links'
     _maintainer:
