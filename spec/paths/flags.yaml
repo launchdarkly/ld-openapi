@@ -104,7 +104,7 @@ FlagStatuses:
       - flags
 FlagStatus:
   get:
-    summary: Get a list of statuses for all feature flags
+    summary: Get the status for a particular feature flag.
     operationId: getFeatureFlagStatuses
     parameters:
     - $ref: '#/parameters/ProjectKey'
@@ -112,7 +112,7 @@ FlagStatus:
     - $ref: '#/parameters/FeatureFlagKey'
     responses:
       '200':
-        description: Feature flag status by flag key
+        description: Status of the requested feature flag.
         schema:
           $ref: '#/definitions/FeatureFlagStatus'
       '401':
