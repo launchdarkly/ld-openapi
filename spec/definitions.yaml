@@ -356,7 +356,7 @@ UserFlagSetting:
       $ref: '#/definitions/Links'
     _value:
       type: boolean
-      description: The most important attribute in the response. The _value is the current setting that the user will see. For a boolean feature toggle, this will be true, false, or null if there is no defined fallthrough value.
+      description: The most important attribute in the response. The _value is the current setting for the user. For a boolean feature toggle, this will be true, false, or null if there is no defined fallthrough value.
       example: true
     setting:
       type: boolean
