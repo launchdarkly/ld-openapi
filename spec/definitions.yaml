@@ -41,26 +41,43 @@ FeatureFlag:
   properties:
     key:
       type: string
+      example: bob@example.com
     name:
       type: string
+      description: Name of the feature flag
+      example: test-feature
     kind:
       type: string
+      description: Whether the feature flag is a boolean flag or multivariate.
+      example: boolean
     creationDate:
       type: number
+      format: int64
+      description: A unix epoch time in milliseconds specifying the creation time of this flag.
+      example: 1443652232590
     includeInSnippet:
       type: boolean
+      example: false
     temporary:
       type: boolean
+      description: Whether or not this flag is temporary.
+      example: false
     maintainerId:
       type: string
+      description: The ID of the member that should maintain this flag.
+      example: 561c579cd8fd5c2704000001
     tags: 
       type: array
+      description: An array of tags for this feature flag.
       items:
         type: string
+      example: '[]'
     variations:
       type: array
+      description: The variations for this feature flag.
       items:
         $ref: '#/definitions/Variation'
+      example: '[ { "value": "a" }, { "value": "b" } ]'
     _links:
       $ref: '#/definitions/Links'
     _maintainer:
@@ -86,7 +103,7 @@ Member:
     _id:
       type: string
     role:
-      type: string
+      $ref: '#/definitions/Role'
     email: 
       type: string
     _pendingInvite: 
@@ -96,7 +113,14 @@ Member:
     customRoles:
       type: array
       items:
-        type: string
+        $ref: '#/definitions/CustomRoleId'
+Members:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      $ref: '#/definitions/Member'
 FeatureFlagConfig:
   type: object
   properties:
@@ -110,6 +134,7 @@ FeatureFlagConfig:
       type: string
     lastModified:
       type: integer
+      format: int64
     version:
       type: integer
     targets:
@@ -193,7 +218,8 @@ FeatureFlagStatus:
     name:
       type: string
     lastRequested:
-      type: string
+      type: integer
+      format: int64
     default:
       type: boolean
 FeatureFlagStatuses:
@@ -236,25 +262,42 @@ Environment:
       $ref: '#/definitions/Links'
     _id:
       type: string
+      example: 57ae15fc40cda6071f6c242e
+      description: The unique id for the environment
     key:
       type: string
+      example: production
+      description: The key for the environment
     name:
       type: string
+      example: Production
+      description: The name of the environment
     apiKey:
       type: string
+      example: XXX
+      description: The SDK key for backend LaunchDarkly SDKs
     mobileKey:
       type: string
+      example: XXX
+      description: The SDK key for mobile LaunchDarkly SDKs
     color:
       type: string
+      example: 417505
+      description: The swatch color for the environment
     defaultTtl:
       type: number
+      example: 0
+      description: The default TTL
     secureMode:
       type: boolean
+      example: false
+      description: Determines if this environment is in safe mode
 User:
   type: object
   properties:
     lastPing:
-      type: string
+      type: integer
+      format: int64
     environmentId:
       type: string
     ownerId:
@@ -275,6 +318,7 @@ Users:
       $ref: '#/definitions/Links'
     totalCount:
       type: number
+      example: 3
     items:
       type: array
       items:
@@ -287,7 +331,8 @@ AuditLogEntry:
     _id:
       type: string
     date:
-      type: number
+      type: integer
+      format: int64
     kind:
       type: string
     name:
@@ -352,3 +397,71 @@ UserFlagSettings:
               type: application/json
           _value: false,
           setting: null
+
+Statements:
+  type: array
+  items:
+    $ref: '#/definitions/Statement'
+Statement:
+  type: object
+  properties:
+    resources:
+      $ref: '#/definitions/Resources'
+    notresources:
+      $ref: '#/definitions/Resources'
+      description: Targeted resource will be those resources NOT in this list. The "resources`" field must be empty to use this field.
+    actions:
+      $ref: '#/definitions/Actions'
+    notactions:
+      $ref: '#/definitions/Actions'
+      description: Targeted actions will be those actions NOT in this list. The "actions" field must be empty to use this field.
+    effect:
+      type: string
+      enum:
+        - allow
+        - deny
+
+Resources:
+  type: array
+  items:
+    $ref: '#/definitions/Resource'
+
+Resource:
+  type: string
+  description: A resource specifier string
+  example: "proj/*:env/*:flag/my-flag"
+
+Actions:
+  type: array
+  items:
+    $ref: '#/definitions/Action'
+
+Action:
+  type: string
+  description: An action to perform on a resource
+  example: updateOn
+
+NonOwnerRole:
+  type: string
+  enum:
+    - writer
+    - reader
+    - admin
+
+Role:
+  type: string
+  enum:
+    - writer
+    - reader
+    - admin
+    - owner
+
+CustomRoleKeyOrId:
+  type: string
+  description: The 20-hexdigit id or the key for a custom role
+  example: "revenue-team"
+
+CustomRoleId:
+  type: string
+  description: The 20-hexdigit id or the key for a custom role
+  example: "5721124f538714de2896338c"
