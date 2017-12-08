@@ -27,7 +27,7 @@ Webhook:
       description: If defined, the webhooks post request will include a X-LD-Signature header whose value will contain an HMAC SHA256 hex digest of the webhook payload, using the secret as the key
     on:
       type: boolean
-      description: Wheater this webhook is enabled or not
+      description: Whether this webhook is enabled or not
       example: true
     tags:
       type: array

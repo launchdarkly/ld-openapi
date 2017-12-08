@@ -26,7 +26,7 @@ WebhookPostRequest:
       on: 
         type: boolean
         example: true
-        description: Wheater this webhook is enabled or not
+        description: Whether this webhook is enabled or not
     required:
       - url
       - sign
