@@ -1,6 +1,6 @@
 Root:
   get:
-    summary: Get the root resource
+    description: You can issue a GET request to the root resource to find all of the resource categories supported by the API.
     operationId: getRoot
     responses:
       '200':
