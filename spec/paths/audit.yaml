@@ -1,7 +1,13 @@
 AuditLogEntries:
   get:
-    summary: Fetch a list of all audit log entries
+    summary: 'Get a list of all audit log entries. The query parameters allow you to restrict the returned results by date ranges, resource specifiers, or a full-text search query.'
     operationId: getAuditLogEntries
+    parameters:
+      - $ref: '#/parameters/Before'
+      - $ref: '#/parameters/After'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/AuditLimit'
+      - $ref: '#/parameters/Spec'
     responses:
       '200':
         description: Audit log entries response
