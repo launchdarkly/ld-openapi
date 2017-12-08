@@ -161,9 +161,9 @@ After:
   name: after
   in: query
   required: false
-  description: A unix epoch time in milliseconds specifying the maximum last time a user requested a feature flag
-  type: integer
+  description: 'A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occured after this timestamp.'
   format: int64
+  type: number
 PatchRequest:
   name: patchDelta
   in: body
@@ -196,6 +196,30 @@ UserSettingsPutRequest:
         description: >
           The variation value to set for the user. Must match the variation type of
           the flag.
+Before:
+  name: before
+  in: query
+  required: false
+  description: 'A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have before this timestamp.'
+  type: number
+Q:
+  name: q
+  in: query
+  required: false
+  description: Text to search for. You can search for the full or partial name of the resource involved or fullpartial email address of the member who made the change
+  type: string
+AuditLimit:
+  name: limit
+  in: query
+  required: false
+  description: 'A limit on the number of audit log entries to be returned, between 1 and 20'
+  type: number
+Spec:
+  name: spec
+  in: query
+  required: false
+  description: 'A resource specifier, allowing you to filter audit log listings by resource'
+  type: string
 MembersPostRequest:
   name: membersBody
   in: body
