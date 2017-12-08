@@ -21,7 +21,7 @@ AuditLogEntries:
       - audit log
 AuditLogEntry:
   get:
-    summary: Get an audit log entry by ID
+    summary: 'Use this endpoint to fetch a single audit log entry by its resouce ID.'
     operationId: getAuditLogEntry
     parameters:
       - $ref: '#/parameters/ResourceId'
