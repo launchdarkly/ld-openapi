@@ -15,13 +15,18 @@ WebhookPostRequest:
       url:
         example: https://example.com/example
         type: string
+        description: The URL of the remote webhook
       secret:
         example: <password> 
         type: string
+        description: If sign is true, and the secret attribute is omitted, LaunchDarkly will automatically generate a secret for you.
       sign: 
         type: boolean
+        description: If sign is false, the webhook will not include a signature header, and the secret can be omitted.
       on: 
         type: boolean
+        example: true
+        description: Wheater this webhook is enabled or not
     required:
       - url
       - sign
