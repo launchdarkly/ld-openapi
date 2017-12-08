@@ -17,14 +17,21 @@ Webhook:
       $ref: '#/definitions/Links'
     _id:
       type: string
+      description: the ID of the webhook resource
     url:
       type: string
+      description: The URL of the remote webhook
+      example: https://example.com/example
     secret:
       type: string
+      description: If defined, the webhooks post request will include a X-LD-Signature header whose value will contain an HMAC SHA256 hex digest of the webhook payload, using the secret as the key
     on:
       type: boolean
+      description: Whether this webhook is enabled or not
+      example: true
     tags:
       type: array
+      description: Tags assigned to this webhook
       items: 
         type: string
 Webhooks:
