@@ -251,3 +251,10 @@ MembersPostRequest:
           $ref: '#/definitions/Statements'
       required:
         - email
+MemberId:
+  name: memberId
+  in: path
+  required: true
+  description: The member ID
+  type: string
+

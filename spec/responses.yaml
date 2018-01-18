@@ -26,3 +26,7 @@
     description: Successful Project response
     schema:
       $ref: '#/definitions/Project'
+  Member200:
+    description: Member response
+    schema:
+      $ref: '#/definitions/Member'
