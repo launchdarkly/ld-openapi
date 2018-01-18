@@ -3,7 +3,7 @@ TARGETS = \
 	bash \
 	go \
 	csharp \
-	csharp-dotnet2 \
+	CsharpDotNet2 \
 	java \
 	python \
 	javascript \
