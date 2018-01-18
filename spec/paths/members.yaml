@@ -27,3 +27,51 @@ Members:
         $ref: '#/responses/Standard409'
     tags:
       - members
+Member:
+  get:
+    summary: Get a single team member by ID
+    operationId: getMember
+    parameters:
+      - $ref: '#/parameters/MemberId'
+    responses: 
+      '200': 
+        $ref: '#/responses/Member200'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - member
+  patch:
+    summary: Modify a team member by ID
+    operationId: patchMember
+    parameters:
+      - $ref: '#/parameters/MemberId'
+      - $ref: '#/parameters/PatchRequest'
+    responses: 
+      '200': 
+        $ref: '#/responses/Member200'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - member
+  delete:
+    summary: Delete a team member by ID
+    operationId: deleteMember
+    parameters:
+      - $ref: '#/parameters/MemberId'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - member

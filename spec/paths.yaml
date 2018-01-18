@@ -16,6 +16,8 @@
   $ref: ./paths/flags.yaml#/FlagStatus
 /members:
   $ref: ./paths/members.yaml#/Members
+/members/{memberId}:
+  $ref: ./paths/members.yaml#/Member
 /users/{projectKey}/{environmentKey}:
   $ref: ./paths/users.yaml#/Users
 /user-search/{projectKey}/{environmentKey}:
