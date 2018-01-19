@@ -30,3 +30,7 @@
     description: Member response
     schema:
       $ref: '#/definitions/Member'
+  CustomRole200:
+    description: Custom role response
+    schema:
+      $ref: '#/definitions/CustomRole'

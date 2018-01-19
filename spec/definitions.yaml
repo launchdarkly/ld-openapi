@@ -491,3 +491,49 @@ CustomRoleId:
   type: string
   description: The 20-hexdigit id or the key for a custom role
   example: "5721124f538714de2896338c"
+CustomRole:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    name:
+      type: string
+      description: name of the custom role
+      example: "revenue team"
+    key:
+      $ref: '#/definitions/CustomRoleKeyOrId'
+    description:
+      type: string
+      description: description of the custom role
+      example: "description of revenue team role here"
+    _id:
+      $ref: '#/definitions/Id'
+    policy:
+      type: array
+      items:
+        $ref: '#/definitions/Policy'
+CustomRoles:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      $ref: '#/definitions/CustomRole'
+Policy:
+  type: object
+  properties:
+    resources:
+      $ref: '#/definitions/Resources'
+    actions:
+      $ref: '#/definitions/Actions'
+    effect:
+      type: string
+      description: effect of the policy
+      example: "deny"
+Id:
+  type: string
+  description: the unique id
+  example: "5a580a01b4ff89217bdf9dc1"
+  
+
+

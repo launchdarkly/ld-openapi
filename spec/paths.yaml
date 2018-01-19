@@ -36,5 +36,9 @@
   $ref: ./paths/webhooks.yaml#/Webhooks
 /webhooks/{resourceId}: 
   $ref: ./paths/webhooks.yaml#/Webhook
+/roles:
+  $ref: ./paths/roles.yaml#/CustomRoles
+/roles/{customRoleKey}:
+  $ref: ./paths/roles.yaml#/CustomRole
 /:
   $ref: ./paths/root.yaml#/Root
