@@ -267,12 +267,12 @@ CustomRolePostRequest:
     properties:
       name:
         type: string
-        description: name of custom role
+        description: Name of the custom role
         example: "revenue team"
       description:
         type: string
-        description: description of custom role
-        example: "description of revenue team role here"
+        description: Description of the custom role
+        example: "Description of revenue team role here"
       key:
         $ref: '#/definitions/CustomRoleKeyOrId'
       policy:
@@ -287,5 +287,5 @@ CustomRoleKey:
   name: customRoleKey
   in: path
   required: true
-  description: the custom role key
+  description: The custom role key
   type: string

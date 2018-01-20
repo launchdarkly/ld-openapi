@@ -498,14 +498,14 @@ CustomRole:
       $ref: '#/definitions/Links'
     name:
       type: string
-      description: name of the custom role
+      description: Name of the custom role
       example: "revenue team"
     key:
       $ref: '#/definitions/CustomRoleKeyOrId'
     description:
       type: string
-      description: description of the custom role
-      example: "description of revenue team role here"
+      description: Description of the custom role
+      example: "Description of revenue team role here"
     _id:
       $ref: '#/definitions/Id'
     policy:
@@ -528,12 +528,9 @@ Policy:
       $ref: '#/definitions/Actions'
     effect:
       type: string
-      description: effect of the policy
+      description: Effect of the policy - allow or deny
       example: "deny"
 Id:
   type: string
-  description: the unique id
+  description: The unique resource id
   example: "5a580a01b4ff89217bdf9dc1"
-  
-
-
