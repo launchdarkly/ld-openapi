@@ -257,4 +257,35 @@ MemberId:
   required: true
   description: The member ID
   type: string
-
+CustomRolePostRequest:
+  name: customRoleBody
+  in: body
+  required: true
+  description: New role or roles to create
+  schema:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the custom role
+        example: "revenue team"
+      description:
+        type: string
+        description: Description of the custom role
+        example: "Description of revenue team role here"
+      key:
+        $ref: '#/definitions/CustomRoleKeyOrId'
+      policy:
+        type: array
+        items:
+          $ref: '#/definitions/Policy'
+    required:
+      - name
+      - key
+      - policy
+CustomRoleKey:
+  name: customRoleKey
+  in: path
+  required: true
+  description: The custom role key
+  type: string
