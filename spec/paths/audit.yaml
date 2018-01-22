@@ -18,7 +18,7 @@ AuditLogEntries:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - audit log
+      - Audit log
 AuditLogEntry:
   get:
     summary: 'Use this endpoint to fetch a single audit log entry by its resouce ID.'
@@ -35,4 +35,4 @@ AuditLogEntry:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - audit log
+      - Audit log

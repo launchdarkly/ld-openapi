@@ -8,4 +8,4 @@ Root:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - root
+      - Root

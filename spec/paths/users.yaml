@@ -14,7 +14,7 @@ Users:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - users
+      - Users
 UsersSearch:
   get:
     summary: Search users in LaunchDarkly based on their last active date, or a search query. It should not be used to enumerate all users in LaunchDarkly-- use the List users API resource.
@@ -34,7 +34,7 @@ UsersSearch:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - users
+      - Users
 User:
   get:
     summary: Get a user by key.
@@ -53,7 +53,7 @@ User:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - users
+      - Users
   delete:
     summary: Delete a user by ID
     operationId: deleteUser
@@ -69,7 +69,7 @@ User:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - users
+      - Users
 UserFlagSettings:
   get:
     summary: Fetch a single flag setting for a user by key.
@@ -88,7 +88,7 @@ UserFlagSettings:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - user settings
+      - User settings
 UserFlagSetting:
   get:
     summary: Fetch a single flag setting for a user by key.
@@ -108,7 +108,7 @@ UserFlagSetting:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - user settings
+      - User settings
   put:
     summary: Specifically enable or disable a feature flag for a user based on their key.
     operationId: putFlagSetting
@@ -128,4 +128,4 @@ UserFlagSetting:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - user settings
+      - User settings

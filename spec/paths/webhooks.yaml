@@ -10,7 +10,7 @@ Webhooks:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - webhooks
+      - Webhooks
   post:
     summary: Create a webhook
     operationId: postWebhook
@@ -24,7 +24,7 @@ Webhooks:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - webhooks
+      - Webhooks
 Webhook:
   get:
     summary: Get a webhook by ID
@@ -39,7 +39,7 @@ Webhook:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - webhooks
+      - Webhooks
   patch:
     summary: Modify a webhook by ID
     operationId: patchWebhook
@@ -58,7 +58,7 @@ Webhook:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - webhooks
+      - Webhooks
   delete:
     summary: Delete a webhook by ID
     operationId: deleteWebhook
@@ -72,4 +72,4 @@ Webhook:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - webhooks
+      - Webhooks

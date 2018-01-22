@@ -14,7 +14,7 @@ Flags:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - flags
+      - Feature flags
   post:
     summary: Creates a new feature flag.
     operationId: postFeatureFlag
@@ -31,7 +31,7 @@ Flags:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - flags
+      - Feature flags
 Flag:
   get:
     summary: Get a single feature flag by key.
@@ -50,7 +50,7 @@ Flag:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - flags
+      - Feature flags
   patch:
     summary: Perform a partial update to a feature.
     operationId: patchFeatureFlag
@@ -70,7 +70,7 @@ Flag:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - flags
+      - Feature flags
   delete:
     summary: 'Delete a feature flag in all environments. Be careful-- only delete feature flags that are no longer being used by your application.'
     operationId: deleteFeatureFlag
@@ -85,7 +85,7 @@ Flag:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - flags
+      - Feature flags
 FlagStatuses:
   get:
     summary: 'Get a list of statuses for all feature flags. The status includes the last time the feature flag was requested, as well as the state of the flag'
@@ -101,7 +101,7 @@ FlagStatuses:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - flags
+      - Feature flags
 FlagStatus:
   get:
     summary: Get the status for a particular feature flag.
@@ -118,4 +118,4 @@ FlagStatus:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - flags
+      - Feature flags

@@ -10,7 +10,7 @@ CustomRoles:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - custom roles
+      - Custom roles
   post:
     summary: Create a new custom role
     operationId: postCustomRole
@@ -26,7 +26,7 @@ CustomRoles:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - custom roles
+      - Custom roles
 CustomRole:
   get:
     summary: Get one custom role by key
@@ -41,7 +41,7 @@ CustomRole:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - custom roles
+      - Custom roles
   patch:
     summary: Modify a custom role by key
     operationId: patchCustomRole
@@ -60,7 +60,7 @@ CustomRole:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - custom roles
+      - Custom roles
   delete:
     summary: Delete a custom role by key
     operationId: deleteCustomRole
@@ -74,4 +74,4 @@ CustomRole:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - custom roles
+      - Custom roles

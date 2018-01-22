@@ -15,7 +15,7 @@ Environments:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - environments
+      - Environments
 Environment:
   get:
     summary: Get an environment given a project and key.
@@ -33,7 +33,7 @@ Environment:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - environments
+      - Environments
   patch:
     summary: Modify an environment by ID
     operationId: patchEnvironment
@@ -51,7 +51,7 @@ Environment:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - environments
+      - Environments
   delete:
     summary: 'Delete an environment in a specific project.'
     operationId: deleteEnvironment
@@ -66,4 +66,4 @@ Environment:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - environments
+      - Environments

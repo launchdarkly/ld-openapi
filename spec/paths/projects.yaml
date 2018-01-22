@@ -10,7 +10,7 @@ Projects:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - projects
+      - Projects
   post:
     summary: Create a new project with the given key and name.
     operationId: postProject
@@ -26,7 +26,7 @@ Projects:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - projects
+      - Projects
 Project:
   get:
     summary: Fetch a single project by key.
@@ -41,7 +41,7 @@ Project:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - projects
+      - Projects
   patch:
     summary: Modify a project by ID
     operationId: patchProject
@@ -58,7 +58,7 @@ Project:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - projects
+      - Projects
   delete:
     summary: Delete a project by key. Caution-- deleting a project will delete all associated environments and feature flags. You cannot delete the last project in an account.
     operationId: deleteProject
@@ -72,4 +72,4 @@ Project:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - projects
+      - Projects

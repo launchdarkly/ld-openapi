@@ -14,10 +14,6 @@
   $ref: ./paths/flags.yaml#/FlagStatuses
 /flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/FlagStatus
-/members:
-  $ref: ./paths/members.yaml#/Members
-/members/{memberId}:
-  $ref: ./paths/members.yaml#/Member
 /users/{projectKey}/{environmentKey}:
   $ref: ./paths/users.yaml#/Users
 /user-search/{projectKey}/{environmentKey}:
@@ -40,5 +36,9 @@
   $ref: ./paths/roles.yaml#/CustomRoles
 /roles/{customRoleKey}:
   $ref: ./paths/roles.yaml#/CustomRole
+/members:
+  $ref: ./paths/members.yaml#/Members
+/members/{memberId}:
+  $ref: ./paths/members.yaml#/Member
 /:
   $ref: ./paths/root.yaml#/Root
