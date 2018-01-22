@@ -43,7 +43,7 @@ Project:
     tags:
       - Projects
   patch:
-    summary: Modify a project by ID
+    summary: Modify a project by ID.
     operationId: patchProject
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -73,3 +73,4 @@ Project:
         $ref: '#/responses/Standard404'
     tags:
       - Projects
+      

@@ -8,7 +8,7 @@ Users:
     - $ref: '#/parameters/Limit'
     responses:
       '200':
-        description: Users response
+        description: Users response.
         schema:
           $ref: '#/definitions/Users'
       '401':
@@ -28,7 +28,7 @@ UsersSearch:
     - $ref: '#/parameters/After'
     responses:
       '200':
-        description: Users response
+        description: Users response.
         schema:
           $ref: '#/definitions/Users'
       '401':
@@ -45,7 +45,7 @@ User:
       - $ref: '#/parameters/UserKey'
     responses:
       '200':
-        description: User response
+        description: User response.
         schema:
           $ref: '#/definitions/User'
       '401':
@@ -55,7 +55,7 @@ User:
     tags:
       - Users
   delete:
-    summary: Delete a user by ID
+    summary: Delete a user by ID.
     operationId: deleteUser
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -80,7 +80,7 @@ UserFlagSettings:
       - $ref: '#/parameters/UserKey'
     responses:
       '200':
-        description: User flags settings response
+        description: User flags settings response.
         schema:
           $ref: '#/definitions/UserFlagSettings'
       '401':
@@ -100,7 +100,7 @@ UserFlagSetting:
       - $ref: '#/parameters/FeatureFlagKey'
     responses:
       '200':
-        description: User flag setting response
+        description: User flag setting response.
         schema:
           $ref: '#/definitions/UserFlagSetting'
       '401':
@@ -129,3 +129,4 @@ UserFlagSetting:
         $ref: '#/responses/Standard404'
     tags:
       - User settings
+      

@@ -25,7 +25,7 @@ Environment:
       - $ref: '#/parameters/EnvironmentKey'
     responses:
       '200':
-        description: Environment response
+        description: Environment response.
         schema:
           $ref: '#/definitions/Environment'
       '401':
@@ -35,7 +35,7 @@ Environment:
     tags:
       - Environments
   patch:
-    summary: Modify an environment by ID
+    summary: Modify an environment by ID.
     operationId: patchEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -53,7 +53,7 @@ Environment:
     tags:
       - Environments
   delete:
-    summary: 'Delete an environment in a specific project.'
+    summary: Delete an environment in a specific project.
     operationId: deleteEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -67,3 +67,4 @@ Environment:
         $ref: '#/responses/Standard404'
     tags:
       - Environments
+      

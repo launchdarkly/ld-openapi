@@ -1,10 +1,10 @@
 Webhooks:
   get:
-    summary: Fetch a list of all webhooks
+    summary: Fetch a list of all webhooks.
     operationId: getWebhooks
     responses:
       '200':
-        description: Webhooks response
+        description: Webhooks response.
         schema:
           $ref: '#/definitions/Webhooks'
       '401':
@@ -12,7 +12,7 @@ Webhooks:
     tags:
       - Webhooks
   post:
-    summary: Create a webhook
+    summary: Create a webhook.
     operationId: postWebhook
     parameters:
       - $ref: '#/parameters/WebhookPostRequest'
@@ -27,7 +27,7 @@ Webhooks:
       - Webhooks
 Webhook:
   get:
-    summary: Get a webhook by ID
+    summary: Get a webhook by ID.
     operationId: getWebhook
     parameters:
       - $ref: '#/parameters/ResourceId'
@@ -41,7 +41,7 @@ Webhook:
     tags:
       - Webhooks
   patch:
-    summary: Modify a webhook by ID
+    summary: Modify a webhook by ID.
     operationId: patchWebhook
     parameters:
       - $ref: '#/parameters/ResourceId'
@@ -60,7 +60,7 @@ Webhook:
     tags:
       - Webhooks
   delete:
-    summary: Delete a webhook by ID
+    summary: Delete a webhook by ID.
     operationId: deleteWebhook
     parameters:
       - $ref: '#/parameters/ResourceId'
@@ -73,3 +73,4 @@ Webhook:
         $ref: '#/responses/Standard404'
     tags:
       - Webhooks
+      

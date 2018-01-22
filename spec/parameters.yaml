@@ -2,20 +2,20 @@ ResourceId:
   name: resourceId
   in: path
   required: true
-  description: The resource ID
+  description: The resource ID.
   type: string
 WebhookPostRequest:
   name: webhookBody
   in: body
   required: true
-  description: New webhook
+  description: New webhook.
   schema:
     type: object
     properties:
       url:
         example: https://example.com/example
         type: string
-        description: The URL of the remote webhook
+        description: The URL of the remote webhook.
       secret:
         example: <password> 
         type: string
@@ -26,7 +26,7 @@ WebhookPostRequest:
       on: 
         type: boolean
         example: true
-        description: Whether this webhook is enabled or not
+        description: Whether this webhook is enabled or not.
     required:
       - url
       - sign
@@ -35,7 +35,7 @@ FeatureFlagPostRequest:
   name: featureFlagBody
   in: body
   required: true
-  description: Create a new feature flag
+  description: Create a new feature flag.
   schema:
     type: object
     properties:
@@ -44,7 +44,7 @@ FeatureFlagPostRequest:
         description: A human-friendly name for the feature flag. Remember to note if this flag is intended to be temporary or permanent.
       key:
         type: string
-        description: A unique key that will be used to reference the flag in your code
+        description: A unique key that will be used to reference the flag in your code.
       variations:
         type: array
         items:
@@ -52,15 +52,15 @@ FeatureFlagPostRequest:
         description: An array of possible variations for the flag.
       temporary: 
         type: boolean
-        description: Whether or not the flag is a temporary flag
+        description: Whether or not the flag is a temporary flag.
       tags:
         type: array
         items:
           type: string
-        description: Tags for the feature flag
+        description: Tags for the feature flag.
       includeInSnippet:
         type: boolean
-        description: Whether or not this flag should be made available to the client-side JavaScript SDK
+        description: Whether or not this flag should be made available to the client-side JavaScript SDK.
     required:
       - name
       - key
@@ -84,25 +84,25 @@ EnvironmentPostRequest:
   name: environmentBody
   in: body
   required: true
-  description: New environment
+  description: New environment.
   schema:
     type: object
     properties:
       name:
         type: string
-        description: The name of the new environment
+        description: The name of the new environment.
         example: Development
       key:
         type: string
-        description: A project-unique key for the new environment
+        description: A project-unique key for the new environment.
         example: dev
       color:
         type: string
-        description: A color swatch (as an RGB hex value with no leading '#', e.g. C8C8C8)
+        description: A color swatch (as an RGB hex value with no leading '#', e.g. C8C8C8).
         example: 417505
       defaultTtl:
         type: number
-        description: The default TTL for the new environment
+        description: The default TTL for the new environment.
         example: 0
     required:
       - name
@@ -136,7 +136,7 @@ UserKey:
   name: userKey
   in: path
   required: true
-  description: The user's key
+  description: The user's key.
   type: string
 Tag:
   name: tag
@@ -148,19 +148,19 @@ Limit:
   name: limit
   in: query
   required: false
-  description: Pagination limit
+  description: Pagination limit.
   type: number
 Query:
   name: q
   in: query
   required: false
-  description: Search query
+  description: Search query.
   type: string
 Offset:
   name: offset
   in: query
   required: false
-  description: Specifies the first item to return in the collection
+  description: Specifies the first item to return in the collection.
   type: number
 After:
   name: after
@@ -205,31 +205,31 @@ Before:
   name: before
   in: query
   required: false
-  description: 'A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have before this timestamp.'
+  description: A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have before this timestamp.
   type: number
 Q:
   name: q
   in: query
   required: false
-  description: Text to search for. You can search for the full or partial name of the resource involved or fullpartial email address of the member who made the change
+  description: Text to search for. You can search for the full or partial name of the resource involved or fullpartial email address of the member who made the change.
   type: string
 AuditLimit:
   name: limit
   in: query
   required: false
-  description: 'A limit on the number of audit log entries to be returned, between 1 and 20'
+  description: A limit on the number of audit log entries to be returned, between 1 and 20.
   type: number
 Spec:
   name: spec
   in: query
   required: false
-  description: 'A resource specifier, allowing you to filter audit log listings by resource'
+  description: A resource specifier, allowing you to filter audit log listings by resource.
   type: string
 MembersPostRequest:
   name: membersBody
   in: body
   required: true
-  description: New members to invite
+  description: New members to invite.
   schema:
     type: array
     items:
@@ -255,23 +255,23 @@ MemberId:
   name: memberId
   in: path
   required: true
-  description: The member ID
+  description: The member ID.
   type: string
 CustomRolePostRequest:
   name: customRoleBody
   in: body
   required: true
-  description: New role or roles to create
+  description: New role or roles to create.
   schema:
     type: object
     properties:
       name:
         type: string
-        description: Name of the custom role
+        description: Name of the custom role.
         example: "revenue team"
       description:
         type: string
-        description: Description of the custom role
+        description: Description of the custom role.
         example: "Description of revenue team role here"
       key:
         $ref: '#/definitions/CustomRoleKeyOrId'
@@ -287,5 +287,5 @@ CustomRoleKey:
   name: customRoleKey
   in: path
   required: true
-  description: The custom role key
+  description: The custom role key.
   type: string

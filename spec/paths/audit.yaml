@@ -1,6 +1,6 @@
 AuditLogEntries:
   get:
-    summary: 'Get a list of all audit log entries. The query parameters allow you to restrict the returned results by date ranges, resource specifiers, or a full-text search query.'
+    summary: Get a list of all audit log entries. The query parameters allow you to restrict the returned results by date ranges, resource specifiers, or a full-text search query.
     operationId: getAuditLogEntries
     parameters:
       - $ref: '#/parameters/Before'
@@ -10,7 +10,7 @@ AuditLogEntries:
       - $ref: '#/parameters/Spec'
     responses:
       '200':
-        description: Audit log entries response
+        description: Audit log entries response.
         schema:
           $ref: '#/definitions/AuditLogEntries'
       '400':
@@ -21,13 +21,13 @@ AuditLogEntries:
       - Audit log
 AuditLogEntry:
   get:
-    summary: 'Use this endpoint to fetch a single audit log entry by its resouce ID.'
+    summary: Use this endpoint to fetch a single audit log entry by its resouce ID.
     operationId: getAuditLogEntry
     parameters:
       - $ref: '#/parameters/ResourceId'
     responses:
       '200':
-        description: Audit log entry response
+        description: Audit log entry response.
         schema:
           $ref: '#/definitions/AuditLogEntry'
       '401':
@@ -36,3 +36,4 @@ AuditLogEntry:
         $ref: '#/responses/Standard404'
     tags:
       - Audit log
+      

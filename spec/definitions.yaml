@@ -17,21 +17,21 @@ Webhook:
       $ref: '#/definitions/Links'
     _id:
       type: string
-      description: the ID of the webhook resource
+      description: the ID of the webhook resource.
     url:
       type: string
-      description: The URL of the remote webhook
+      description: The URL of the remote webhook.
       example: https://example.com/example
     secret:
       type: string
-      description: If defined, the webhooks post request will include a X-LD-Signature header whose value will contain an HMAC SHA256 hex digest of the webhook payload, using the secret as the key
+      description: If defined, the webhooks post request will include a X-LD-Signature header whose value will contain an HMAC SHA256 hex digest of the webhook payload, using the secret as the key.
     on:
       type: boolean
-      description: Whether this webhook is enabled or not
+      description: Whether this webhook is enabled or not.
       example: true
     tags:
       type: array
-      description: Tags assigned to this webhook
+      description: Tags assigned to this webhook.
       items: 
         type: string
 Webhooks:
@@ -51,7 +51,7 @@ FeatureFlag:
       example: bob@example.com
     name:
       type: string
-      description: Name of the feature flag
+      description: Name of the feature flag.
       example: test-feature
     kind:
       type: string
@@ -282,35 +282,35 @@ Environment:
     _id:
       type: string
       example: 57ae15fc40cda6071f6c242e
-      description: The unique id for the environment
+      description: The unique id for the environment.
     key:
       type: string
       example: production
-      description: The key for the environment
+      description: The key for the environment.
     name:
       type: string
       example: Production
-      description: The name of the environment
+      description: The name of the environment.
     apiKey:
       type: string
       example: XXX
-      description: The SDK key for backend LaunchDarkly SDKs
+      description: The SDK key for backend LaunchDarkly SDKs.
     mobileKey:
       type: string
       example: XXX
-      description: The SDK key for mobile LaunchDarkly SDKs
+      description: The SDK key for mobile LaunchDarkly SDKs.
     color:
       type: string
       example: 417505
-      description: The swatch color for the environment
+      description: The swatch color for the environment.
     defaultTtl:
       type: number
       example: 0
-      description: The default TTL
+      description: The default TTL.
     secureMode:
       type: boolean
       example: false
-      description: Determines if this environment is in safe mode
+      description: Determines if this environment is in safe mode.
 User:
   type: object
   properties:
@@ -423,7 +423,6 @@ UserFlagSettings:
               type: application/json
           _value: false,
           setting: null
-
 Statements:
   type: array
   items:
@@ -446,34 +445,28 @@ Statement:
       enum:
         - allow
         - deny
-
 Resources:
   type: array
   items:
     $ref: '#/definitions/Resource'
-
 Resource:
   type: string
   description: A resource specifier string
   example: "proj/*:env/*:flag/my-flag"
-
 Actions:
   type: array
   items:
     $ref: '#/definitions/Action'
-
 Action:
   type: string
-  description: An action to perform on a resource
+  description: An action to perform on a resource.
   example: updateOn
-
 NonOwnerRole:
   type: string
   enum:
     - writer
     - reader
     - admin
-
 Role:
   type: string
   enum:
@@ -481,15 +474,13 @@ Role:
     - reader
     - admin
     - owner
-
 CustomRoleKeyOrId:
   type: string
-  description: The 20-hexdigit id or the key for a custom role
+  description: The 20-hexdigit id or the key for a custom role.
   example: "revenue-team"
-
 CustomRoleId:
   type: string
-  description: The 20-hexdigit id or the key for a custom role
+  description: The 20-hexdigit id or the key for a custom role.
   example: "5721124f538714de2896338c"
 CustomRole:
   type: object
@@ -498,13 +489,13 @@ CustomRole:
       $ref: '#/definitions/Links'
     name:
       type: string
-      description: Name of the custom role
+      description: Name of the custom role.
       example: "revenue team"
     key:
       $ref: '#/definitions/CustomRoleKeyOrId'
     description:
       type: string
-      description: Description of the custom role
+      description: Description of the custom role.
       example: "Description of revenue team role here"
     _id:
       $ref: '#/definitions/Id'
@@ -528,7 +519,7 @@ Policy:
       $ref: '#/definitions/Actions'
     effect:
       type: string
-      description: Effect of the policy - allow or deny
+      description: Effect of the policy - allow or deny.
       example: "deny"
 Id:
   type: string
