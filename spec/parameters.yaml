@@ -42,9 +42,11 @@ FeatureFlagPostRequest:
       name:
         type: string
         description: A human-friendly name for the feature flag. Remember to note if this flag is intended to be temporary or permanent.
+        example: "new test flag"
       key:
         type: string
         description: A unique key that will be used to reference the flag in your code.
+        example: "new-test-flag"
       variations:
         type: array
         items:
@@ -57,6 +59,7 @@ FeatureFlagPostRequest:
         type: array
         items:
           type: string
+          example: '[]'
         description: Tags for the feature flag.
       includeInSnippet:
         type: boolean
@@ -75,8 +78,10 @@ ProjectPostRequest:
     properties:
       name:
         type: string
+        example: New Project
       key:
         type: string
+        example: new-project
     required:
       - name
       - key
@@ -166,7 +171,7 @@ After:
   name: after
   in: query
   required: false
-  description: 'A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occured after this timestamp.'
+  description: A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occured after this timestamp.
   format: int64
   type: number
 PatchRequest:
@@ -181,10 +186,12 @@ PatchRequest:
       properties:
         op:
           type: string
+          example: replace
         path:
           type: string
+          example: '/on'
         value:
-          type: object
+          type: boolean
       required:
         - op
         - path
@@ -237,10 +244,13 @@ MembersPostRequest:
       properties:
         email:
           type: string
+          example: exampleuser@email.com
         firstName:
           type: string
+          example: Bob
         lastName:
           type: string
+          example: Loblaw
         role:
           $ref: '#/definitions/NonOwnerRole'
         customRoles:

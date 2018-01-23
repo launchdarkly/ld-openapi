@@ -49,6 +49,8 @@ Project:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/PatchRequest'
     responses:
+      '200':
+        $ref: '#/responses/Projects200'
       '400':
         $ref: '#/responses/Standard400'
       '401':

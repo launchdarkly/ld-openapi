@@ -2,9 +2,11 @@ Link:
   type: object
   properties:
     href:
-      type: string     
+      type: string
+      example: "/api/v2/endpoint"     
     type:
       type: string
+      example: "application/json"
 Links:
   type: object
   properties:
@@ -16,8 +18,7 @@ Webhook:
     _links:
       $ref: '#/definitions/Links'
     _id:
-      type: string
-      description: the ID of the webhook resource.
+      $ref: '#/definitions/Id'
     url:
       type: string
       description: The URL of the remote webhook.
@@ -25,6 +26,7 @@ Webhook:
     secret:
       type: string
       description: If defined, the webhooks post request will include a X-LD-Signature header whose value will contain an HMAC SHA256 hex digest of the webhook payload, using the secret as the key.
+      example: "frobozz"
     on:
       type: boolean
       description: Whether this webhook is enabled or not.
@@ -34,6 +36,7 @@ Webhook:
       description: Tags assigned to this webhook.
       items: 
         type: string
+        example: '[]'
 Webhooks:
   type: object
   properties:
@@ -108,11 +111,12 @@ Member:
     _links:
       $ref: '#/definitions/Links'
     _id:
-      type: string
+      $ref: '#/definitions/Id'
     role:
       $ref: '#/definitions/Role'
     email: 
       type: string
+      example: "user@launchdarkly.com"
     _pendingInvite: 
       type: boolean
     isBeta:
@@ -137,13 +141,17 @@ FeatureFlagConfig:
       type: boolean
     salt:
       type: string
+      example: YWx0ZXJuYXRlLnBhZ2U=
     sel:
       type: string
+      example: 45501b9314dc4641841af774cb038b96
     lastModified:
       type: integer
       format: int64
+      example: 1469326565348
     version:
       type: integer
+      example: 65
     targets:
       type: array
       items:
@@ -166,6 +174,7 @@ Target:
       type: array
       items:
         type: string
+        example: '"1461797806427-7-115540266", "00142875-a39d-4028-a3b7-987ccd151649"'
     variation:
       type: integer
 Rule:
@@ -198,12 +207,15 @@ Clause:
   properties:
     attribute:
       type: string
+      example: "groups"
     op:
       type: string
+      example: "in"
     values:
       type: array
       items:
         type: string
+        example: "Top Customers"
     negate:
       type: boolean
 Variation:
@@ -213,10 +225,12 @@ Variation:
   properties:
     name:
       type: string
+      example: "True"
     description:
       type: string
+      example: "The true variation"
     value:
-      type: object
+      type: boolean
 FeatureFlagStatus:
   type: object
   properties:
@@ -237,8 +251,8 @@ FeatureFlagStatus:
         - inactive
         - launched
     lastRequested:
-      type: integer
-      format: int64
+      type: string
+      example: "2016-08-16T21:10:11.886Z"
     default:
       type: boolean
 FeatureFlagStatuses:
@@ -265,11 +279,13 @@ Projects:
     _links:
       $ref: '#/definitions/Links'
     _id:
-      type: string
+      $ref: '#/definitions/Id'
     key:
       type: string
+      example: zentasks
     name:
       type: string
+      example: Zentasks
     items:
       type: array
       items:
@@ -322,8 +338,7 @@ User:
       type: string
       example: 54ac2d97de674204ddd61096
     ownerId:
-      type: string
-      example: 573ca90604a444f18afd651a
+      $ref: '#/definitions/Id'
     user:
       type: object
       example:
@@ -333,6 +348,7 @@ User:
           company: example.com
     avatar:
       type: string
+      example: 'https://s3.amazonaws.com/uifaces/faces/twitter/shylockjoy/73.jpg'
 Users:
   type: object
   properties:
@@ -351,22 +367,28 @@ AuditLogEntry:
     _links:
       $ref: '#/definitions/Links'
     _id:
-      type: string
+      $ref: '#/definitions/Id'
     date:
       type: integer
       format: int64
+      example: 1472243938774
     kind:
       type: string
+      example: environment
     name:
       type: string
+      example: Testing
     description:
       type: string
+      example: Changed the name from Test to Testing
     member:
       $ref: '#/definitions/Member'
     titleVerb:
       type: string
+      example: changed the name of
     title:
       type: string
+      example: '[Reese Applebaum](mailto:refapp@launchdarkly.com) changed the name of [Testing](https://app.launchdarkly.com/settings#/projects)'
     target:
       type: object
       properties:
@@ -374,10 +396,12 @@ AuditLogEntry:
           $ref: '#/definitions/Links'
         name:
           type: string
+          example: Testing
         resources:
           type: array
           items:
             type: string
+            example: proj/alexis:env/test
 AuditLogEntries:
   type: object
   properties:
@@ -523,5 +547,5 @@ Policy:
       example: "deny"
 Id:
   type: string
-  description: The unique resource id
+  description: The unique resource id.
   example: "5a580a01b4ff89217bdf9dc1"
