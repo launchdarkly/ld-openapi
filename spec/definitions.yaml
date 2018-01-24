@@ -124,7 +124,7 @@ Member:
     customRoles:
       type: array
       items:
-        $ref: '#/definitions/CustomRoleId'
+        $ref: '#/definitions/Id'
 Members:
   type: object
   properties:
@@ -502,10 +502,6 @@ CustomRoleKeyOrId:
   type: string
   description: The 20-hexdigit id or the key for a custom role.
   example: "revenue-team"
-CustomRoleId:
-  type: string
-  description: The 20-hexdigit id or the key for a custom role.
-  example: "5721124f538714de2896338c"
 CustomRole:
   type: object
   properties:
