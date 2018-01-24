@@ -4,15 +4,15 @@ CustomRoles:
     operationId: getCustomRoles
     responses:
       '200':
-        description: Custom roles response
+        description: Custom roles response.
         schema:
           $ref: '#/definitions/CustomRoles'
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - custom roles
+      - Custom roles
   post:
-    summary: Create a new custom role
+    summary: Create a new custom role.
     operationId: postCustomRole
     parameters:
       - $ref: '#/parameters/CustomRolePostRequest'
@@ -26,10 +26,10 @@ CustomRoles:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - custom roles
+      - Custom roles
 CustomRole:
   get:
-    summary: Get one custom role by key
+    summary: Get one custom role by key.
     operationId: getCustomRole
     parameters:
       - $ref: '#/parameters/CustomRoleKey'
@@ -41,9 +41,9 @@ CustomRole:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - custom roles
+      - Custom roles
   patch:
-    summary: Modify a custom role by key
+    summary: Modify a custom role by key.
     operationId: patchCustomRole
     parameters:
       - $ref: '#/parameters/CustomRoleKey'
@@ -60,9 +60,9 @@ CustomRole:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - custom roles
+      - Custom roles
   delete:
-    summary: Delete a custom role by key
+    summary: Delete a custom role by key.
     operationId: deleteCustomRole
     parameters:
       - $ref: '#/parameters/CustomRoleKey'
@@ -74,4 +74,4 @@ CustomRole:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - custom roles
+      - Custom roles

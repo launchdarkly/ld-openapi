@@ -1,36 +1,36 @@
   Standard201:
-    description: Resource created
+    description: Resource created.
   Standard204:
-    description: Action completed successfully
+    description: Action completed successfully.
   Standard400:
-    description: Invalid request body
+    description: Invalid request body.
   Standard401:
-    description: Invalid access token
+    description: Invalid access token.
   Standard404:
-    description: Invalid resource specifier
+    description: Invalid resource specifier.
   Standard409:
-    description: Status conflict
+    description: Status conflict.
   Root200:
-    description: A list of links to available resources in the API
+    description: A list of links to available resources in the API.
     schema:
       $ref: '#/definitions/Links'
   Webhooks200:
-    description: Webhook response
+    description: Webhook response.
     schema:
       $ref: '#/definitions/Webhook'
   FeatureFlags200:
-    description: Feature flag response
+    description: Feature flag response.
     schema:
       $ref: '#/definitions/FeatureFlag'
   Projects200:
-    description: Successful Project response
+    description: Successful Project response.
     schema:
       $ref: '#/definitions/Project'
   Member200:
-    description: Member response
+    description: Member response.
     schema:
       $ref: '#/definitions/Member'
   CustomRole200:
-    description: Custom role response
+    description: Custom role response.
     schema:
       $ref: '#/definitions/CustomRole'

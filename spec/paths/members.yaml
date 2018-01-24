@@ -4,15 +4,15 @@ Members:
     operationId: getMembers
     responses:
       '200':
-        description: Projects response
+        description: Projects response.
         schema:
           $ref: '#/definitions/Members'
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - members
+      - Team members
   post:
-    summary: Invite new members
+    summary: Invite new members.
     operationId: postMembers
     parameters:
       - $ref: '#/parameters/MembersPostRequest'
@@ -26,10 +26,10 @@ Members:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - members
+      - Team members
 Member:
   get:
-    summary: Get a single team member by ID
+    summary: Get a single team member by ID.
     operationId: getMember
     parameters:
       - $ref: '#/parameters/MemberId'
@@ -41,9 +41,9 @@ Member:
       '401':
         $ref: '#/responses/Standard401'
     tags:
-      - member
+      - Team members
   patch:
-    summary: Modify a team member by ID
+    summary: Modify a team member by ID.
     operationId: patchMember
     parameters:
       - $ref: '#/parameters/MemberId'
@@ -60,9 +60,9 @@ Member:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - member
+      - Team members
   delete:
-    summary: Delete a team member by ID
+    summary: Delete a team member by ID.
     operationId: deleteMember
     parameters:
       - $ref: '#/parameters/MemberId'
@@ -74,4 +74,4 @@ Member:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - member
+      - Team members
