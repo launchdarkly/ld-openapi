@@ -2,9 +2,9 @@
   $ref: ./paths/projects.yaml#/Projects
 /projects/{projectKey}:
   $ref: ./paths/projects.yaml#/Project
-/environments/{projectKey}:
+/projects/{projectKey}/environments:
   $ref: ./paths/environments.yaml#/Environments
-/environments/{projectKey}/{environmentKey}:
+/projects/{projectKey}/environments/{environmentKey}:
   $ref: ./paths/environments.yaml#/Environment
 /flags/{projectKey}:
   $ref: ./paths/flags.yaml#/Flags

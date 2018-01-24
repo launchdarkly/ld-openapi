@@ -317,7 +317,7 @@ Environment:
       description: The SDK key for mobile LaunchDarkly SDKs.
     color:
       type: string
-      example: 417505
+      example: "417505"
       description: The swatch color for the environment.
     defaultTtl:
       type: number

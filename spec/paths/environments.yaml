@@ -42,6 +42,10 @@ Environment:
       - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/PatchRequest'
     responses:
+      '200':
+        description: Environment response.
+        schema:
+          $ref: '#/definitions/Environment'
       '400':
         $ref: '#/responses/Standard400'
       '401':
