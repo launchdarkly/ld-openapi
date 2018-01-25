@@ -2,8 +2,7 @@ VERSION = 1.0.2
 TARGETS = \
 	bash \
 	go \
-	csharp \
-	CsharpDotNet2 \
+	csharp-dotnet2 \
 	java \
 	python \
 	javascript \
