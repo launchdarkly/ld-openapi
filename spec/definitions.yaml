@@ -381,6 +381,12 @@ AuditLogEntry:
     description:
       type: string
       example: Changed the name from Test to Testing
+    shortDescription:
+      type: string
+      example: '""'
+    comment: 
+      type: string
+      example: This is a comment string
     member:
       $ref: '#/definitions/Member'
     titleVerb:
