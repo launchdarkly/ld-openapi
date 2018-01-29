@@ -57,7 +57,7 @@ Flag:
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/PatchRequest'
+      - $ref: '#/parameters/PatchWithComment'
     responses:
       '200':
         $ref: '#/responses/FeatureFlags200'

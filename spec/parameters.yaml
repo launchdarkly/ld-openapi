@@ -299,3 +299,33 @@ CustomRoleKey:
   required: true
   description: The custom role key.
   type: string
+PatchWithComment:
+  name: patchComment
+  in: body
+  required: true
+  description: Requires a JSON Patch representation of the desired changes to the project. 'http://jsonpatch.com/' Feature flag patches also support JSON Merge Patch format. 'https://tools.ietf.org/html/rfc7386' The addition of comments is also supported.
+  schema:
+    type: object
+    properties:
+      comment:
+        type: string
+        example: "This is a comment string"
+      patch:
+        type: array
+        items:
+          type: object
+          properties:
+            op:
+              type: string
+              example: replace
+            path:
+              type: string
+              example: '/description'
+            value:
+              type: string
+              example: "The new description"
+          required:
+            - op
+            - path
+            - value
+      
