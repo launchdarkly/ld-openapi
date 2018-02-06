@@ -17,13 +17,13 @@ WebhookPostRequest:
         type: string
         description: The URL of the remote webhook.
       secret:
-        example: <password> 
+        example: <password>
         type: string
         description: If sign is true, and the secret attribute is omitted, LaunchDarkly will automatically generate a secret for you.
-      sign: 
+      sign:
         type: boolean
         description: If sign is false, the webhook will not include a signature header, and the secret can be omitted.
-      on: 
+      on:
         type: boolean
         example: true
         description: Whether this webhook is enabled or not.
@@ -52,7 +52,7 @@ FeatureFlagPostRequest:
         items:
           $ref: '#/definitions/Variation'
         description: An array of possible variations for the flag.
-      temporary: 
+      temporary:
         type: boolean
         description: Whether or not the flag is a temporary flag.
       tags:
@@ -126,7 +126,7 @@ EnvironmentKey:
   description: The environment key, used to tie together flag configuration and users under one environment so they can be managed together.
   type: string
 EnvironmentKeyQuery:
-  name: environmentKeyQuery
+  name: env
   in: query
   required: false
   description: By default, each feature will include configurations for each environment. You can filter environments with the env query parameter. For example, setting env=production will restrict the returned configurations to just your production environment.
@@ -328,4 +328,4 @@ PatchWithComment:
             - op
             - path
             - value
-      
+
