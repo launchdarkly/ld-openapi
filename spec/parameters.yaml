@@ -191,7 +191,7 @@ PatchRequest:
           type: string
           example: '/on'
         value:
-          type: boolean
+          type: object
       required:
         - op
         - path
@@ -252,7 +252,7 @@ MembersPostRequest:
           type: string
           example: Loblaw
         role:
-          $ref: '#/definitions/NonOwnerRole'
+          $ref: '#/definitions/Role'
         customRoles:
           type: array
           items:
@@ -322,7 +322,7 @@ PatchWithComment:
               type: string
               example: '/description'
             value:
-              type: string
+              type: object
               example: "The new description"
           required:
             - op

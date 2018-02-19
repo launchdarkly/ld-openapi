@@ -56,6 +56,10 @@ FeatureFlag:
       type: string
       description: Name of the feature flag.
       example: test-feature
+    description:
+      type: string
+      description: Description of the feature flag.
+      example: This flag controls whether test feature is turned on or not.
     kind:
       type: string
       description: Whether the feature flag is a boolean flag or multivariate.
@@ -230,7 +234,7 @@ Variation:
       type: string
       example: "The true variation"
     value:
-      type: boolean
+      type: object
 FeatureFlagStatus:
   type: object
   properties:
@@ -269,15 +273,6 @@ Project:
   properties:
     _links:
       $ref: '#/definitions/Links'
-    items:
-      type: array
-      items:
-        $ref: '#/definitions/Environment'
-Projects:
-  type: object
-  properties:
-    _links:
-      $ref: '#/definitions/Links'
     _id:
       $ref: '#/definitions/Id'
     key:
@@ -286,6 +281,15 @@ Projects:
     name:
       type: string
       example: Zentasks
+    environments:
+      type: array
+      items:
+        $ref: '#/definitions/Environment'
+Projects:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
     items:
       type: array
       items:
@@ -296,9 +300,7 @@ Environment:
     _links:
       $ref: '#/definitions/Links'
     _id:
-      type: string
-      example: 57ae15fc40cda6071f6c242e
-      description: The unique id for the environment.
+      $ref: '#/definitions/Id'
     key:
       type: string
       example: production
@@ -491,12 +493,6 @@ Action:
   type: string
   description: An action to perform on a resource.
   example: updateOn
-NonOwnerRole:
-  type: string
-  enum:
-    - writer
-    - reader
-    - admin
 Role:
   type: string
   enum:

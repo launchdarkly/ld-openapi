@@ -89,7 +89,7 @@ Flag:
 FlagStatuses:
   get:
     summary: Get a list of statuses for all feature flags. The status includes the last time the feature flag was requested, as well as the state of the flag.
-    operationId: getFeatureFlagStatus
+    operationId: getFeatureFlagStatuses
     parameters:
     - $ref: '#/parameters/ProjectKey'
     - $ref: '#/parameters/EnvironmentKey'
@@ -105,7 +105,7 @@ FlagStatuses:
 FlagStatus:
   get:
     summary: Get the status for a particular feature flag.
-    operationId: getFeatureFlagStatuses
+    operationId: getFeatureFlagStatus
     parameters:
     - $ref: '#/parameters/ProjectKey'
     - $ref: '#/parameters/EnvironmentKey'
