@@ -20,14 +20,13 @@ PREFIX = api-client
 TARGETS_PATH ?= ./targets
 LASTHASH := $(shell git rev-parse --short HEAD)
 
-TEMP_DIR := $(shell mktemp -d)
-
 all: $(TARGETS)
 
 $(TARGETS_PATH):
 	mkdir -p $@
 
 $(TARGETS): spec
+	$(eval TEMP_DIR := $(shell mktemp -d))
 	rm -rf $(TARGETS_PATH)/$(PREFIX)-$@
 	mkdir -p $(TARGETS_PATH)/$(PREFIX)-$@
 	cp $(TARGETS_PATH)/swagger.yaml $(TEMP_DIR)/swagger.yaml
@@ -37,6 +36,7 @@ $(TARGETS): spec
 	mv $(TARGETS_PATH)/$(PREFIX)-$@/README.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md || touch $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md > $(TARGETS_PATH)/$(PREFIX)-$@/README.md 
 	rm $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md
+	rm -rf $(TEMP_DIR)
 
 spec: $(TARGETS_PATH)
 	./node_modules/.bin/multi-file-swagger ./index.yaml > $(TARGETS_PATH)/swagger.json
