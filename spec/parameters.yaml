@@ -154,7 +154,7 @@ Limit:
   in: query
   required: false
   description: Pagination limit.
-  type: number
+  type: integer
 Query:
   name: q
   in: query
@@ -166,7 +166,7 @@ Offset:
   in: query
   required: false
   description: Specifies the first item to return in the collection.
-  type: number
+  type: integer
 After:
   name: after
   in: query
