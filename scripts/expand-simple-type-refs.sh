@@ -6,4 +6,4 @@
 
 sed -e "s@^\( *\)\$ref: ['\"]#/definitions/Id['\"]@\1type: string\\
 \1description: The unique resource id.\\
-\1example: \"5a580a01b4ff89217bdf9dc1\"@" -i '' $1
+\1example: \"5a580a01b4ff89217bdf9dc1\"@" -i .bak $1
