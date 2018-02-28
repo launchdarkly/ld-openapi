@@ -31,7 +31,7 @@ $(TARGETS): spec
 	rm -rf $(TARGETS_PATH)/$(PREFIX)-$@
 	mkdir -p $(TARGETS_PATH)/$(PREFIX)-$@
 	cp $(TARGETS_PATH)/swagger.yaml $(TEMP_DIR)/swagger.yaml
-	-./scripts/preprocess-yaml-$@.sh $(TEMP_DIR)/swagger.yaml
+	if [ -e "./scripts/preprocess-yaml-$@.sh" ]; then ./scripts/preprocess-yaml-$@.sh $(TEMP_DIR)/swagger.yaml; fi
 	swagger-codegen generate `cat ./config/params-$@ || true` --artifact-version $(VERSION) -i $(TEMP_DIR)/swagger.yaml -l $@ -o $(TARGETS_PATH)/$(PREFIX)-$@
 	cp ./LICENSE.txt $(TARGETS_PATH)/$(PREFIX)-$@/LICENSE.txt
 	mv $(TARGETS_PATH)/$(PREFIX)-$@/README.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md || touch $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md
