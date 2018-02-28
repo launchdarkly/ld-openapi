@@ -1,3 +1,6 @@
+
+SHELL = /bin/bash
+
 VERSION = 1.0.2
 TARGETS = \
 	bash \
@@ -17,6 +20,8 @@ PREFIX = api-client
 TARGETS_PATH ?= ./targets
 LASTHASH := $(shell git rev-parse --short HEAD)
 
+TEMP_DIR := $(shell mktemp -d)
+
 all: $(TARGETS)
 
 $(TARGETS_PATH):
@@ -25,7 +30,9 @@ $(TARGETS_PATH):
 $(TARGETS): spec
 	rm -rf $(TARGETS_PATH)/$(PREFIX)-$@
 	mkdir -p $(TARGETS_PATH)/$(PREFIX)-$@
-	swagger-codegen generate --group-id com.launchdarkly --artifact-id $(PREFIX) --artifact-version $(VERSION) -i $(TARGETS_PATH)/swagger.yaml -l $@ -o $(TARGETS_PATH)/$(PREFIX)-$@
+	cp $(TARGETS_PATH)/swagger.yaml $(TEMP_DIR)/swagger.yaml
+	./scripts/preprocess-yaml-$@.sh $(TEMP_DIR)/swagger.yaml || true
+	swagger-codegen generate `cat ./config/params-$@ || true` --artifact-version $(VERSION) -i $(TEMP_DIR)/swagger.yaml -l $@ -o $(TARGETS_PATH)/$(PREFIX)-$@
 	cp ./LICENSE.txt $(TARGETS_PATH)/$(PREFIX)-$@/LICENSE.txt
 	mv $(TARGETS_PATH)/$(PREFIX)-$@/README.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md || touch $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(TARGETS_PATH)/$(PREFIX)-$@/README-ORIGINAL.md > $(TARGETS_PATH)/$(PREFIX)-$@/README.md 

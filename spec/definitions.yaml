@@ -218,7 +218,7 @@ Clause:
     values:
       type: array
       items:
-        type: string
+        type: object
         example: "Top Customers"
     negate:
       type: boolean

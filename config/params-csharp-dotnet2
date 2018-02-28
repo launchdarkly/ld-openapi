@@ -1,0 +1,1 @@
+-DpackageName=LaunchDarkly.Api -DclientPackage=LaunchDarkly.Api.Client

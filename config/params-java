@@ -1,0 +1,1 @@
+--group-id com.launchdarkly --artifact-id api-client --api-package com.launchdarkly.api.api --model-package com.launchdarkly.api.model
