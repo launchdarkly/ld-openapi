@@ -1,0 +1,88 @@
+UserSegments:
+  get:
+    summary: Get a list of all user segments in the given project.
+    operationId: getUserSegments
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKeyQuery'
+      - $ref: '#/parameters/Tag'
+    responses:
+      '200':
+        description: Segments response.
+        schema:
+          $ref: '#/definitions/UserSegments'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - User segments
+  post:
+    summary: Creates a new user segment.
+    operationId: postUserSegment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/UserSegmentPostRequest'
+    responses:
+      '201':
+        $ref: '#/responses/Standard201'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - User segments
+UserSegment:
+  get:
+    summary: Get a single user segment by key.
+    operationId: getUserSegment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/UserSegmentKey'
+      - $ref: '#/parameters/EnvironmentKeyQuery'
+    responses:
+      '200':
+        description: User segment response.
+        schema:
+          $ref: '#/definitions/UserSegment'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - User segments
+  patch:
+    summary: Perform a partial update to a user segment.
+    operationId: patchUserSegment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/UserSegmentKey'
+      - $ref: '#/parameters/PatchWithComment'
+    responses:
+      '200':
+        $ref: '#/responses/UserSegment200'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - User segments
+  delete:
+    summary: Delete a user segment in all environments.
+    operationId: deleteUserSegment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/UserSegmentKey'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - User segments
