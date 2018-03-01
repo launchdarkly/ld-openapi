@@ -562,3 +562,18 @@ Id:
   type: string
   description: The unique resource id.
   example: "5a580a01b4ff89217bdf9dc1"
+PatchOperation:
+  type: object
+  properties:
+    op:
+      type: string
+      example: replace
+    path:
+      type: string
+      example: '/on'
+    value:
+      type: object
+  required:
+    - op
+    - path
+    - value
