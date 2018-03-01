@@ -4,7 +4,7 @@ UserSegments:
     operationId: getUserSegments
     parameters:
       - $ref: '#/parameters/ProjectKey'
-      - $ref: '#/parameters/EnvironmentKeyQuery'
+      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/Tag'
     responses:
       '200':
@@ -20,6 +20,7 @@ UserSegments:
     operationId: postUserSegment
     parameters:
       - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/UserSegmentPostRequest'
     responses:
       '201':
@@ -38,8 +39,8 @@ UserSegment:
     operationId: getUserSegment
     parameters:
       - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/UserSegmentKey'
-      - $ref: '#/parameters/EnvironmentKeyQuery'
     responses:
       '200':
         description: User segment response.
@@ -56,6 +57,7 @@ UserSegment:
     operationId: patchUserSegment
     parameters:
       - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/UserSegmentKey'
       - $ref: '#/parameters/PatchWithComment'
     responses:
@@ -72,10 +74,11 @@ UserSegment:
     tags:
       - User segments
   delete:
-    summary: Delete a user segment in all environments.
+    summary: Delete a user segment.
     operationId: deleteUserSegment
     parameters:
       - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/UserSegmentKey'
     responses:
       '204':

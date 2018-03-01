@@ -14,9 +14,9 @@
   $ref: ./paths/flags.yaml#/FlagStatuses
 /flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/FlagStatus
-/segments/{projectKey}:
+/segments/{projectKey}/{environmentKey}:
   $ref: ./paths/segments.yaml#/UserSegments
-/segments/{projectKey}/{userSegmentKey}:
+/segments/{projectKey}/{environmentKey}/{userSegmentKey}:
   $ref: ./paths/segments.yaml#/UserSegment
 /users/{projectKey}/{environmentKey}:
   $ref: ./paths/users.yaml#/Users
