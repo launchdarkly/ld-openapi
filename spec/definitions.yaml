@@ -51,11 +51,11 @@ FeatureFlag:
   properties:
     key:
       type: string
-      example: bob@example.com
+      example: test-feature
     name:
       type: string
       description: Name of the feature flag.
-      example: test-feature
+      example: Test Feature
     description:
       type: string
       description: Description of the feature flag.
@@ -268,6 +268,74 @@ FeatureFlagStatuses:
       type: array
       items:
         $ref: '#/definitions/FeatureFlagStatus'
+UserSegment:
+  type: object
+  required:
+    - key
+    - name
+    - creationDate
+  properties:
+    key:
+      type: string
+      description: Unique identifier for the user segment.
+      example: beta-testers
+    name:
+      type: string
+      description: Name of the user segment.
+      example: Beta Testers
+    description:
+      type: string
+      description: Description of the user segment.
+      example: Users in this segment can access beta features.
+    tags:
+      type: array
+      items:
+        type: string
+      description: An array of tags for this user segment.
+    creationDate:
+      type: number
+      format: int64
+      description: A unix epoch time in milliseconds specifying the creation time of this flag.
+      example: 1443652232590
+    included:
+      type: array
+      items:
+        type: string
+      description: An array of user keys that are included in this segment.
+    excluded:
+      type: array
+      items:
+        type: string
+      description: An array of user keys that should not be included in this segment, unless they are also listed in "included".
+    rules:
+      type: array
+      items:
+        $ref: '#/definitions/UserSegmentRule'
+      description: An array of rules that can cause a user to be included in this segment.
+    version:
+      type: integer
+    _links:
+      $ref: '#/definitions/Links'
+UserSegmentRule:
+  type: object
+  properties:
+    clauses:
+      type: array
+      items:
+        $ref: '#/definitions/Clause'
+    weight:
+      type: integer
+    bucketBy:
+      type: string
+UserSegments:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/UserSegment'
 Project:
   type: object
   properties:

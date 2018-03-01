@@ -22,6 +22,10 @@
     description: Feature flag response.
     schema:
       $ref: '#/definitions/FeatureFlag'
+  UserSegment200:
+    description: User segment response.
+    schema:
+      $ref: '#/definitions/UserSegment'
   Projects200:
     description: Successful Project response.
     schema:
