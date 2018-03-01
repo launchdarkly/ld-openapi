@@ -165,12 +165,13 @@ FeatureFlagConfig:
       items:
         $ref: '#/definitions/Rule'
     fallthrough:
-      type: object
-      properties:
-        variation:
-          type: integer
-        rollout:
-          $ref: '#/definitions/Rollout'
+      $ref: '#/definitions/Fallthrough'
+    offVariation:
+      type: integer
+    prerequisites:
+      type: array
+      items:
+        $ref: '#/definitions/Prerequisite'
 Target:
   type: object
   properties:
@@ -192,6 +193,13 @@ Rule:
       type: array
       items:
         $ref: '#/definitions/Clause'
+Fallthrough:
+  type: object
+  properties:
+    variation:
+      type: integer
+    rollout:
+      $ref: '#/definitions/Rollout'    
 Rollout:
   type: object
   properties:
@@ -235,6 +243,13 @@ Variation:
       example: "The true variation"
     value:
       type: object
+Prerequisite:
+  type: object
+  properties:
+    key:
+      type: string
+    variation:
+      type: integer
 FeatureFlagStatus:
   type: object
   properties:
@@ -615,3 +630,18 @@ Id:
   type: string
   description: The unique resource id.
   example: "5a580a01b4ff89217bdf9dc1"
+PatchOperation:
+  type: object
+  properties:
+    op:
+      type: string
+      example: replace
+    path:
+      type: string
+      example: '/on'
+    value:
+      type: object
+  required:
+    - op
+    - path
+    - value

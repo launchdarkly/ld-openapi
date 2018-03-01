@@ -217,20 +217,7 @@ PatchRequest:
   schema:
     type: array
     items:
-      type: object
-      properties:
-        op:
-          type: string
-          example: replace
-        path:
-          type: string
-          example: '/on'
-        value:
-          type: object
-      required:
-        - op
-        - path
-        - value
+      $ref: '#/definitions/PatchOperation'
 UserSettingsPutRequest:
   name: userSettingsBody
   in: body
@@ -348,19 +335,4 @@ PatchWithComment:
       patch:
         type: array
         items:
-          type: object
-          properties:
-            op:
-              type: string
-              example: replace
-            path:
-              type: string
-              example: '/description'
-            value:
-              type: object
-              example: "The new description"
-          required:
-            - op
-            - path
-            - value
-
+          $ref: '#/definitions/PatchOperation'
