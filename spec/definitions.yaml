@@ -226,7 +226,7 @@ Clause:
     values:
       type: array
       items:
-        type: string
+        type: object
         example: "Top Customers"
     negate:
       type: boolean
@@ -415,6 +415,35 @@ Environment:
 User:
   type: object
   properties:
+    key:
+      type: string
+      example: a00bea
+    secondary:
+      type: string
+    ip:
+      type: string
+    country:
+      type: string
+    email:
+      type: string
+    firstName:
+      type: string
+    lastName:
+      type: string
+    avatar:
+      type: string
+    name:
+      type: string
+      example: Bob Loblaw
+    anonymous:
+      type: boolean
+    custom:
+      type: object
+      example:
+        company: example.com
+UserRecord:
+  type: object
+  properties:
     lastPing:
       type: string
       format: int64
@@ -425,12 +454,7 @@ User:
     ownerId:
       $ref: '#/definitions/Id'
     user:
-      type: object
-      example:
-        key: a00bea
-        name: Bob Loblaw
-        custom:
-          company: example.com
+      $ref: '#/definitions/User'
     avatar:
       type: string
       example: 'https://s3.amazonaws.com/uifaces/faces/twitter/shylockjoy/73.jpg'
@@ -445,7 +469,7 @@ Users:
     items:
       type: array
       items:
-        $ref: '#/definitions/User'
+        $ref: '#/definitions/UserRecord'
 AuditLogEntry:
   type: object
   properties:

@@ -16,8 +16,8 @@
     "multi-file-swagger": "2.2.0",
     "spectacle-docs": "0.9.13",
     "swagger-cli": "1.0.0-beta.2",
-    "swagger-repo": "^1.4.2",
-    "swagger-ui": "^3.2.0"
+    "swagger-repo": "1.5.1",
+    "swagger-ui": "3.11.0"
   },
   "scripts": {
     "swagger": "swagger-repo",
