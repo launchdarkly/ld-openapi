@@ -325,7 +325,7 @@ PatchWithComment:
   name: patchComment
   in: body
   required: true
-  description: Requires a JSON Patch representation of the desired changes to the project. 'http://jsonpatch.com/' Feature flag patches also support JSON Merge Patch format. 'https://tools.ietf.org/html/rfc7386' The addition of comments is also supported.
+  description: Requires a JSON Patch representation of the desired changes to the project, and an optional comment. 'http://jsonpatch.com/' Feature flag patches also support JSON Merge Patch format. 'https://tools.ietf.org/html/rfc7386' The addition of comments is also supported.
   schema:
     type: object
     properties:
@@ -336,3 +336,12 @@ PatchWithComment:
         type: array
         items:
           $ref: '#/definitions/PatchOperation'
+PatchOnly:
+  name: PatchOnly
+  in: body
+  required: true
+  description: Requires a JSON Patch representation of the desired changes to the project. 'http://jsonpatch.com/' Feature flag patches also support JSON Merge Patch format. 'https://tools.ietf.org/html/rfc7386' The addition of comments is also supported.
+  schema:
+    type: array
+    items:
+      $ref: '#/definitions/PatchOperation'

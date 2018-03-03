@@ -59,7 +59,7 @@ UserSegment:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/UserSegmentKey'
-      - $ref: '#/parameters/PatchWithComment'
+      - $ref: '#/parameters/PatchOnly'
     responses:
       '200':
         $ref: '#/responses/UserSegment200'
