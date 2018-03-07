@@ -12,6 +12,8 @@ Links:
   properties:
     'self':
       $ref: '#/definitions/Link'
+    'next':
+      $ref: '#/definitions/Link'
 Webhook:
   type: object
   properties:
