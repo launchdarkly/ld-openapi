@@ -196,6 +196,18 @@ Query:
   required: false
   description: Search query.
   type: string
+HMAC:
+  name: h
+  in: query
+  required: false
+  description: Next link query parameter.
+  type: string
+ScrollId:
+  name: scrollId
+  in: query
+  required: false
+  description: Next link query parameter.
+  type: string
 Offset:
   name: offset
   in: query
