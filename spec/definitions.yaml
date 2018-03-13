@@ -33,6 +33,10 @@ Webhook:
       type: boolean
       description: Whether this webhook is enabled or not.
       example: true
+    name:
+      type: string
+      description: The name of the webhook.
+      example: "Example hook"
     tags:
       type: array
       description: Tags assigned to this webhook.
