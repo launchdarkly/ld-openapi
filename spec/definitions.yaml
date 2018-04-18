@@ -568,7 +568,7 @@ UserFlagSettings:
             self:
               href: /api/v2/users/lacuna/production/Abbie_Braun/flags/alternate.page
               type: application/json
-          _value: 'false,'
+          _value: false,
           setting: null
 Statements:
   type: array
