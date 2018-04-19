@@ -1,7 +1,7 @@
 
 SHELL = /bin/bash
 
-VERSION = 2.0.0
+VERSION=$(shell cat targets/swagger.json | jq '.info.version' )
 TARGETS = \
 	bash \
 	go \
