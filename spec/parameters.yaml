@@ -200,13 +200,13 @@ HMAC:
   name: h
   in: query
   required: false
-  description: Next link query parameter.
+  description: This parameter is required when following "next" links.
   type: string
 ScrollId:
   name: scrollId
   in: query
   required: false
-  description: Next link query parameter.
+  description: This parameter is required when following "next" links.
   type: string
 Offset:
   name: offset
