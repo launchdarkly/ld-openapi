@@ -6,6 +6,8 @@ Users:
     - $ref: '#/parameters/ProjectKey'
     - $ref: '#/parameters/EnvironmentKey'
     - $ref: '#/parameters/Limit'
+    - $ref: '#/parameters/HMAC'
+    - $ref: '#/parameters/ScrollId'
     responses:
       '200':
         description: Users response.

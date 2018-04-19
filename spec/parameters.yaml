@@ -200,6 +200,18 @@ Query:
   required: false
   description: Search query.
   type: string
+HMAC:
+  name: h
+  in: query
+  required: false
+  description: This parameter is required when following "next" links.
+  type: string
+ScrollId:
+  name: scrollId
+  in: query
+  required: false
+  description: This parameter is required when following "next" links.
+  type: string
 Offset:
   name: offset
   in: query
