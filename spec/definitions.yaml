@@ -178,6 +178,10 @@ FeatureFlagConfig:
       type: array
       items:
         $ref: '#/definitions/Prerequisite'
+    trackEvents:
+      type: boolean
+      example: false
+      description: Set to true to send detailed event information for this flag.
 Target:
   type: object
   properties:
@@ -418,6 +422,10 @@ Environment:
       type: boolean
       example: false
       description: Determines if this environment is in safe mode.
+    defaultTrackEvents:
+      type: boolean
+      example: false
+      description: Set to true to send detailed event information for new flags.
 User:
   type: object
   properties:
