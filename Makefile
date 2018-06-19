@@ -26,8 +26,8 @@ LASTHASH := $(shell git rev-parse --short HEAD)
 CODEGEN_PARAMS_csharp_dotnet2 := -DpackageName=LaunchDarkly.Api -DclientPackage=LaunchDarkly.Api.Client
 CODEGEN_PARAMS_go := -DpackageName=ldapi
 CODEGEN_PARAMS_java := --group-id com.launchdarkly --artifact-id api-client --api-package com.launchdarkly.api.api --model-package com.launchdarkly.api.model
-CODEGEN_PARAMS_python := -DpackageName=ldapi
-CODEGEN_PARAMS_ruby := -DmoduleName=LaunchDarklyApi -DgemName=ldapi -DgemVersion=$(VERSION) -DgemHomepage=https://github.com/launchdarkly/api-client-ruby
+CODEGEN_PARAMS_python := -DpackageName=launchdarkly_api
+CODEGEN_PARAMS_ruby := -DmoduleName=LaunchDarklyApi -DgemName=launchdarkly-api -DgemVersion=$(VERSION) -DgemHomepage=https://github.com/launchdarkly/api-client-ruby
 
 all: $(TARGETS)
 
