@@ -283,7 +283,7 @@ FeatureFlagStatus:
       type: string
       example: "2016-08-16T21:10:11.886Z"
     default:
-      type: boolean
+      type: object
 FeatureFlagStatuses:
   type: object
   properties:
