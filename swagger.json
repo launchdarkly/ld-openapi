@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.0"
+    "version": "2.0.5"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -450,7 +450,7 @@
     "/flag-statuses/{projectKey}/{environmentKey}": {
       "get": {
         "summary": "Get a list of statuses for all feature flags. The status includes the last time the feature flag was requested, as well as the state of the flag.",
-        "operationId": "getFeatureFlagStatus",
+        "operationId": "getFeatureFlagStatuses",
         "parameters": [
           {
             "$ref": "#/parameters/ProjectKey"
@@ -478,7 +478,7 @@
     "/flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}": {
       "get": {
         "summary": "Get the status for a particular feature flag.",
-        "operationId": "getFeatureFlagStatuses",
+        "operationId": "getFeatureFlagStatus",
         "parameters": [
           {
             "$ref": "#/parameters/ProjectKey"
@@ -506,6 +506,170 @@
         ]
       }
     },
+    "/segments/{projectKey}/{environmentKey}": {
+      "get": {
+        "summary": "Get a list of all user segments in the given project.",
+        "operationId": "getUserSegments",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/Tag"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Segments response.",
+            "schema": {
+              "$ref": "#/definitions/UserSegments"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          }
+        },
+        "tags": [
+          "User segments"
+        ]
+      },
+      "post": {
+        "summary": "Creates a new user segment.",
+        "operationId": "postUserSegment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/UserSegmentPostRequest"
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/responses/Standard201"
+          },
+          "400": {
+            "$ref": "#/responses/Standard400"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "409": {
+            "$ref": "#/responses/Standard409"
+          }
+        },
+        "tags": [
+          "User segments"
+        ]
+      }
+    },
+    "/segments/{projectKey}/{environmentKey}/{userSegmentKey}": {
+      "get": {
+        "summary": "Get a single user segment by key.",
+        "operationId": "getUserSegment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/UserSegmentKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User segment response.",
+            "schema": {
+              "$ref": "#/definitions/UserSegment"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "404": {
+            "$ref": "#/responses/Standard404"
+          }
+        },
+        "tags": [
+          "User segments"
+        ]
+      },
+      "patch": {
+        "summary": "Perform a partial update to a user segment.",
+        "operationId": "patchUserSegment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/UserSegmentKey"
+          },
+          {
+            "$ref": "#/parameters/PatchOnly"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/UserSegment200"
+          },
+          "400": {
+            "$ref": "#/responses/Standard400"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "404": {
+            "$ref": "#/responses/Standard404"
+          },
+          "409": {
+            "$ref": "#/responses/Standard409"
+          }
+        },
+        "tags": [
+          "User segments"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a user segment.",
+        "operationId": "deleteUserSegment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/UserSegmentKey"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/responses/Standard204"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "404": {
+            "$ref": "#/responses/Standard404"
+          }
+        },
+        "tags": [
+          "User segments"
+        ]
+      }
+    },
     "/users/{projectKey}/{environmentKey}": {
       "get": {
         "summary": "List all users in the environment. Includes the total count of users. In each page, there will be up to 'limit' users returned (default 20). This is useful for exporting all users in the system for further analysis. Paginated collections will include a next link containing a URL with the next set of elements in the collection.",
@@ -519,6 +683,12 @@
           },
           {
             "$ref": "#/parameters/Limit"
+          },
+          {
+            "$ref": "#/parameters/HMAC"
+          },
+          {
+            "$ref": "#/parameters/ScrollId"
           }
         ],
         "responses": {
@@ -1229,6 +1399,9 @@
       "properties": {
         "self": {
           "$ref": "#/definitions/Link"
+        },
+        "next": {
+          "$ref": "#/definitions/Link"
         }
       }
     },
@@ -1255,6 +1428,11 @@
           "type": "boolean",
           "description": "Whether this webhook is enabled or not.",
           "example": true
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the webhook.",
+          "example": "Example hook"
         },
         "tags": {
           "type": "array",
@@ -1285,12 +1463,17 @@
       "properties": {
         "key": {
           "type": "string",
-          "example": "bob@example.com"
+          "example": "test-feature"
         },
         "name": {
           "type": "string",
           "description": "Name of the feature flag.",
-          "example": "test-feature"
+          "example": "Test Feature"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the feature flag.",
+          "example": "This flag controls whether test feature is turned on or not."
         },
         "kind": {
           "type": "string",
@@ -1441,15 +1624,21 @@
           }
         },
         "fallthrough": {
-          "type": "object",
-          "properties": {
-            "variation": {
-              "type": "integer"
-            },
-            "rollout": {
-              "$ref": "#/definitions/Rollout"
-            }
+          "$ref": "#/definitions/Fallthrough"
+        },
+        "offVariation": {
+          "type": "integer"
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Prerequisite"
           }
+        },
+        "trackEvents": {
+          "type": "boolean",
+          "example": false,
+          "description": "Set to true to send detailed event information for this flag."
         }
       }
     },
@@ -1482,6 +1671,17 @@
           "items": {
             "$ref": "#/definitions/Clause"
           }
+        }
+      }
+    },
+    "Fallthrough": {
+      "type": "object",
+      "properties": {
+        "variation": {
+          "type": "integer"
+        },
+        "rollout": {
+          "$ref": "#/definitions/Rollout"
         }
       }
     },
@@ -1521,7 +1721,7 @@
         "values": {
           "type": "array",
           "items": {
-            "type": "string",
+            "type": "object",
             "example": "Top Customers"
           }
         },
@@ -1545,7 +1745,18 @@
           "example": "The true variation"
         },
         "value": {
-          "type": "boolean"
+          "type": "object"
+        }
+      }
+    },
+    "Prerequisite": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "variation": {
+          "type": "integer"
         }
       }
     },
@@ -1570,7 +1781,7 @@
           "example": "2016-08-16T21:10:11.886Z"
         },
         "default": {
-          "type": "boolean"
+          "type": "object"
         }
       }
     },
@@ -1588,7 +1799,89 @@
         }
       }
     },
-    "Project": {
+    "UserSegment": {
+      "type": "object",
+      "required": [
+        "key",
+        "name",
+        "creationDate"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Unique identifier for the user segment.",
+          "example": "beta-testers"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user segment.",
+          "example": "Beta Testers"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the user segment.",
+          "example": "Users in this segment can access beta features."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of tags for this user segment."
+        },
+        "creationDate": {
+          "type": "number",
+          "format": "int64",
+          "description": "A unix epoch time in milliseconds specifying the creation time of this flag.",
+          "example": 1443652232590
+        },
+        "included": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of user keys that are included in this segment."
+        },
+        "excluded": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of user keys that should not be included in this segment, unless they are also listed in \"included\"."
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserSegmentRule"
+          },
+          "description": "An array of rules that can cause a user to be included in this segment."
+        },
+        "version": {
+          "type": "integer"
+        },
+        "_links": {
+          "$ref": "#/definitions/Links"
+        }
+      }
+    },
+    "UserSegmentRule": {
+      "type": "object",
+      "properties": {
+        "clauses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Clause"
+          }
+        },
+        "weight": {
+          "type": "integer"
+        },
+        "bucketBy": {
+          "type": "string"
+        }
+      }
+    },
+    "UserSegments": {
       "type": "object",
       "properties": {
         "_links": {
@@ -1597,12 +1890,12 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Environment"
+            "$ref": "#/definitions/UserSegment"
           }
         }
       }
     },
-    "Projects": {
+    "Project": {
       "type": "object",
       "properties": {
         "_links": {
@@ -1619,6 +1912,20 @@
           "type": "string",
           "example": "Zentasks"
         },
+        "environments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Environment"
+          }
+        }
+      }
+    },
+    "Projects": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/Links"
+        },
         "items": {
           "type": "array",
           "items": {
@@ -1634,9 +1941,7 @@
           "$ref": "#/definitions/Links"
         },
         "_id": {
-          "type": "string",
-          "example": "57ae15fc40cda6071f6c242e",
-          "description": "The unique id for the environment."
+          "$ref": "#/definitions/Id"
         },
         "key": {
           "type": "string",
@@ -1672,10 +1977,58 @@
           "type": "boolean",
           "example": false,
           "description": "Determines if this environment is in safe mode."
+        },
+        "defaultTrackEvents": {
+          "type": "boolean",
+          "example": false,
+          "description": "Set to true to send detailed event information for new flags."
         }
       }
     },
     "User": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "example": "a00bea"
+        },
+        "secondary": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "example": "Bob Loblaw"
+        },
+        "anonymous": {
+          "type": "boolean"
+        },
+        "custom": {
+          "type": "object",
+          "example": {
+            "company": "example.com"
+          }
+        }
+      }
+    },
+    "UserRecord": {
       "type": "object",
       "properties": {
         "lastPing": {
@@ -1691,14 +2044,7 @@
           "$ref": "#/definitions/Id"
         },
         "user": {
-          "type": "object",
-          "example": {
-            "key": "a00bea",
-            "name": "Bob Loblaw",
-            "custom": {
-              "company": "example.com"
-            }
-          }
+          "$ref": "#/definitions/User"
         },
         "avatar": {
           "type": "string",
@@ -1719,7 +2065,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/User"
+            "$ref": "#/definitions/UserRecord"
           }
         }
       }
@@ -1909,14 +2255,6 @@
       "description": "An action to perform on a resource.",
       "example": "updateOn"
     },
-    "NonOwnerRole": {
-      "type": "string",
-      "enum": [
-        "writer",
-        "reader",
-        "admin"
-      ]
-    },
     "Role": {
       "type": "string",
       "enum": [
@@ -1992,6 +2330,27 @@
       "type": "string",
       "description": "The unique resource id.",
       "example": "5a580a01b4ff89217bdf9dc1"
+    },
+    "PatchOperation": {
+      "type": "object",
+      "properties": {
+        "op": {
+          "type": "string",
+          "example": "replace"
+        },
+        "path": {
+          "type": "string",
+          "example": "/on"
+        },
+        "value": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "op",
+        "path",
+        "value"
+      ]
     }
   },
   "responses": {
@@ -2029,6 +2388,12 @@
       "description": "Feature flag response.",
       "schema": {
         "$ref": "#/definitions/FeatureFlag"
+      }
+    },
+    "UserSegment200": {
+      "description": "User segment response.",
+      "schema": {
+        "$ref": "#/definitions/UserSegment"
       }
     },
     "Projects200": {
@@ -2084,6 +2449,11 @@
             "type": "boolean",
             "example": true,
             "description": "Whether this webhook is enabled or not."
+          },
+          "name": {
+            "type": "string",
+            "example": "Example hook",
+            "description": "The name of the webhook."
           }
         },
         "required": [
@@ -2139,6 +2509,44 @@
           "name",
           "key",
           "variations"
+        ]
+      }
+    },
+    "UserSegmentPostRequest": {
+      "name": "userSegmentBody",
+      "in": "body",
+      "required": true,
+      "description": "Create a new user segment.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "A human-friendly name for the user segment.",
+            "example": "new segment"
+          },
+          "key": {
+            "type": "string",
+            "description": "A unique key that will be used to reference the user segment in feature flags.",
+            "example": "new-segment"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description for the user segment.",
+            "example": "Users in this segment will have access to beta features."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "[]"
+            },
+            "description": "Tags for the user segment."
+          }
+        },
+        "required": [
+          "name",
+          "key"
         ]
       }
     },
@@ -2229,6 +2637,13 @@
       "description": "The feature flag's key. The key identifies the flag in your code.",
       "type": "string"
     },
+    "UserSegmentKey": {
+      "name": "userSegmentKey",
+      "in": "path",
+      "required": true,
+      "description": "The user segment's key. The key identifies the user segment in your code.",
+      "type": "string"
+    },
     "UserKey": {
       "name": "userKey",
       "in": "path",
@@ -2248,7 +2663,7 @@
       "in": "query",
       "required": false,
       "description": "Pagination limit.",
-      "type": "number"
+      "type": "integer"
     },
     "Query": {
       "name": "q",
@@ -2257,12 +2672,26 @@
       "description": "Search query.",
       "type": "string"
     },
+    "HMAC": {
+      "name": "h",
+      "in": "query",
+      "required": false,
+      "description": "This parameter is required when following \"next\" links.",
+      "type": "string"
+    },
+    "ScrollId": {
+      "name": "scrollId",
+      "in": "query",
+      "required": false,
+      "description": "This parameter is required when following \"next\" links.",
+      "type": "string"
+    },
     "Offset": {
       "name": "offset",
       "in": "query",
       "required": false,
       "description": "Specifies the first item to return in the collection.",
-      "type": "number"
+      "type": "integer"
     },
     "After": {
       "name": "after",
@@ -2280,25 +2709,7 @@
       "schema": {
         "type": "array",
         "items": {
-          "type": "object",
-          "properties": {
-            "op": {
-              "type": "string",
-              "example": "replace"
-            },
-            "path": {
-              "type": "string",
-              "example": "/on"
-            },
-            "value": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "op",
-            "path",
-            "value"
-          ]
+          "$ref": "#/definitions/PatchOperation"
         }
       }
     },
@@ -2367,7 +2778,7 @@
               "example": "Loblaw"
             },
             "role": {
-              "$ref": "#/definitions/NonOwnerRole"
+              "$ref": "#/definitions/Role"
             },
             "customRoles": {
               "type": "array",
@@ -2438,7 +2849,7 @@
       "name": "patchComment",
       "in": "body",
       "required": true,
-      "description": "Requires a JSON Patch representation of the desired changes to the project. 'http://jsonpatch.com/' Feature flag patches also support JSON Merge Patch format. 'https://tools.ietf.org/html/rfc7386' The addition of comments is also supported.",
+      "description": "Requires a JSON Patch representation of the desired changes to the project, and an optional comment. 'http://jsonpatch.com/' Feature flag patches also support JSON Merge Patch format. 'https://tools.ietf.org/html/rfc7386' The addition of comments is also supported.",
       "schema": {
         "type": "object",
         "properties": {
@@ -2449,28 +2860,21 @@
           "patch": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "op": {
-                  "type": "string",
-                  "example": "replace"
-                },
-                "path": {
-                  "type": "string",
-                  "example": "/description"
-                },
-                "value": {
-                  "type": "string",
-                  "example": "The new description"
-                }
-              },
-              "required": [
-                "op",
-                "path",
-                "value"
-              ]
+              "$ref": "#/definitions/PatchOperation"
             }
           }
+        }
+      }
+    },
+    "PatchOnly": {
+      "name": "PatchOnly",
+      "in": "body",
+      "required": true,
+      "description": "Requires a JSON Patch representation of the desired changes to the project. 'http://jsonpatch.com/' Feature flag patches also support JSON Merge Patch format. 'https://tools.ietf.org/html/rfc7386' The addition of comments is also supported.",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/PatchOperation"
         }
       }
     }
