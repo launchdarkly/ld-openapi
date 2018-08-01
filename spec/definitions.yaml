@@ -378,6 +378,11 @@ Project:
       type: array
       items:
         $ref: '#/definitions/Environment'
+    tags:
+      type: array
+      items:
+        type: string
+      description: An array of tags for this project.              
 Projects:
   type: object
   properties:
@@ -426,6 +431,11 @@ Environment:
       type: boolean
       example: false
       description: Set to true to send detailed event information for new flags.
+    tags:
+      type: array
+      items:
+        type: string
+      description: An array of tags for this environment.      
 User:
   type: object
   properties:
