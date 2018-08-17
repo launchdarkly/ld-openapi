@@ -169,6 +169,11 @@ FeatureFlagConfig:
       type: array
       items:
         $ref: '#/definitions/Target'
+    goalIds:
+      type: array
+      items:
+        type: string
+        example: 'd7239405bd89c930e885aa76'
     rules:
       type: array
       items:
