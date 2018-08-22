@@ -171,9 +171,9 @@ FeatureFlagConfig:
         $ref: '#/definitions/Target'
     goalIds:
       type: array
+      example: '["d7239405bd89c930e885aa76", "405bc930e88d7239d895aa76"]'
       items:
         type: string
-        example: 'd7239405bd89c930e885aa76'
     rules:
       type: array
       items:
