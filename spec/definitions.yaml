@@ -203,7 +203,7 @@ Target:
 Rule:
   type: object
   properties:
-    id:
+    _id:
       type: string
     variation:
       type: integer
