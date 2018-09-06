@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    branches:
+      ignore:
+        - gh-pages
+    working_directory: ~/ld-openapi
+    docker:
+      - image: circleci/node:8.10.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install Node Dependencies
+          command: npm install
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Install Swagger CodeGen
+          command: |
+            sudo apt-get install -y default-jre
+            mkdir -p /home/circleci/bin
+            wget http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.3.1/swagger-codegen-cli-2.3.1.jar -O /home/circleci/bin/swagger-codegen-cli.jar
+            printf '#!/bin/bash\nexec java -jar /home/circleci/bin/swagger-codegen-cli.jar "$@"\n' > /home/circleci/bin/swagger-codegen
+            chmod +x /home/circleci/bin/swagger-codegen
+            # add to PATH per https://circleci.com/docs/2.0/env-vars/#setting-path
+            echo 'export PATH=/home/circleci/bin:$PATH' >> $BASH_ENV
+      - run:
+          name: Compile
+          command: |
+            npm run generate
+            npm run html
+      - run:
+          name: Run Tests
+          command: npm run test
+      - store_artifacts:
+          path: targets
