@@ -203,6 +203,8 @@ Target:
 Rule:
   type: object
   properties:
+    _id:
+      type: string
     variation:
       type: integer
     rollout:
