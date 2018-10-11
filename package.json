@@ -1,31 +1,5 @@
 {
-  "name": "ld-openapi",
-  "version": "2.0.9",
-  "description": "This repository contains an OpenAPI specification for LaunchDarkly's REST API.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/launchdarkly/ld-openapi.git"
-  },
-  "author": "",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/launchdarkly/ld-openapi/issues"
-  },
-  "homepage": "https://github.com/launchdarkly/ld-openapi#readme",
   "dependencies": {
-    "minimatch": "^3.0.2",
-    "multi-file-swagger": "2.2.0",
-    "spectacle-docs": "^1.0.5",
-    "swagger-cli": "1.0.0-beta.2",
-    "swagger-repo": "1.5.1",
-    "swagger-ui": "^3.17.5",
-    "webpack": "^2.2.0"
-  },
-  "scripts": {
-    "swagger": "swagger-repo",
-    "generate": "make all",
-    "compile": "make spec",
-    "html": "spectacle -t targets/html ./targets/swagger.yaml",
-    "test": "swagger validate ./targets/swagger.yaml"
+    "multi-file-swagger": "2.2.0"
   }
 }

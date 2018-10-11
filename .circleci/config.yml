@@ -1,0 +1,118 @@
+version: 2
+
+# Keep this at the top to reduce noise in chatrooms when we mess up circleci setup
+experimental:
+  notify:
+    branches:
+      only:
+      - master
+
+jobs:
+  build:
+    docker:
+    - image: circleci/node:10-browsers  # -browsers image has java but is otherwise relatively small
+    steps:
+    - checkout
+    - run:
+        name: Install Swagger Codegen
+        command: |
+          wget http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.3.1/swagger-codegen-cli-2.3.1.jar -O swagger-codegen-cli.jar
+          printf '#!/bin/bash\nexec java -jar /usr/local/bin/swagger-codegen-cli.jar "$@"\n' > ./swagger-codegen
+          sudo mv ./swagger-codegen /usr/local/bin
+          sudo mv ./swagger-codegen-cli.jar /usr/local/bin
+          sudo chmod +x /usr/local/bin/swagger-codegen
+
+    - run:
+        name: Loading previous client repos
+        command: |
+          export REPO_USER_URL=https://github.com/$CIRCLE_PROJECT_USERNAME
+          make load_prior_targets
+
+    - run:
+        name: Generating code
+        command: |
+          export REPO_USER_URL=https://github.com/$CIRCLE_PROJECT_USERNAME
+          make all
+
+    - run:
+        name: Archiving targets
+        command: |
+          cd targets
+          VERSION=$(cat openapi.json | jq -r '.info.version')
+          tar cvfz api-clients-${VERSION}-${CIRCLE_SHA1:0:7}.tgz api-client-*
+          mkdir /tmp/api-clients
+          cp api-clients-*.tgz /tmp/api-clients
+
+    - persist_to_workspace:
+        root: targets
+        paths:
+        - .
+
+    - store_artifacts:
+        path: targets/html2
+        destination: html
+
+    - store_artifacts:
+        path: targets/html
+        destination: html-plain
+
+    - store_artifacts:
+        path: /tmp/api-clients
+
+  publish:
+    docker:
+    - image: circleci/node:10-browsers
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+
+    - run:
+        name: Install GHR (Github Releaser)
+        command: |
+          curl -L https://github.com/tcnksm/ghr/releases/download/v0.10.2/ghr_v0.10.2_linux_amd64.tar.gz | tar xz
+          sudo mv ghr_v0.10.2_linux_amd64/ghr /usr/local/bin
+          sudo chmod a+x /usr/local/bin/ghr
+
+    - run:
+        name: Publishing GitHub Release
+        command: |
+          cd targets
+          for file in openapi.{json,yaml} api-clients-*.tgz; do
+            ghr -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME $CIRCLE_TAG $file
+          done
+
+    - run:
+        name: Pushing updated client repos
+        command: make push
+
+    - run:
+        name: Publish packages
+        command: |
+          if [ "$CIRCLE_REPO" = "https://github.com/launchdarkly/ld-openapi" ]; then
+            npm install -g npm-cli-login
+            npm-cli-login -u "${NPM_LOGIN}" -p "${NPM_PASSWORD}" -e "{NPM_EMAIL}"
+            make publish
+          fi
+
+workflows:
+  version: 2
+  build:
+    jobs:
+    - build:
+        filters:
+          branches:
+            ignore:
+            - gh-pages
+          tags:
+            only:
+              /.*/ # Required in order to run publish job for a tag push
+
+    - publish:
+        requires:
+        - build
+        filters:
+          tags:
+            only: /^\d+\.\d+\.\d+.*$/
+          branches:
+            ignore: /.*/
