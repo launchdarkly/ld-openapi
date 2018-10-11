@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.5"
+    "version": "2.0.9"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -1516,6 +1516,10 @@
           },
           "example": "[ { \"value\": \"a\" }, { \"value\": \"b\" } ]"
         },
+        "customProperties": {
+          "$ref": "#/definitions/CustomProperties",
+          "example": "{ \"bugs\": { \"name\": \"Issue tracker ids\", \"value\": [\"123\", \"456\"] }, \"deprecated\": { \"name\": \"Deprecated Date\", \"value\": [] } }"
+        },
         "_links": {
           "$ref": "#/definitions/Links"
         },
@@ -1617,6 +1621,13 @@
             "$ref": "#/definitions/Target"
           }
         },
+        "goalIds": {
+          "type": "array",
+          "example": "[\"d7239405bd89c930e885aa76\", \"405bc930e88d7239d895aa76\"]",
+          "items": {
+            "type": "string"
+          }
+        },
         "rules": {
           "type": "array",
           "items": {
@@ -1660,6 +1671,9 @@
     "Rule": {
       "type": "object",
       "properties": {
+        "_id": {
+          "type": "string"
+        },
         "variation": {
           "type": "integer"
         },
@@ -1917,6 +1931,13 @@
           "items": {
             "$ref": "#/definitions/Environment"
           }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of tags for this project."
         }
       }
     },
@@ -1982,6 +2003,13 @@
           "type": "boolean",
           "example": false,
           "description": "Set to true to send detailed event information for new flags."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "An array of tags for this environment."
         }
       }
     },
@@ -2176,6 +2204,9 @@
         },
         "items": {
           "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/UserFlagSetting"
+          },
           "example": {
             "sort.order": {
               "_links": {
@@ -2351,6 +2382,39 @@
         "path",
         "value"
       ]
+    },
+    "CustomProperties": {
+      "type": "object",
+      "description": "A mapping of keys to CustomProperty entries.",
+      "items": {
+        "$ref": "#/definitions/CustomProperty"
+      },
+      "example": "{ \"bugs\": { \"name\": \"Issue tracker ids\", \"value\": [\"123\", \"456\"] }, \"deprecated\": { \"name\": \"Deprecated Date\", \"value\": [] } }"
+    },
+    "CustomProperty": {
+      "type": "object",
+      "description": "A name and value describing a custom property.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the property.",
+          "example": "My property"
+        },
+        "value": {
+          "$ref": "#/definitions/CustomPropertyValues"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "CustomPropertyValues": {
+      "type": "array",
+      "description": "Values for this property.",
+      "items": {
+        "type": "string"
+      },
+      "example": "[\"Value 1\", \"Value 2\"]"
     }
   },
   "responses": {
@@ -2480,6 +2544,11 @@
             "type": "string",
             "description": "A unique key that will be used to reference the flag in your code.",
             "example": "new-test-flag"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of the feature flag.",
+            "example": "This flag controls whether test feature is turned on or not."
           },
           "variations": {
             "type": "array",
