@@ -84,7 +84,7 @@ jobs:
 
     - run:
         name: Pushing updated client repos
-        command: make push
+        command: make TAG=$CIRCLE_TAG push
 
     - run:
         name: Publish packages

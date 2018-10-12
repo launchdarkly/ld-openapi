@@ -23,6 +23,7 @@ RELEASE_SUFFIX ?=                         # allows the private branch to push to
 
 REPO ?= ld-openapi$(RELEASE_SUFFIX)
 REPO_USER_URL ?= https://github.com/launchdarkly
+TAG ?= $(VERSION)
 
 DOC_TARGETS = \
 	html \
@@ -112,7 +113,7 @@ push:
 	cd $(TARGETS_PATH); \
 	$(GIT_COMMAND) submodule foreach git add .; \
 	$(GIT_COMMAND) submodule foreach git commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
-	$(GIT_COMMAND) submodule foreach git tag $(VERSION); \
+	$(GIT_COMMAND) submodule foreach git tag $(TAG); \
 	$(GIT_COMMAND) submodule foreach $(GIT_PUSH_COMMAND) --follow-tags origin $(RELEASE_BRANCH)
 
 publish:
