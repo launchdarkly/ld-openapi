@@ -1,7 +1,7 @@
 SHELL = /bin/bash
 
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
-REVISION:=$(git rev-parse --short HEAD)
+REVISION:=$(shell git rev-parse --short HEAD)
 
 API_TARGETS = \
 	bash \
@@ -55,7 +55,7 @@ else
 CODEGEN_INSTALL_MSG = "You must install swagger-codegen before building this target"
 endif
 
-all: $(API_TARGETS) $(DOC_TARGETS)
+all: $(API_TARGETS) $(DOC_TARGETS) gh-pages
 
 load_prior_targets:
 	rm -rf $(TARGETS_PATH)
@@ -65,6 +65,7 @@ load_prior_targets:
 	git init; \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
 	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGETS)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET)); \
+	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
 openapi_yaml: $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
 	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
@@ -93,6 +94,10 @@ $(DOC_TARGETS): openapi_yaml
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
 	$(CODEGEN) generate -i $(TARGET_OPENAPI_YAML) $(CODEGEN_PARAMS_$@) -l $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
 
+gh-pages: openapi_yaml
+	cp $(TARGET_OPENAPI_JSON) $(TARGETS_PATH)/gh-pages
+	cp gh-pages/* $(TARGETS_PATH)/gh-pages
+
 $(MULTI_FILE_SWAGGER):
 	yarn add --no-lockfile multi-file-swagger
 
@@ -104,6 +109,7 @@ push_test: push
 
 push_dry_run: GIT_PUSH_COMMAND=git push --dry-run
 push:
+	cd $(TARGETS_PATH); \
 	$(GIT_COMMAND) submodule foreach git add .; \
 	$(GIT_COMMAND) submodule foreach git commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
 	$(GIT_COMMAND) submodule foreach git tag $(VERSION); \
@@ -120,4 +126,4 @@ check_codegen:
 clean:
 	rm -rf $(TARGETS_PATH)
 
-.PHONY: $(TARGETS) all check_codegen clean load_prior_targets openapi_yaml push push_dry_run push_test
+.PHONY: $(TARGETS) all check_codegen clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
