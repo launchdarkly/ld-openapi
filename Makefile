@@ -3,14 +3,13 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
-API_TARGETS = \
+API_TARGETS ?= \
 	bash \
 	go \
 	csharp-dotnet2 \
 	java \
 	python \
 	javascript \
-	nodejs-server \
 	typescript-node \
 	php \
 	ruby \
@@ -41,6 +40,7 @@ LASTHASH := $(shell git rev-parse --short HEAD)
 CODEGEN_PARAMS_csharp_dotnet2 = -DpackageName=LaunchDarkly.Api -DclientPackage=LaunchDarkly.Api.Client
 CODEGEN_PARAMS_go = -DpackageName=ldapi
 CODEGEN_PARAMS_java = --group-id com.launchdarkly --artifact-id api-client --api-package com.launchdarkly.api.api --model-package com.launchdarkly.api.model
+CODEGEN_PARAMS_javascript = -DprojectName=launchdarkly-api
 CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api
 CODEGEN_PARAMS_ruby = -DmoduleName=LaunchDarklyApi -DgemName=launchdarkly_api -DgemVersion=$(VERSION) -DgemHomepage=https://github.com/launchdarkly/api-client-ruby
 
