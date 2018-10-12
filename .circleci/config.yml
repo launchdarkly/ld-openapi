@@ -77,6 +77,8 @@ jobs:
     - run:
         name: Publishing GitHub Release
         command: |
+          git config --global user.name $GH_NAME
+          git config --global user.email $GH_EMAIL
           cd targets
           for file in openapi.{json,yaml} api-clients-*.tgz; do
             ghr -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME $CIRCLE_TAG $file
