@@ -113,7 +113,7 @@ push:
 	cd $(TARGETS_PATH); \
 	$(GIT_COMMAND) submodule foreach git add .; \
 	$(GIT_COMMAND) submodule foreach git commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
-	$(GIT_COMMAND) submodule foreach git tag $(TAG) || true; \
+	$(GIT_COMMAND) submodule foreach "git tag $(TAG) || true"; \
 	$(GIT_COMMAND) submodule foreach $(GIT_PUSH_COMMAND) --follow-tags origin $(RELEASE_BRANCH)
 
 publish:
