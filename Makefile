@@ -65,7 +65,7 @@ load_prior_targets:
 	cd $(TARGETS_PATH); \
 	git init; \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGETS)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET)); \
+	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;) \
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
 openapi_yaml: $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
