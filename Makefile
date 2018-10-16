@@ -5,19 +5,21 @@ REVISION:=$(shell git rev-parse --short HEAD)
 
 API_TARGETS ?= \
 	bash \
-	go \
 	csharp-dotnet2 \
+	go \
 	java \
-	python \
 	javascript \
-	typescript-node \
 	php \
-	ruby
+	python \
+	ruby \
+	typescript-node
 
 RELEASE_BRANCH ?= master                  # when we bump a major version, we may need to change this
 PREV_RELEASE_BRANCH ?= $(RELEASE_BRANCH)  # override this to create a revision of an older branch
 RELEASE_TARGETS ?= $(API_TARGETS)         # for now, we don't release the docs to repos
 RELEASE_SUFFIX ?=                         # allows the private branch to push to repos with a "-private" suffix
+
+PUBLISH_TARGETS ?= $(RELEASE_TARGETS)
 
 REPO ?= ld-openapi$(RELEASE_SUFFIX)
 REPO_USER_URL ?= https://github.com/launchdarkly
@@ -38,7 +40,22 @@ LASTHASH := $(shell git rev-parse --short HEAD)
 # were discovered by looking in the swagger-codegen source.
 CODEGEN_PARAMS_csharp-dotnet2 = -DpackageName=LaunchDarkly.Api -DclientPackage=LaunchDarkly.Api.Client
 CODEGEN_PARAMS_go = -DpackageName=ldapi
-CODEGEN_PARAMS_java = --group-id com.launchdarkly --artifact-id api-client --api-package com.launchdarkly.api.api --model-package com.launchdarkly.api.model
+CODEGEN_PARAMS_java = \
+	--group-id com.launchdarkly \
+	--api-package com.launchdarkly.api.api \
+	--model-package com.launchdarkly.api.model \
+	-DartifactId=api-client \
+	-Demail=support@launchdarkly.com \
+	-DdeveloperName=LaunchDarkly \
+	-DdeveloperEmail=support@launchdarkly.com \
+	-DdeveloperOrganization=LaunchDarkly \
+	-DdeveloperOrganizationUrl=https://launchdarkly.com \
+	-DartifactUrl=https://github.com/launchdarkly/api-client-java \
+	-DartifactDescription="LaunchDarkly API client" \
+	-DscmUrl="https://github.com/launchdarkly/api-client-java" \
+	-DscmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
+	-DscmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
+
 CODEGEN_PARAMS_javascript = -DprojectName=launchdarkly-api -DmoduleName=LaunchDarklyApi
 CODEGEN_PARAMS_php = -DpackagePath=LaunchDarklyApi -DcomposerVendorName=launchdarkly -DcomposerProjectName=api-client-php -DinvokerPackage=LaunchDarklyApi -DgitUserId=launchdarkly -DgitRepoId=api-client-php
 CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api
@@ -117,8 +134,8 @@ push:
 	$(GIT_COMMAND) submodule foreach $(GIT_PUSH_COMMAND) --follow-tags origin $(RELEASE_BRANCH)
 
 publish:
-	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-		[ ! -f ./scripts/release/$(RELEASE_TARGET).sh ] || ./scripts/release/$(RELEASE_TARGET).sh targets/api-client-$(RELEASE_TARGET) $(RELEASE_TARGET); \
+	$(foreach TARGET, $(PUBLISH_TARGETS), \
+		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET); \
 	)
 
 check_codegen:

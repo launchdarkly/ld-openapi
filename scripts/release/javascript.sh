@@ -4,5 +4,5 @@ set -ex
 path=$1
 name=$2
 
-cd ${patch}/
+cd ${path}/
 npm publish
