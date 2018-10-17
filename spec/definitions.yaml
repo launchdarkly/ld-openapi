@@ -581,6 +581,8 @@ UserFlagSettings:
       $ref: '#/definitions/Links'
     items:
       type: object
+      additionalProperties:
+        $ref: '#/definitions/UserFlagSetting'
       example:
         sort.order:
           _links:
