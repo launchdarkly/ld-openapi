@@ -67,7 +67,7 @@ FeatureFlagPostRequest:
         type: array
         items:
           type: string
-          example: '[]'
+          example: []
         description: Tags for the feature flag.
       includeInSnippet:
         type: boolean
@@ -100,7 +100,7 @@ UserSegmentPostRequest:
         type: array
         items:
           type: string
-          example: '[]'
+          example: []
         description: Tags for the user segment.
     required:
       - name
