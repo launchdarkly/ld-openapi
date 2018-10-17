@@ -51,6 +51,10 @@ FeatureFlagPostRequest:
         type: string
         description: A unique key that will be used to reference the flag in your code.
         example: "new-test-flag"
+      description:
+        type: string
+        description: A description of the feature flag.
+        example: This flag controls whether test feature is turned on or not.
       variations:
         type: array
         items:
