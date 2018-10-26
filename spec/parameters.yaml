@@ -119,6 +119,11 @@ ProjectPostRequest:
       key:
         type: string
         example: new-project
+      environments:
+        type: array
+        items:
+          $ref: '#/definitions/EnvironmentPost'
+        minLength: 1
     required:
       - name
       - key
@@ -128,28 +133,7 @@ EnvironmentPostRequest:
   required: true
   description: New environment.
   schema:
-    type: object
-    properties:
-      name:
-        type: string
-        description: The name of the new environment.
-        example: Development
-      key:
-        type: string
-        description: A project-unique key for the new environment.
-        example: dev
-      color:
-        type: string
-        description: A color swatch (as an RGB hex value with no leading '#', e.g. C8C8C8).
-        example: "417505"
-      defaultTtl:
-        type: number
-        description: The default TTL for the new environment.
-        example: 0
-    required:
-      - name
-      - key
-      - color
+    $ref: '#/definitions/EnvironmentPost'
 ProjectKey:
   name: projectKey
   in: path
@@ -173,6 +157,12 @@ FeatureFlagKey:
   in: path
   required: true
   description: The feature flag's key. The key identifies the flag in your code.
+  type: string
+CloneFlagKeyQuery:   
+  name: clone
+  in: query
+  required: false
+  description: The key of the feature flag to be cloned. The key identifies the flag in your code.  For example, setting clone=flagKey will copy the full targeting configuration for all environments (including on/off state) from the original flag to the new flag.
   type: string
 UserSegmentKey:
   name: userSegmentKey
