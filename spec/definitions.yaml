@@ -445,7 +445,30 @@ Environment:
       type: array
       items:
         type: string
-      description: An array of tags for this environment.      
+      description: An array of tags for this environment.
+EnvironmentPost:
+  type: object
+  properties:
+    name:
+      type: string
+      description: The name of the new environment.
+      example: Development
+    key:
+      type: string
+      description: A project-unique key for the new environment.
+      example: dev
+    color:
+      type: string
+      description: A color swatch (as an RGB hex value with no leading '#', e.g. C8C8C8).
+      example: "417505"
+    defaultTtl:
+      type: number
+      description: The default TTL for the new environment.
+      example: 0
+  required:
+  - name
+  - key
+  - color
 User:
   type: object
   properties:
