@@ -132,9 +132,9 @@ push:
 	$(GIT_COMMAND) submodule foreach git commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
 		git -C ./api-client-$(RELEASE_TARGET) tag $(TAG); \
-		git -C ./api-client-$(RELEASE_TARGET) push -follow-tags origin $(RELEASE_BRANCH) ;) \
+		git -C ./api-client-$(RELEASE_TARGET) push --follow-tags origin $(RELEASE_BRANCH) ;) \
 	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
-		git -C ./api-client-$(RELEASE_TARGET) push; \
+		git -C ./gh-pages push; \
 	fi
 publish:
 	$(foreach TARGET, $(PUBLISH_TARGETS), \
