@@ -114,6 +114,20 @@ jobs:
             make PUBLISH_TARGETS="java javascript" publish
           fi
 
+  test-go:
+    docker:
+    - image: circleci/golang
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+    - run:  |
+        mkdir -p /go/src/github.com/launchdarkly
+        cp -r targets/api-client-go /go/src/github.com/launchdarkly/
+    - run: |
+        cd samples/go
+        make
+
 workflows:
   version: 2
   build:
@@ -126,7 +140,9 @@ workflows:
           tags:
             only:
               /.*/ # Required in order to run publish job for a tag push
-
+    - test-go:
+        requires:
+        - build
     - publish:
         requires:
         - build
