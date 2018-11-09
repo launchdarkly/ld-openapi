@@ -98,7 +98,7 @@ FeatureFlag:
       items:
         $ref: '#/definitions/Variation'
       example: [ { "value": "a" }, { "value": "b" } ]
-    version:
+    _version:
       type: integer
       example: 23
     customProperties:
