@@ -32,6 +32,8 @@ DOC_TARGETS = \
 API_CLIENT_PREFIX = api-client
 
 TARGETS_PATH ?= ./targets
+TEMPLATES_PATH ?= ./swagger-codegen-templates
+SAMPLES_PATH ?= ./samples
 
 LASTHASH := $(shell git rev-parse --short HEAD)
 
@@ -39,7 +41,7 @@ LASTHASH := $(shell git rev-parse --short HEAD)
 # to swagger-codegen for each language/platform. In most cases these are undocumented and
 # were discovered by looking in the swagger-codegen source.
 CODEGEN_PARAMS_csharp-dotnet2 = -DpackageName=LaunchDarkly.Api -DclientPackage=LaunchDarkly.Api.Client
-CODEGEN_PARAMS_go = -DpackageName=ldapi
+CODEGEN_PARAMS_go = -DpackageName=ldapi -t $(TEMPLATES_PATH)/go
 CODEGEN_PARAMS_java = \
 	--group-id com.launchdarkly \
 	--api-package com.launchdarkly.api.api \
@@ -60,6 +62,8 @@ CODEGEN_PARAMS_javascript = -DprojectName=launchdarkly-api -DmoduleName=LaunchDa
 CODEGEN_PARAMS_php = -DpackagePath=LaunchDarklyApi -DcomposerVendorName=launchdarkly -DcomposerProjectName=api-client-php -DinvokerPackage=LaunchDarklyApi -DgitUserId=launchdarkly -DgitRepoId=api-client-php
 CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api
 CODEGEN_PARAMS_ruby = -DmoduleName=LaunchDarklyApi -DgemName=launchdarkly_api -DgemVersion=$(VERSION) -DgemHomepage=https://github.com/launchdarkly/api-client-ruby
+
+SAMPLE_FILE_go = main.go
 
 TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
@@ -105,6 +109,12 @@ $(API_TARGETS): openapi_yaml
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md
+	if [ -f "$(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@)" ]; then \
+		echo -e "## Sample Code\n" >> $(BUILD_DIR)/README.md; \
+		echo '```' >> $(BUILD_DIR)/README.md; \
+		cat $(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@) >> $(BUILD_DIR)/README.md; \
+		echo '```' >> $(BUILD_DIR)/README.md; \
+	fi
 	rm $(BUILD_DIR)/README-ORIGINAL.md
 
 $(DOC_TARGETS): openapi_yaml
