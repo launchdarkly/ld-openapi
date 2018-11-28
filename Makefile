@@ -64,6 +64,7 @@ CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api
 CODEGEN_PARAMS_ruby = -DmoduleName=LaunchDarklyApi -DgemName=launchdarkly_api -DgemVersion=$(VERSION) -DgemHomepage=https://github.com/launchdarkly/api-client-ruby
 
 SAMPLE_FILE_go = main.go
+SAMPLE_FILE_javascript = index.js
 
 TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json

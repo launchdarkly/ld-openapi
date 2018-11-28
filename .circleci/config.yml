@@ -128,6 +128,18 @@ jobs:
         cd samples/go
         make
 
+  test-javascript:
+    docker:
+    - image: circleci/node
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+    - run: |
+        cd samples/javascript
+        sudo npm link ../../targets/api-client-javascript
+        node index.js
+
 workflows:
   version: 2
   build:
@@ -141,6 +153,9 @@ workflows:
             only:
               /.*/ # Required in order to run publish job for a tag push
     - test-go:
+        requires:
+        - build
+    - test-javascript:
         requires:
         - build
     - publish:
