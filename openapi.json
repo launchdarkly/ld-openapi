@@ -338,7 +338,10 @@
         ],
         "responses": {
           "201": {
-            "$ref": "#/responses/Standard201"
+            "description": "Flag response.",
+            "schema": {
+              "$ref": "#/definitions/FeatureFlag"
+            }
           },
           "400": {
             "$ref": "#/responses/Standard400"
@@ -404,7 +407,10 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/FeatureFlags200"
+            "description": "Feature flag response.",
+            "schema": {
+              "$ref": "#/definitions/FeatureFlag"
+            }
           },
           "400": {
             "$ref": "#/responses/Standard400"
@@ -1526,6 +1532,10 @@
             }
           ]
         },
+        "_version": {
+          "type": "integer",
+          "example": 23
+        },
         "customProperties": {
           "$ref": "#/definitions/CustomProperties"
         },
@@ -2507,12 +2517,6 @@
       "description": "Webhook response.",
       "schema": {
         "$ref": "#/definitions/Webhook"
-      }
-    },
-    "FeatureFlags200": {
-      "description": "Feature flag response.",
-      "schema": {
-        "$ref": "#/definitions/FeatureFlag"
       }
     },
     "UserSegment200": {
