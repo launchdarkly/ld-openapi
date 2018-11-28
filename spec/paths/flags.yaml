@@ -24,7 +24,9 @@ Flags:
       - $ref: '#/parameters/CloneFlagKeyQuery'
     responses:
       '201':
-        $ref: '#/responses/Standard201'
+        description: Flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlag'
       '400':
         $ref: '#/responses/Standard400'
       '401':
@@ -61,7 +63,9 @@ Flag:
       - $ref: '#/parameters/PatchWithComment'
     responses:
       '200':
-        $ref: '#/responses/FeatureFlags200'
+        description: Feature flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlag'
       '400':
         $ref: '#/responses/Standard400'
       '401':
