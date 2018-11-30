@@ -77,6 +77,11 @@ jobs:
           sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 
     - run:
+        name: Install Python publishing requirements
+        command: |
+          pip install wheel twine
+
+    - run:
         name: Install GHR (Github Releaser)
         command: |
           curl -L https://github.com/tcnksm/ghr/releases/download/v0.10.2/ghr_v0.10.2_linux_amd64.tar.gz | tar xz
@@ -109,9 +114,10 @@ jobs:
     - run:
         name: Publish packages
         command: |
-          if [ "$CIRCLE_REPO" = "https://github.com/launchdarkly/ld-openapi" ]; then
+          if [ "$CIRCLE_REPOSITORY_URL" = "https://github.com/launchdarkly/ld-openapi" ]; then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-            make PUBLISH_TARGETS="java javascript" publish
+            echo -e "[pypi]\nusername=launchdarkly\npassword=$PYPI_PASSWORD" > ~/.pypirc
+            make PUBLISH_TARGETS="java javascript python" publish
           fi
 
   test-go:
@@ -140,6 +146,18 @@ jobs:
         sudo npm link ../../targets/api-client-javascript
         node index.js
 
+  test-python:
+    docker:
+    - image: circleci/python:3.6
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+    - run: |
+        cd samples/python
+        sudo pip install -e ../../targets/api-client-python
+        python3 main.py
+
 workflows:
   version: 2
   build:
@@ -156,6 +174,9 @@ workflows:
         requires:
         - build
     - test-javascript:
+        requires:
+        - build
+    - test-python:
         requires:
         - build
     - publish:

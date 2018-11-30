@@ -60,7 +60,7 @@ CODEGEN_PARAMS_java = \
 
 CODEGEN_PARAMS_javascript = -DprojectName=launchdarkly-api -DmoduleName=LaunchDarklyApi
 CODEGEN_PARAMS_php = -DpackagePath=LaunchDarklyApi -DcomposerVendorName=launchdarkly -DcomposerProjectName=api-client-php -DinvokerPackage=LaunchDarklyApi -DgitUserId=launchdarkly -DgitRepoId=api-client-php
-CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api
+CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api -DpackageVersion=$(TAG)
 CODEGEN_PARAMS_ruby = -DmoduleName=LaunchDarklyApi -DgemName=launchdarkly_api -DgemVersion=$(VERSION) -DgemHomepage=https://github.com/launchdarkly/api-client-ruby
 
 SAMPLE_FILE_go = main.go
