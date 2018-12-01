@@ -75,6 +75,9 @@ SAMPLE_FILE_javascript = index.js
 SAMPLE_FILE_python = main.py
 SAMPLE_FILE_ruby = main.rb
 
+SAMPLE_FILE_go = main.go
+SAMPLE_FILE_javascript = index.js
+
 TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 
