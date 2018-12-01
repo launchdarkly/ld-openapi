@@ -70,16 +70,11 @@ jobs:
         at: targets
 
     - run:
-        name: Install AWS CLI
+        name: Install Python tools and AWS CLI
         command: |
-          curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-          unzip awscli-bundle.zip
-          sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-
-    - run:
-        name: Install Python publishing requirements
-        command: |
-          pip install wheel twine
+          sudo apt update
+          sudo apt install awscli python-pip
+          sudo pip install wheel twine
 
     - run:
         name: Set up RubyGems credentials
