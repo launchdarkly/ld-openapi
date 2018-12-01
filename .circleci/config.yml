@@ -82,6 +82,12 @@ jobs:
           pip install wheel twine
 
     - run:
+        name: Set up RubyGems credentials
+        command: |
+          echo -e "---\r\n:rubygems_api_key: $RUBYGEMS_API_KEY" > ~/.gem/credentials
+          chmod 0600 /home/circleci/.gem/credentials
+
+    - run:
         name: Install GHR (Github Releaser)
         command: |
           curl -L https://github.com/tcnksm/ghr/releases/download/v0.10.2/ghr_v0.10.2_linux_amd64.tar.gz | tar xz
@@ -158,6 +164,23 @@ jobs:
         sudo pip install -e ../../targets/api-client-python
         python3 main.py
 
+  test-ruby:
+    docker:
+    - image: circleci/ruby
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+    - run:
+        name: Install Gem
+        command: |
+          cd targets/api-client-ruby
+          gem build launchdarkly_api.gemspec
+          gem install ./launchdarkly_api*.gem
+    - run: |
+        cd samples/ruby
+        ruby main.rb
+
 workflows:
   version: 2
   build:
@@ -177,6 +200,9 @@ workflows:
         requires:
         - build
     - test-python:
+        requires:
+        - build
+    - test-ruby:
         requires:
         - build
     - publish:
