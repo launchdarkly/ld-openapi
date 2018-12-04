@@ -61,7 +61,7 @@ jobs:
 
   publish:
     docker:
-    - image: circleci/openjdk:10-browsers
+    - image: circleci/openjdk:10-node-browsers
       environment:
         GRADLE_USER_HOME: /home/circleci
     steps:
@@ -73,7 +73,7 @@ jobs:
         name: Install Python tools and AWS CLI
         command: |
           sudo apt update
-          sudo apt install awscli python-pip
+          sudo apt install awscli python-pip python3-setuptools
           sudo pip install wheel twine
 
     - run:
