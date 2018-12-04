@@ -73,7 +73,7 @@ jobs:
         name: Install Python tools and AWS CLI
         command: |
           sudo apt update
-          sudo apt install awscli python-pip python3-setuptools
+          sudo apt install awscli python-pip python-setuptools
           sudo pip install wheel twine
 
     - run:
@@ -150,7 +150,7 @@ jobs:
 
   test-python:
     docker:
-    - image: circleci/python:3.6
+    - image: circleci/python:2.7
     steps:
     - checkout
     - attach_workspace:
@@ -158,7 +158,7 @@ jobs:
     - run: |
         cd samples/python
         sudo pip install -e ../../targets/api-client-python
-        python3 main.py
+        python main.py
 
   test-ruby:
     docker:
