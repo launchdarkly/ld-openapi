@@ -61,7 +61,7 @@ jobs:
 
   publish:
     docker:
-    - image: circleci/openjdk:10-browsers
+    - image: circleci/openjdk:10-node-browsers
       environment:
         GRADLE_USER_HOME: /home/circleci
     steps:
@@ -70,20 +70,17 @@ jobs:
         at: targets
 
     - run:
-        name: Install AWS CLI
+        name: Install Python tools and AWS CLI
         command: |
-          curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-          unzip awscli-bundle.zip
-          sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+          sudo apt update
+          sudo apt install awscli python-pip python-setuptools
+          sudo pip install wheel twine
 
     - run:
-        name: Install Python publishing requirements
+        name: Set up Ruby and RubyGems credentials
         command: |
-          pip install wheel twine
-
-    - run:
-        name: Set up RubyGems credentials
-        command: |
+          sudo apt-get install ruby
+          mkdir -p ~/.gem
           echo -e "---\r\n:rubygems_api_key: $RUBYGEMS_API_KEY" > ~/.gem/credentials
           chmod 0600 /home/circleci/.gem/credentials
 
@@ -120,7 +117,7 @@ jobs:
     - run:
         name: Publish packages
         command: |
-          if [ "$CIRCLE_REPOSITORY_URL" = "https://github.com/launchdarkly/ld-openapi" ]; then
+          if [ "$CIRCLE_REPOSITORY_URL" = "git@github.com:launchdarkly/ld-openapi.git" ]; then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
             echo -e "[pypi]\nusername=launchdarkly\npassword=$PYPI_PASSWORD" > ~/.pypirc
             make PUBLISH_TARGETS="java javascript python" publish
@@ -154,7 +151,7 @@ jobs:
 
   test-python:
     docker:
-    - image: circleci/python:3.6
+    - image: circleci/python:2.7
     steps:
     - checkout
     - attach_workspace:
@@ -162,7 +159,7 @@ jobs:
     - run: |
         cd samples/python
         sudo pip install -e ../../targets/api-client-python
-        python3 main.py
+        python main.py
 
   test-ruby:
     docker:
