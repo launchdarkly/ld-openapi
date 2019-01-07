@@ -91,6 +91,29 @@ Flag:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
+
+FlagCopy:
+  post:
+    summary: Copies the feature flag configuration from one environment to the same feature flag in another environment.
+    operationId: copyFeatureFlag
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '201':
+        description: Flag confguration copy response.
+        schema:
+          $ref: '#/definitions/FeatureFlag'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Feature flags    
+      
 FlagStatuses:
   get:
     summary: Get a list of statuses for all feature flags. The status includes the last time the feature flag was requested, as well as the state of the flag.

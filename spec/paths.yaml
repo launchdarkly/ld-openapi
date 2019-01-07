@@ -10,6 +10,8 @@
   $ref: ./paths/flags.yaml#/Flags
 /flags/{projectKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/Flag
+/flags/{projectKey}/{environmentKey}/{featureFlagKey}/copy:
+  $ref: ./paths/flags.yaml#/FlagCopy
 /flag-statuses/{projectKey}/{environmentKey}:
   $ref: ./paths/flags.yaml#/FlagStatuses
 /flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
