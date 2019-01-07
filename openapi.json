@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.10"
+    "version": "2.0.12"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -449,6 +449,43 @@
           },
           "404": {
             "$ref": "#/responses/Standard404"
+          }
+        },
+        "tags": [
+          "Feature flags"
+        ]
+      }
+    },
+    "/flags/{projectKey}/{environmentKey}/{featureFlagKey}/copy": {
+      "post": {
+        "summary": "Copies the feature flag configuration from one environment to the same feature flag in another environment.",
+        "operationId": "copyFeatureFlag",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/FeatureFlagKey"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Flag confguration copy response.",
+            "schema": {
+              "$ref": "#/definitions/FeatureFlag"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/Standard400"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "409": {
+            "$ref": "#/responses/Standard409"
           }
         },
         "tags": [
@@ -1537,7 +1574,24 @@
           "example": 23
         },
         "customProperties": {
-          "$ref": "#/definitions/CustomProperties"
+          "type": "object",
+          "description": "A mapping of keys to CustomProperty entries.",
+          "additionalProperties": {
+            "$ref": "#/definitions/CustomProperty"
+          },
+          "example": {
+            "bugs": {
+              "name": "Issue tracker ids",
+              "value": [
+                "123",
+                "456"
+              ]
+            },
+            "deprecated": {
+              "name": "Deprecated Date",
+              "value": []
+            }
+          }
         },
         "_links": {
           "$ref": "#/definitions/Links"
@@ -2438,26 +2492,6 @@
         "path",
         "value"
       ]
-    },
-    "CustomProperties": {
-      "type": "object",
-      "description": "A mapping of keys to CustomProperty entries.",
-      "items": {
-        "$ref": "#/definitions/CustomProperty"
-      },
-      "example": {
-        "bugs": {
-          "name": "Issue tracker ids",
-          "value": [
-            "123",
-            "456"
-          ]
-        },
-        "deprecated": {
-          "name": "Deprecated Date",
-          "value": []
-        }
-      }
     },
     "CustomProperty": {
       "type": "object",
