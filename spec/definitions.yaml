@@ -98,6 +98,12 @@ FeatureFlag:
       items:
         $ref: '#/definitions/Variation'
       example: [ { "value": "a" }, { "value": "b" } ]
+    goalIds:
+      type: array
+      description: An array goals from all environments associated with this feature flag
+      items:
+        type: string
+      example: ["d7239405bd89c930e885aa76", "405bc930e88d7239d895aa76"]
     _version:
       type: integer
       example: 23
@@ -175,11 +181,6 @@ FeatureFlagConfig:
       type: array
       items:
         $ref: '#/definitions/Target'
-    goalIds:
-      type: array
-      example: ["d7239405bd89c930e885aa76", "405bc930e88d7239d895aa76"]
-      items:
-        type: string
     rules:
       type: array
       items:
