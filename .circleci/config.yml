@@ -16,7 +16,7 @@ jobs:
     - run:
         name: Install Swagger Codegen
         command: |
-          wget http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.3.1/swagger-codegen-cli-2.3.1.jar -O swagger-codegen-cli.jar
+          wget http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.4.0/swagger-codegen-cli-2.4.0.jar -O swagger-codegen-cli.jar
           printf '#!/bin/bash\nexec java -jar /usr/local/bin/swagger-codegen-cli.jar "$@"\n' > ./swagger-codegen
           sudo mv ./swagger-codegen /usr/local/bin
           sudo mv ./swagger-codegen-cli.jar /usr/local/bin
@@ -151,7 +151,7 @@ jobs:
 
   test-python:
     docker:
-    - image: circleci/python:2.7
+    - image: circleci/python:3.7
     steps:
     - checkout
     - attach_workspace:
