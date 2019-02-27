@@ -134,6 +134,7 @@ $(DOC_TARGETS): openapi_yaml
 
 gh-pages: openapi_yaml
 	cp $(TARGET_OPENAPI_JSON) $(TARGETS_PATH)/gh-pages
+	cp $(TARGET_OPENAPI_YAML) $(TARGETS_PATH)/gh-pages
 	cp gh-pages/* $(TARGETS_PATH)/gh-pages
 
 $(MULTI_FILE_SWAGGER):
