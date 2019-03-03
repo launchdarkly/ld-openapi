@@ -3,6 +3,10 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
+SWAGGER_VERSION=2.4.0
+SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
+SWAGGER_DOWNLOAD_URL=http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
+
 API_TARGETS ?= \
 	bash \
 	csharp-dotnet2 \
@@ -79,13 +83,7 @@ TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 
 MULTI_FILE_SWAGGER = node_modules/.bin/multi-file-swagger
-CODEGEN = ./swagger-codegen
-
-ifeq ($(OS),Darwin)
-CODEGEN_INSTALL_MSG = "Run 'brew install swagger-codegen' to install swagger-codegen"
-else
-CODEGEN_INSTALL_MSG = "You must install swagger-codegen before building this target"
-endif
+CODEGEN = test -s ${SWAGGER_JAR} || wget  ${SWAGGER_DOWNLOAD_URL} -O ${SWAGGER_JAR} && exec java -jar ${SWAGGER_JAR}
 
 all: $(API_TARGETS) $(DOC_TARGETS) gh-pages
 
@@ -99,7 +97,7 @@ load_prior_targets:
 	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;) \
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
-openapi_yaml: $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
+openapi_yaml: $(TARGETS_PATH) $(MULTI_FILE_SWAGGER)
 	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
 	$(MULTI_FILE_SWAGGER) -o yaml openapi.yaml > $(TARGET_OPENAPI_YAML)
 	$(CODEGEN) validate -i $(TARGET_OPENAPI_YAML)
@@ -164,10 +162,7 @@ publish:
 		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET); \
 	)
 
-check_codegen:
-	command $(CODEGEN) > /dev/null 2>&1 || { echo $CODEGEN_INSTALL_MSG; false; }
-
 clean:
 	rm -rf $(TARGETS_PATH)
 
-.PHONY: $(TARGETS) all check_codegen clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
+.PHONY: $(TARGETS) all clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
