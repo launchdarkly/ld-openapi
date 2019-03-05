@@ -24,7 +24,7 @@ UserSegments:
       - $ref: '#/parameters/UserSegmentPostRequest'
     responses:
       '201':
-        $ref: '#/responses/Standard201'
+        $ref: '#/responses/UserSegment2xx'
       '400':
         $ref: '#/responses/Standard400'
       '401':
@@ -43,9 +43,7 @@ UserSegment:
       - $ref: '#/parameters/UserSegmentKey'
     responses:
       '200':
-        description: User segment response.
-        schema:
-          $ref: '#/definitions/UserSegment'
+        $ref: '#/responses/UserSegment2xx'
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -62,7 +60,7 @@ UserSegment:
       - $ref: '#/parameters/PatchOnly'
     responses:
       '200':
-        $ref: '#/responses/UserSegment200'
+        $ref: '#/responses/UserSegment2xx'
       '400':
         $ref: '#/responses/Standard400'
       '401':
