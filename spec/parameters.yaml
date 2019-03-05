@@ -355,3 +355,11 @@ PatchOnly:
     type: array
     items:
       $ref: '#/definitions/PatchOperation'
+StreamSource:
+  name: source
+  in: path
+  required: true
+  description: The source of where the stream comes from.
+  type: string
+  example: 'client'
+

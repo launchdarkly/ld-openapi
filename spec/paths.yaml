@@ -1,13 +1,13 @@
 /usage:
   $ref: ./paths/cmetrics.yaml#/Usage
-# /usage/streams:
-#  $ref: ./paths/cmetrics.yaml#/Streams
-# /usage/streams/{source}:
-#   $ref: ./paths/cmetrics.yaml#/Stream
+/usage/streams:
+ $ref: ./paths/cmetrics.yaml#/Streams
+/usage/streams/{source}:
+  $ref: ./paths/cmetrics.yaml#/Stream
 # /usage/streams/{source}/bysdkversion:
-#   $ref: ./paths/cmetrics.yaml#/Stream
+#   $ref: ./paths/cmetrics.yaml#/StreamBySDKVersion
 # /usage/streams/{source}/sdkversions:
-#   $ref: ./paths/cmetrics.yaml#/Stream
+#   $ref: ./paths/cmetrics.yaml#/StreamSDKVersion
 # /usage/mau:
 #   $ref: ./paths/cmetrics.yaml#/MAUs
 # /usage/mau/bycategory:

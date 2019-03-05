@@ -35,4 +35,8 @@
     schema:
       $ref: '#/definitions/CustomRole'
   BetaApi403:
-    description: Request to Beta API without "Ld-Version-Api" set to "beta"
+    description: This is a beta API, you must pass beta in the LD-API-Version header to use it.
+  StreamUsage404:
+    description: The stream source you requested could not be found
+    schema:
+      $ref: '#/definitions/StreamUsageError'

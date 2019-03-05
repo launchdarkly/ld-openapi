@@ -1,10 +1,9 @@
 Usage:
   get:
     summary: Returns of the usage endpoints available.
-    operationId: getUsage
     responses:
       '200':
-        description: Usage response
+        description: Usage endpoints
         schema:
           $ref: '#/definitions/Usage'
       '403':
@@ -13,34 +12,65 @@ Usage:
       - Customer Metrics Usage
 Streams:
   get:
-    summary: Get a list of all streams.
-    operationId: getFeatureFlags
+    summary: Returns a list of all streams.
     responses:
       '200':
-        description: Streams response.
+        description: Stream usage endpoints
         schema:
-          $ref: '#/definitions/FeatureFlags'
+          $ref: '#/definitions/Streams'
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
       - Customer Metrics Usage
 Stream:
   get:
-    summary: Get a list of all streams.
-    operationId: getFeatureFlags
+    summary: Get a stream endpoint and return timeseries data.
     parameters:
       - $ref: '#/parameters/StreamSource'
     responses:
       '200':
-        description: Streams response.
+        description: Responds with time series data on stream usage.
         schema:
-          $ref: '#/definitions/FeatureFlags'
+          $ref: '#/definitions/Stream'
       '403':
         $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/StreamUsage404'
     tags:
       - Customer Metrics Usage
+# StreamBySDKVersion:
+#   get:
+#     summary: Get a stream endpoint by source and return timeseries data.
+#     parameters:
+#       - $ref: '#/parameters/StreamSource'
+#     responses:
+#       '200':
+#         description: Streams response.
+#         schema:
+#           $ref: '#/definitions/FeatureFlags'
+#       '403':
+#         $ref: '#/responses/BetaApi403'
+#       '404':
+#         $ref: '#/responses/StreamUsage404'
+#     tags:
+#       - Customer Metrics Usage
+# StreamSDKVersion:
+#   get:
+#     summary: Get a stream endpoint by source and return timeseries data.
+#     parameters:
+#       - $ref: '#/parameters/StreamSource'
+#     responses:
+#       '200':
+#         description: Streams response.
+#         schema:
+#           $ref: '#/definitions/FeatureFlags'
+#       '403':
+#         $ref: '#/responses/BetaApi403'
+#       '404':
+#         $ref: '#/responses/StreamUsage404'
+#     tags:
+#       - Customer Metrics Usage
 
-MAU:
-
-Events:
-Evaluations:
+# MAU:
+# Events:
+# Evaluations:

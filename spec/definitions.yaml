@@ -754,6 +754,7 @@ CustomPropertyValues:
   items:
     type: string
   example: ["Value 1", "Value 2"]
+# Customer Metrics Definitions 
 UsageLinks:
   type: object
   properties:
@@ -772,19 +773,83 @@ UsageLinks:
     'series': 
       type: string 
       example: null
-    
+StreamLinks:
+  type: object
+  properties:
+    'parent':
+      $ref: '#/definitions/Link'
+    'self':
+      $ref: '#/definitions/Link'
+    'subseries':
+        type: array
+        description: The following links that are in the response.
+        items:
+          $ref: '#/definitions/Link'
 Usage:
   type: object
   properties:
     _links:
       $ref: '#/definitions/UsageLinks'
-      # parent:
-      #   $ref: '#/definitions/Link'
-      # self:
-      #   $ref: '#/definitions/Link'
-      # subseries:
-      #   type: array
-      #   description: The following links that are in the response.
-      #   items:
-      #     $ref: '#/definitions/Link'
+Streams:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/StreamUsageLinks'
+Stream:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/StreamUsageLinks'
+    metadata:
+      type: array
+      items:
+        $ref: '#/definitions/StreamUsageMetadata'
+    series:
+      type: array
+      items:
+        $ref: '#/definitions/StreamUsageSeries'
+StreamUsageLinks:
+  type: object
+  properties:
+    'parent':
+      $ref: '#/definitions/Link'
+    'self':
+      $ref: '#/definitions/Link'
+    'subseries':
+        type: array
+        description: The following links that are in the response.
+        items:
+          $ref: '#/definitions/Link'
+StreamUsageSeries:
+  type: object
+  properties:
+    '0':
+      type: number
+      format: int64
+      example: 0
+    'time':
+      type: number
+      format: int64
+      example: 1551740400000
 
+StreamUsageMetadata:
+  type: object
+  properties:
+    'sdk':
+      type: string
+      example: ''
+    'version':
+      type: string
+      example: ''
+    'source':
+      type: string
+      example: 'server'
+StreamUsageError:
+  type: object
+  properties:
+    'code':
+      type: string
+      example: "not_found"
+    'message': 
+      type: string
+      example: "Stream source not found"
