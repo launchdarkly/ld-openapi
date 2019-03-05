@@ -85,7 +85,7 @@ TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 MULTI_FILE_SWAGGER = node_modules/.bin/multi-file-swagger
 CODEGEN = exec java -jar ${SWAGGER_JAR}
 
-all: $(SWAGGER_JAR) $(API_TARGETS) $(DOC_TARGETS) gh-pages
+all: $(API_TARGETS) $(DOC_TARGETS) gh-pages
 
 load_prior_targets:
 	rm -rf $(TARGETS_PATH)
@@ -97,7 +97,7 @@ load_prior_targets:
 	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;) \
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
-openapi_yaml: $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
+openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
 	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
 	$(MULTI_FILE_SWAGGER) -o yaml openapi.yaml > $(TARGET_OPENAPI_YAML)
 	$(CODEGEN) validate -i $(TARGET_OPENAPI_YAML)
@@ -163,9 +163,9 @@ publish:
 	)
 
 $(SWAGGER_JAR):
-	test -s $@ || wget  ${SWAGGER_DOWNLOAD_URL} -O $@
+	wget ${SWAGGER_DOWNLOAD_URL} -O $@
 
 clean:
 	rm -rf $(TARGETS_PATH)
 
-.PHONY: $(TARGETS) all $(SWAGGER_JAR) clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
+.PHONY: $(TARGETS) all clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
