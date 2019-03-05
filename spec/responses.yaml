@@ -14,23 +14,27 @@
     description: A list of links to available resources in the API.
     schema:
       $ref: '#/definitions/Links'
-  Webhooks200:
+  Webhook2xx:
     description: Webhook response.
     schema:
       $ref: '#/definitions/Webhook'
-  UserSegment200:
+  UserSegment2xx:
     description: User segment response.
     schema:
       $ref: '#/definitions/UserSegment'
-  Projects200:
+  Project2xx:
     description: Successful Project response.
     schema:
       $ref: '#/definitions/Project'
-  Member200:
+  Member2xx:
     description: Member response.
     schema:
       $ref: '#/definitions/Member'
-  CustomRole200:
+  CustomRole2xx:
     description: Custom role response.
     schema:
       $ref: '#/definitions/CustomRole'
+  Environment2xx:
+    description: Environment response.
+    schema:
+      $ref: '#/definitions/Environment'

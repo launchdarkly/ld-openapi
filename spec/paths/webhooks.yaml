@@ -18,7 +18,7 @@ Webhooks:
       - $ref: '#/parameters/WebhookPostRequest'
     responses:
       '201':
-        $ref: '#/responses/Standard201'
+        $ref: '#/responses/Webhook2xx'
       '400':
         $ref: '#/responses/Standard400'
       '401':
@@ -33,7 +33,7 @@ Webhook:
       - $ref: '#/parameters/ResourceId'
     responses:
       '200':
-        $ref: '#/responses/Webhooks200'
+        $ref: '#/responses/Webhook2xx'
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -48,7 +48,7 @@ Webhook:
       - $ref: '#/parameters/PatchRequest'
     responses:
       '200':
-        $ref: '#/responses/Webhooks200'
+        $ref: '#/responses/Webhook2xx'
       '400':
         $ref: '#/responses/Standard400'
       '401':
