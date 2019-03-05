@@ -37,3 +37,4 @@ targets/
 
 # Auto generated files
 .DS_Store
+/swagger-codegen-cli-*.jar

@@ -31,11 +31,8 @@ We use the spec to build some internals tools in go.  Tests for other specs are 
 
 Server/client code for the API can be automatically generated. To generate the code:
 
-  1. Install `swagger-codegen`:
 
-        brew install swagger-codegen
-
-  2. Run the `generate` command:
+  1. Run the `generate` command:
 ```
 > make
 ```
