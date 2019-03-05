@@ -10,6 +10,9 @@ import (
 
 func main() {
 	apiKey := os.Getenv("LD_API_KEY")
+	if apiKey == "" {
+		panic("LD_API_KEY env var was empty!")
+	}
 	client := ldapi.NewAPIClient(ldapi.NewConfiguration())
 	ctx := context.WithValue(context.Background(), ldapi.ContextAPIKey, ldapi.APIKey{
 		Key: apiKey,
