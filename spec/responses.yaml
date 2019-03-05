@@ -34,3 +34,5 @@
     description: Custom role response.
     schema:
       $ref: '#/definitions/CustomRole'
+  BetaApi403:
+    description: Request to Beta API without "Ld-Version-Api" set to "beta"

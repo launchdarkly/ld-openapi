@@ -1,0 +1,46 @@
+Usage:
+  get:
+    summary: Returns of the usage endpoints available.
+    operationId: getUsage
+    responses:
+      '200':
+        description: Usage response
+        schema:
+          $ref: '#/definitions/Usage'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Customer Metrics Usage
+Streams:
+  get:
+    summary: Get a list of all streams.
+    operationId: getFeatureFlags
+    responses:
+      '200':
+        description: Streams response.
+        schema:
+          $ref: '#/definitions/FeatureFlags'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Customer Metrics Usage
+Stream:
+  get:
+    summary: Get a list of all streams.
+    operationId: getFeatureFlags
+    parameters:
+      - $ref: '#/parameters/StreamSource'
+    responses:
+      '200':
+        description: Streams response.
+        schema:
+          $ref: '#/definitions/FeatureFlags'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Customer Metrics Usage
+
+MAU:
+
+Events:
+Evaluations:

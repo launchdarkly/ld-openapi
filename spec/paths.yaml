@@ -1,3 +1,23 @@
+/usage:
+  $ref: ./paths/cmetrics.yaml#/Usage
+# /usage/streams:
+#  $ref: ./paths/cmetrics.yaml#/Streams
+# /usage/streams/{source}:
+#   $ref: ./paths/cmetrics.yaml#/Stream
+# /usage/streams/{source}/bysdkversion:
+#   $ref: ./paths/cmetrics.yaml#/Stream
+# /usage/streams/{source}/sdkversions:
+#   $ref: ./paths/cmetrics.yaml#/Stream
+# /usage/mau:
+#   $ref: ./paths/cmetrics.yaml#/MAUs
+# /usage/mau/bycategory:
+#   $ref: ./paths/cmetrics.yaml#/MAU
+# /usage/events:
+#   $ref: ./paths/cmetrics.yaml#/Events
+# /usage/events/{type}:
+#   $ref: ./paths/cmetrics.yaml#/Events
+# /usage/evaluations/{envId}/{flagKey}:
+#   $ref: ./paths/cmetrics.yaml#/Evaluations
 /projects:
   $ref: ./paths/projects.yaml#/Projects
 /projects/{projectKey}:
