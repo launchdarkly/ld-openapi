@@ -288,7 +288,9 @@ MembersPostRequest:
         customRoles:
           type: array
           items:
-            $ref: '#/definitions/CustomRoleKeyOrId'
+            type: string
+            description: The 20-hexdigit id or the key for a custom role.
+            example: "revenue-team"
         inlineRole:
           $ref: '#/definitions/Statements'
       required:
@@ -316,7 +318,9 @@ CustomRolePostRequest:
         description: Description of the custom role.
         example: "Description of revenue team role here"
       key:
-        $ref: '#/definitions/CustomRoleKeyOrId'
+        type: string
+        description: The 20-hexdigit id or the key for a custom role.
+        example: "revenue-team"
       policy:
         type: array
         items:
