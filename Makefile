@@ -85,7 +85,7 @@ TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 MULTI_FILE_SWAGGER = node_modules/.bin/multi-file-swagger
 CODEGEN = exec java -jar ${SWAGGER_JAR}
 
-all: check_codegen $(API_TARGETS) $(DOC_TARGETS) gh-pages
+all: $(SWAGGER_JAR) $(API_TARGETS) $(DOC_TARGETS) gh-pages
 
 load_prior_targets:
 	rm -rf $(TARGETS_PATH)
@@ -162,10 +162,10 @@ publish:
 		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET); \
 	)
 
-check_codegen:
-	test -s ${SWAGGER_JAR} || wget  ${SWAGGER_DOWNLOAD_URL} -O ${SWAGGER_JAR}
+$(SWAGGER_JAR):
+	test -s $@ || wget  ${SWAGGER_DOWNLOAD_URL} -O $@
 
 clean:
 	rm -rf $(TARGETS_PATH)
 
-.PHONY: $(TARGETS) all check_codegen clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
+.PHONY: $(TARGETS) all $(SWAGGER_JAR) clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
