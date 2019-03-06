@@ -8,16 +8,16 @@
   $ref: ./paths/cmetrics.yaml#/StreamBySDKVersion
 /usage/streams/{source}/sdkversions:
   $ref: ./paths/cmetrics.yaml#/StreamSDKVersions
-# /usage/mau:
-#   $ref: ./paths/cmetrics.yaml#/MAUs
-# /usage/mau/bycategory:
-#   $ref: ./paths/cmetrics.yaml#/MAU
-# /usage/events:
-#   $ref: ./paths/cmetrics.yaml#/Events
-# /usage/events/{type}:
-#   $ref: ./paths/cmetrics.yaml#/Events
-# /usage/evaluations/{envId}/{flagKey}:
-#   $ref: ./paths/cmetrics.yaml#/Evaluations
+/usage/mau:
+  $ref: ./paths/cmetrics.yaml#/MAU
+/usage/mau/bycategory:
+  $ref: ./paths/cmetrics.yaml#/MAUbyCategory
+/usage/events:
+  $ref: ./paths/cmetrics.yaml#/Events
+/usage/events/{type}:
+  $ref: ./paths/cmetrics.yaml#/Event
+/usage/evaluations/{envId}/{flagKey}:
+  $ref: ./paths/cmetrics.yaml#/Evaluations
 /projects:
   $ref: ./paths/projects.yaml#/Projects
 /projects/{projectKey}:

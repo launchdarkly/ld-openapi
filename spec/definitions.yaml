@@ -790,6 +790,12 @@ Usage:
     series: 
       type: string 
       example: null
+UsageError:
+  type: object
+  properties:
+    'message': 
+      type: string
+      example: "This is a beta API, you must pass beta in the LD-API-Version header to use it."
 Streams:
   type: object
   properties:
@@ -843,12 +849,7 @@ StreamUsageMetadata:
     'source':
       type: string
       example: 'server'
-UsageError:
-  type: object
-  properties:
-    'message': 
-      type: string
-      example: "This is a beta API, you must pass beta in the LD-API-Version header to use it."
+
 StreamUsageError:
   type: object
   properties:
@@ -890,8 +891,6 @@ StreamBySDKLinksMetadata:
     'source':
       type: string
       example: 'server'
-StreamBySDKLinksSeries:
-
 StreamSDKVersion:
   type: object
   properties:
@@ -910,4 +909,46 @@ StreamSDKVersionData:
     'version':
       type: string
       example: ""
-
+MAU:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/UsageLinks'
+    metadata:
+      type: array
+      items:
+        $ref: '#/definitions/StreamBySDKLinksMetadata'
+    series:
+      type: array
+      items:
+        $ref: '#/definitions/StreamUsageSeries'
+MAUbyCategory:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/StreamBySDKLinks'
+    metadata:
+      type: array
+      items:
+        $ref: '#/definitions/MAUMetadata'
+    series:
+      type: array
+      items:
+        $ref: '#/definitions/StreamUsageSeries'
+MAUMetadata:
+  type: object
+  properties:
+    # 'sdk':
+    #   type: string
+    #   example: ''
+    # 'version':
+    #   type: string
+    #   example: ''
+    # 'source':
+    #   type: string
+    #   example: 'server'
+Events:
+  type: object
+  properties:
+    links:
+      $ref: '#/definitions/UsageLinks'

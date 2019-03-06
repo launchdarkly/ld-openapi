@@ -70,7 +70,72 @@ StreamSDKVersions:
         $ref: '#/responses/StreamUsage404'
     tags:
       - Customer Metrics Usage
-
-# MAU:
-# Events:
-# Evaluations:
+MAU:
+  get:
+    summary: Get monthly active user data.
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/MAU'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Customer Metrics Usage
+MAUbyCategory:
+  get:
+    summary: Get monthly active user data by category.
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/MAUbyCategory'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Customer Metrics Usage
+Events:
+  get:
+    summary: Get events usage endpoints.
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/Events'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Customer Metrics Usage
+Event:
+  get:
+    summary: Get events usage by event type. 
+    parameters:
+      - $ref: '#/parameters/EventType'
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/StreamSDKVersion'
+      '403':
+        $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/StreamUsage404'
+    tags:
+      - Customer Metrics Usage
+Evaluations:
+  get:
+    summary: Get events usage by event type. 
+    parameters:
+      - $ref: '#/parameters/EvaluationEnvId'
+      - $ref: '#/parameters/EvaluationFlagKey'
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/StreamSDKVersion'
+      '403':
+        $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/StreamUsage404'
+    tags:
+      - Customer Metrics Usage

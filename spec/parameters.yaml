@@ -362,4 +362,25 @@ StreamSource:
   description: The source of where the stream comes from.
   type: string
   example: 'client'
+EventType:
+  name: type
+  in: path
+  required: true
+  description: The type of event we would like to track.
+  type: string
+  example: 'published'
+EvaluationEnvId:
+  name: envId
+  in: path
+  required: true
+  description: The type of event we would like to track.
+  type: string
+  example: ''
+EvaluationFlagKey:
+  name: flagKey
+  in: path
+  required: true
+  description: The type of event we would like to track.
+  type: string
+  example: ''
 
