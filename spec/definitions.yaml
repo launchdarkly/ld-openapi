@@ -891,14 +891,23 @@ StreamBySDKLinksMetadata:
       type: string
       example: 'server'
 StreamBySDKLinksSeries:
+
+StreamSDKVersion:
   type: object
   properties:
-    '0':
-      type: number
-      format: int64
-      example: 0
-    'time':
-      type: number
-      format: int64
-      example: 1551740400000
+    _links:
+      $ref: '#/definitions/StreamBySDKLinks'
+    sdkVersions:
+      type: array
+      items:
+        $ref: '#/definitions/StreamSDKVersionData'
+StreamSDKVersionData:
+  type: object
+  properties:
+    'sdk':
+      type: string
+      example: ""
+    'version':
+      type: string
+      example: ""
 

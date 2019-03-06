@@ -6,8 +6,8 @@
   $ref: ./paths/cmetrics.yaml#/Stream
 /usage/streams/{source}/bysdkversion:
   $ref: ./paths/cmetrics.yaml#/StreamBySDKVersion
-# /usage/streams/{source}/sdkversions:
-#   $ref: ./paths/cmetrics.yaml#/StreamSDKVersions
+/usage/streams/{source}/sdkversions:
+  $ref: ./paths/cmetrics.yaml#/StreamSDKVersions
 # /usage/mau:
 #   $ref: ./paths/cmetrics.yaml#/MAUs
 # /usage/mau/bycategory:
