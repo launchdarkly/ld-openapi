@@ -38,7 +38,23 @@ Stream:
         $ref: '#/responses/StreamUsage404'
     tags:
       - Customer Metrics Usage
-# StreamBySDKVersion:
+StreamBySDKVersion:
+  get:
+    summary: Get a stream endpoint by source and return timeseries data.
+    parameters:
+      - $ref: '#/parameters/StreamSource'
+    responses:
+      '200':
+        description: Streams response.
+        schema:
+          $ref: '#/definitions/StreamBySDK'
+      '403':
+          $ref: '#/responses/BetaApi403'
+      '404':
+          $ref: '#/responses/StreamUsage404'
+    tags:
+      - Customer Metrics Usage
+# StreamSDKVersions:
 #   get:
 #     summary: Get a stream endpoint by source and return timeseries data.
 #     parameters:
@@ -47,23 +63,7 @@ Stream:
 #       '200':
 #         description: Streams response.
 #         schema:
-#           $ref: '#/definitions/FeatureFlags'
-#       '403':
-#         $ref: '#/responses/BetaApi403'
-#       '404':
-#         $ref: '#/responses/StreamUsage404'
-#     tags:
-#       - Customer Metrics Usage
-# StreamSDKVersion:
-#   get:
-#     summary: Get a stream endpoint by source and return timeseries data.
-#     parameters:
-#       - $ref: '#/parameters/StreamSource'
-#     responses:
-#       '200':
-#         description: Streams response.
-#         schema:
-#           $ref: '#/definitions/FeatureFlags'
+#           $ref: '#/definitions/StreamBySDK'
 #       '403':
 #         $ref: '#/responses/BetaApi403'
 #       '404':

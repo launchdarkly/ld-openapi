@@ -767,12 +767,6 @@ UsageLinks:
         description: The following links that are in the response.
         items:
           $ref: '#/definitions/Link'
-    'metadata':
-      type: string 
-      example: null
-    'series': 
-      type: string 
-      example: null
 StreamLinks:
   type: object
   properties:
@@ -790,6 +784,12 @@ Usage:
   properties:
     _links:
       $ref: '#/definitions/UsageLinks'
+    metadata:
+      type: string 
+      example: null
+    series: 
+      type: string 
+      example: null
 Streams:
   type: object
   properties:
@@ -831,7 +831,6 @@ StreamUsageSeries:
       type: number
       format: int64
       example: 1551740400000
-
 StreamUsageMetadata:
   type: object
   properties:
@@ -844,6 +843,12 @@ StreamUsageMetadata:
     'source':
       type: string
       example: 'server'
+UsageError:
+  type: object
+  properties:
+    'message': 
+      type: string
+      example: "This is a beta API, you must pass beta in the LD-API-Version header to use it."
 StreamUsageError:
   type: object
   properties:
@@ -853,3 +858,47 @@ StreamUsageError:
     'message': 
       type: string
       example: "Stream source not found"
+StreamBySDK:
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/StreamBySDKLinks'
+    metadata:
+      type: array
+      items:
+        $ref: '#/definitions/StreamBySDKLinksMetadata'
+    series:
+      type: array
+      items:
+        $ref: '#/definitions/StreamUsageSeries'
+StreamBySDKLinks:
+  type: object
+  properties:
+    'parent':
+      $ref: '#/definitions/Link'
+    'self':
+      $ref: '#/definitions/Link'
+StreamBySDKLinksMetadata:
+  type: object
+  properties:
+    'sdk':
+      type: string
+      example: ''
+    'version':
+      type: string
+      example: ''
+    'source':
+      type: string
+      example: 'server'
+StreamBySDKLinksSeries:
+  type: object
+  properties:
+    '0':
+      type: number
+      format: int64
+      example: 0
+    'time':
+      type: number
+      format: int64
+      example: 1551740400000
+
