@@ -124,7 +124,7 @@ Event:
       - Customer Metrics Usage
 Evaluations:
   get:
-    summary: Get events usage by event type. 
+    summary: Get events usage by event id and the feature flag key. 
     parameters:
       - $ref: '#/parameters/EvaluationEnvId'
       - $ref: '#/parameters/EvaluationFlagKey'
@@ -136,6 +136,6 @@ Evaluations:
       '403':
         $ref: '#/responses/BetaApi403'
       '404':
-        $ref: '#/responses/StreamUsage404'
+        $ref: '#/responses/EvaluationUsage404'
     tags:
       - Customer Metrics Usage

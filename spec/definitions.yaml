@@ -849,7 +849,6 @@ StreamUsageMetadata:
     'source':
       type: string
       example: 'server'
-
 StreamUsageError:
   type: object
   properties:
@@ -952,3 +951,12 @@ Events:
   properties:
     links:
       $ref: '#/definitions/UsageLinks'
+EvaluationUsageError:
+  type: object
+  properties:
+    'code':
+      type: string
+      example: "not_found"
+    'message': 
+      type: string
+      example: "unknown environment"

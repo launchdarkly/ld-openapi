@@ -42,3 +42,7 @@
     description: The stream source you requested could not be found
     schema:
       $ref: '#/definitions/StreamUsageError'
+  EvaluationUsage404:
+    description: The environment or flag you requested could not be found
+    schema:
+      $ref: '#/definitions/EvaluationUsageError'
