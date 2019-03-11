@@ -142,6 +142,12 @@ Member:
     email: 
       type: string
       example: "user@launchdarkly.com"
+    firstName:
+      type: string
+      example: "Alan"
+    lastName:
+      type: string
+      example: "Turing"
     _pendingInvite: 
       type: boolean
     isBeta:
@@ -156,7 +162,9 @@ Members:
     _links:
       $ref: '#/definitions/Links'
     items:
-      $ref: '#/definitions/Member'
+      type: array
+      items:
+        $ref: '#/definitions/Member'
 FeatureFlagConfig:
   type: object
   properties:
