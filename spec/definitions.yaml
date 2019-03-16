@@ -711,7 +711,9 @@ CustomRoles:
     _links:
       $ref: '#/definitions/Links'
     items:
-      $ref: '#/definitions/CustomRole'
+      type: array
+      items:
+        $ref: '#/definitions/CustomRole'
 Policy:
   type: object
   properties:
