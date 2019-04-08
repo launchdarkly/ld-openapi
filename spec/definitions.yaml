@@ -887,10 +887,10 @@ StreamBySDKLinksMetadata:
   properties:
     'sdk':
       type: string
-      example: ''
+      example: 'ruby'
     'version':
       type: string
-      example: ''
+      example: '5.4.3'
     'source':
       type: string
       example: 'server'
@@ -908,10 +908,12 @@ StreamSDKVersionData:
   properties:
     'sdk':
       type: string
-      example: ""
+      description: The language of the sdk
+      example: "ruby"
     'version':
       type: string
-      example: ""
+      description: The version of the sdk
+      example: "5.4.3"
 MAU:
   type: object
   properties:
