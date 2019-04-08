@@ -832,10 +832,12 @@ StreamUsageSeries:
     '0':
       type: number
       format: int64
+      description: A key corresponding to a time series data series.
       example: 0
     'time':
       type: number
       format: int64
+      description: A unix epoch time in milliseconds specifying the creation time of this flag.
       example: 1551740400000
 StreamUsageMetadata:
   type: object
