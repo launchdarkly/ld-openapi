@@ -776,7 +776,7 @@ StreamLinks:
       $ref: '#/definitions/Link'
     'subseries':
         type: array
-        description: The following links that are in the response.
+        description: Links to endpoints that are in the request path.
         items:
           $ref: '#/definitions/Link'
 Usage:
