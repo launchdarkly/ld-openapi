@@ -844,10 +844,12 @@ StreamUsageMetadata:
   properties:
     'sdk':
       type: string
-      example: ''
+      description: The language of the sdk
+      example: 'ruby'
     'version':
       type: string
-      example: ''
+      description: The version of the SDK
+      example: '5.4.3'
     'source':
       type: string
       example: 'server'
