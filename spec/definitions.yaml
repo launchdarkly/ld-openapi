@@ -832,7 +832,7 @@ StreamUsageSeries:
     '0':
       type: number
       format: int64
-      description: A key corresponding to a time series data series.
+      description: A key corresponding to a time series data point.
       example: 0
     'time':
       type: number
