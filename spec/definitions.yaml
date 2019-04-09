@@ -784,12 +784,13 @@ Usage:
   properties:
     _links:
       $ref: '#/definitions/UsageLinks'
-    metadata:
-      type: string 
-      example: null
+    # metadata:
+    #   type: string 
+    #   example: null
     series: 
-      type: string 
-      example: null
+      type: array
+      items:
+        $ref: '#/definitions/StreamUsageSeries'
 UsageError:
   type: object
   properties:
