@@ -1,6 +1,7 @@
 Usage:
   get:
     summary: Returns of the usage endpoints available.
+    operationId: getUsage
     responses:
       '200':
         description: Usage endpoints
@@ -9,10 +10,11 @@ Usage:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 Streams:
   get:
     summary: Returns a list of all streams.
+    operationId: getStreams
     responses:
       '200':
         description: Stream usage endpoints
@@ -21,10 +23,11 @@ Streams:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 Stream:
   get:
     summary: Get a stream endpoint and return timeseries data.
+    operationId: getStream
     parameters:
       - $ref: '#/parameters/StreamSource'
     responses:
@@ -39,10 +42,11 @@ Stream:
         description: Resource could not be found.
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 StreamBySDKVersion:
   get:
     summary: Get a stream timeseries data by source show sdk version metadata.
+    operationId: getStreamBySDK
     parameters:
       - $ref: '#/parameters/StreamSource'
     responses:
@@ -55,10 +59,11 @@ StreamBySDKVersion:
       '404':
           $ref: '#/responses/StreamUsage404'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 StreamSDKVersions:
   get:
     summary: Get a stream timeseries data by source and show all sdk version associated.
+    operationId: getStreamSDKVersion
     parameters:
       - $ref: '#/parameters/StreamSource'
     responses:
@@ -71,10 +76,11 @@ StreamSDKVersions:
       '404':
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 MAU:
   get:
     summary: Get monthly active user data.
+    operationId: getMAU
     responses:
       '200':
         description: Returns timeseries data and all sdk versions.
@@ -83,10 +89,11 @@ MAU:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 MAUbyCategory:
   get:
     summary: Get monthly active user data by category.
+    operationId: getMAUByCategory
     responses:
       '200':
         description: Returns timeseries data and all sdk versions.
@@ -95,10 +102,11 @@ MAUbyCategory:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 Events:
   get:
     summary: Get events usage endpoints.
+    operationId: getEvents
     responses:
       '200':
         description: Returns timeseries data and all sdk versions.
@@ -107,10 +115,11 @@ Events:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 Event:
   get:
     summary: Get events usage by event type. 
+    operationId: getEvent
     parameters:
       - $ref: '#/parameters/EventType'
     responses:
@@ -123,10 +132,11 @@ Event:
       '404':
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
 Evaluations:
   get:
-    summary: Get events usage by event id and the feature flag key. 
+    summary: Get events usage by event id and the feature flag key.
+    operationId: getEvaluations 
     parameters:
       - $ref: '#/parameters/EvaluationEnvId'
       - $ref: '#/parameters/EvaluationFlagKey'
@@ -140,4 +150,4 @@ Evaluations:
       '404':
         $ref: '#/responses/EvaluationUsage404'
     tags:
-      - Customer Metrics Usage
+      - Customer Metrics
