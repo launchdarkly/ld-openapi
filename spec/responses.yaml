@@ -34,3 +34,15 @@
     description: Custom role response.
     schema:
       $ref: '#/definitions/CustomRole'
+  BetaApi403:
+    description: This is a beta API, you must pass beta in the LD-API-Version header to use it.
+    schema:
+      $ref: '#/definitions/UsageError'
+  StreamUsage404:
+    description: The stream source you requested could not be found
+    schema:
+      $ref: '#/definitions/StreamUsageError'
+  EvaluationUsage404:
+    description: The environment or flag you requested could not be found
+    schema:
+      $ref: '#/definitions/EvaluationUsageError'
