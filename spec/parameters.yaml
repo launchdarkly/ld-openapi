@@ -218,7 +218,7 @@ After:
   required: false
   description: A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occured after this timestamp.
   format: int64
-  type: interger
+  type: integer
 PatchRequest:
   name: patchDelta
   in: body
@@ -246,7 +246,7 @@ Before:
   required: false
   description: A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have before this timestamp.
   format: int64
-  type: interger
+  type: integer
 Q:
   name: q
   in: query
