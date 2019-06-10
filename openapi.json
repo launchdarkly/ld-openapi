@@ -2871,7 +2871,7 @@
       "required": false,
       "description": "A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occured after this timestamp.",
       "format": "int64",
-      "type": "number"
+      "type": "integer"
     },
     "PatchRequest": {
       "name": "patchDelta",
@@ -2904,7 +2904,8 @@
       "in": "query",
       "required": false,
       "description": "A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have before this timestamp.",
-      "type": "number"
+      "format": "int64",
+      "type": "integer"
     },
     "Q": {
       "name": "q",
