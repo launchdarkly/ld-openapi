@@ -34,9 +34,9 @@
   $ref: ./paths/audit.yaml#/AuditLogEntries
 /auditlog/{resourceId}:
   $ref: ./paths/audit.yaml#/AuditLogEntry
-/webhooks: 
+/webhooks:
   $ref: ./paths/webhooks.yaml#/Webhooks
-/webhooks/{resourceId}: 
+/webhooks/{resourceId}:
   $ref: ./paths/webhooks.yaml#/Webhook
 /roles:
   $ref: ./paths/roles.yaml#/CustomRoles
@@ -46,5 +46,11 @@
   $ref: ./paths/members.yaml#/Members
 /members/{memberId}:
   $ref: ./paths/members.yaml#/Member
+/destinations:
+  $ref: ./paths/destinations.yaml#/Destinations
+/destinations/{projectKey}/{environmentKey}:
+  $ref: ./paths/destinations.yaml#/CreateDestination
+/destinations/{projectKey}/{environmentKey}/{destinationId}:
+  $ref: ./paths/destinations.yaml#/Destination
 /:
   $ref: ./paths/root.yaml#/Root
