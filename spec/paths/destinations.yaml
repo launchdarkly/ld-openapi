@@ -16,6 +16,8 @@ CreateDestination:
     summary: Create a new data export destination
     operationId: postDestination
     parameters:
+      - $ref: "#parameters/ProjectKey"
+      - $ref: "#/parameters/EnvironmentKey"
       - $ref: "#/parameters/DestinationPostRequest"
     responses:
       "201":
