@@ -121,6 +121,15 @@ FeatureFlag:
       type: object
       additionalProperties:
         $ref: '#/definitions/FeatureFlagConfig'
+    archivedDate:
+      type: number
+      format: int64
+      description: A unix epoch time in milliseconds specifying the archived time of this flag.
+      example: 1443652232590
+    archived:
+      type: boolean
+      description: Whether or not this flag is archived.
+      example: false
 FeatureFlags:
   type: object
   properties:
