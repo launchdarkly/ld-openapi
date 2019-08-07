@@ -808,4 +808,9 @@ CustomProperty:
         example: ["Value 1", "Value 2"]
   required:
     - name
-
+BetaError:
+  type: object
+  properties:
+    'message':
+      type: string
+      example: "This is a beta API, you must pass beta in the LD-API-Version header to use it."
