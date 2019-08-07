@@ -147,4 +147,21 @@ FlagStatus:
         $ref: '#/responses/Standard401'
     tags:
       - Feature flags
-      
+FlagStatusAcrossEnvironments:
+  get:
+    summary: Get the status for a particular feature flag across environments
+    operationId: getFeatureFlagStatusAcrossEnvironments
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        description: Status of the requested feature flag across environments
+        schema:
+          $ref: '#/definitions/FeatureFlagStatusAcrossEnvironments'
+      '401':
+        $ref: '#/responses/Standard401'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Feature flags

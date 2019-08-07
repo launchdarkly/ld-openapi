@@ -121,6 +121,15 @@ FeatureFlag:
       type: object
       additionalProperties:
         $ref: '#/definitions/FeatureFlagConfig'
+    archivedDate:
+      type: number
+      format: int64
+      description: A unix epoch time in milliseconds specifying the archived time of this flag.
+      example: 1443652232590
+    archived:
+      type: boolean
+      description: Whether or not this flag is archived.
+      example: false
 FeatureFlags:
   type: object
   properties:
@@ -278,10 +287,23 @@ Prerequisite:
     variation:
       type: integer
 FeatureFlagStatus:
+  allOf:
+    - $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
+    - properties:
+      _links:
+        $ref: '#/definitions/Links'
+FeatureFlagStatuses:
   type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
+    items:
+      type: array
+      items:
+        $ref: '#/definitions/FeatureFlagStatus'
+FeatureFlagStatusForQueriedEnvironment:
+  type: object
+  properties:
     name:
       type: string
       description: |
@@ -301,15 +323,17 @@ FeatureFlagStatus:
       example: "2016-08-16T21:10:11.886Z"
     default:
       type: object
-FeatureFlagStatuses:
+FeatureFlagStatusAcrossEnvironments:
   type: object
   properties:
     _links:
       $ref: '#/definitions/Links'
-    items:
-      type: array
-      items:
-        $ref: '#/definitions/FeatureFlagStatus'
+    key:
+      type: string
+    environments:
+      type: object
+      additionalProperties:
+        $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
 UserSegment:
   type: object
   required:
