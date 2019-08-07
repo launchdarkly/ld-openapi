@@ -151,6 +151,12 @@ Member:
     email: 
       type: string
       example: "user@launchdarkly.com"
+    firstName:
+      type: string
+      example: "Alan"
+    lastName:
+      type: string
+      example: "Turing"
     _pendingInvite: 
       type: boolean
     isBeta:
@@ -165,7 +171,9 @@ Members:
     _links:
       $ref: '#/definitions/Links'
     items:
-      $ref: '#/definitions/Member'
+      type: array
+      items:
+        $ref: '#/definitions/Member'
 FeatureFlagConfig:
   type: object
   properties:
@@ -289,9 +297,9 @@ Prerequisite:
 FeatureFlagStatus:
   allOf:
     - $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
-    - properties:
-      _links:
-        $ref: '#/definitions/Links'
+      properties:
+        _links:
+          $ref: '#/definitions/Links'
 FeatureFlagStatuses:
   type: object
   properties:
@@ -661,36 +669,36 @@ Statement:
   type: object
   properties:
     resources:
-      $ref: '#/definitions/Resources'
+      type: array
+      items:
+        type: string
+        description: A resource specifier string
+        example: "proj/*:env/*:flag/my-flag"
     notresources:
-      $ref: '#/definitions/Resources'
+      type: array
+      items:
+        type: string
+        description: A resource specifier string
+        example: "proj/*:env/*:flag/my-flag"
       description: Targeted resource will be those resources NOT in this list. The "resources`" field must be empty to use this field.
     actions:
-      $ref: '#/definitions/Actions'
+      type: array
+      items:
+        type: string
+        description: An action to perform on a resource.
+        example: updateOn
     notactions:
-      $ref: '#/definitions/Actions'
+      type: array
+      items:
+        type: string
+        description: An action to perform on a resource.
+        example: updateOn
       description: Targeted actions will be those actions NOT in this list. The "actions" field must be empty to use this field.
     effect:
       type: string
       enum:
         - allow
         - deny
-Resources:
-  type: array
-  items:
-    $ref: '#/definitions/Resource'
-Resource:
-  type: string
-  description: A resource specifier string
-  example: "proj/*:env/*:flag/my-flag"
-Actions:
-  type: array
-  items:
-    $ref: '#/definitions/Action'
-Action:
-  type: string
-  description: An action to perform on a resource.
-  example: updateOn
 Role:
   type: string
   enum:
@@ -698,10 +706,6 @@ Role:
     - reader
     - admin
     - owner
-CustomRoleKeyOrId:
-  type: string
-  description: The 20-hexdigit id or the key for a custom role.
-  example: "revenue-team"
 CustomRole:
   type: object
   properties:
@@ -712,7 +716,9 @@ CustomRole:
       description: Name of the custom role.
       example: "revenue team"
     key:
-      $ref: '#/definitions/CustomRoleKeyOrId'
+      type: string
+      description: The 20-hexdigit id or the key for a custom role.
+      example: "revenue-team"
     description:
       type: string
       description: Description of the custom role.
@@ -729,14 +735,24 @@ CustomRoles:
     _links:
       $ref: '#/definitions/Links'
     items:
-      $ref: '#/definitions/CustomRole'
+      type: array
+      items:
+        $ref: '#/definitions/CustomRole'
 Policy:
   type: object
   properties:
     resources:
-      $ref: '#/definitions/Resources'
+      type: array
+      items:
+        type: string
+        description: A resource specifier string
+        example: "proj/*:env/*:flag/my-flag"
     actions:
-      $ref: '#/definitions/Actions'
+      type: array
+      items:
+        type: string
+        description: An action to perform on a resource.
+        example: updateOn
     effect:
       type: string
       description: Effect of the policy - allow or deny.
@@ -769,7 +785,11 @@ CustomProperty:
       description: The name of the property.
       example: "My property"
     value:
-      $ref: '#/definitions/CustomPropertyValues'
+      type: array
+      description: Values for this property.
+      items:
+        type: string
+        example: ["Value 1", "Value 2"]
   required:
     - name
 CustomPropertyValues:
@@ -991,3 +1011,4 @@ EvaluationUsageError:
     'message': 
       type: string
       example: "unknown environment"
+

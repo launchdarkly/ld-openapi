@@ -218,7 +218,7 @@ After:
   required: false
   description: A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occured after this timestamp.
   format: int64
-  type: number
+  type: integer
 PatchRequest:
   name: patchDelta
   in: body
@@ -245,7 +245,8 @@ Before:
   in: query
   required: false
   description: A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have before this timestamp.
-  type: number
+  format: int64
+  type: integer
 Q:
   name: q
   in: query
@@ -288,7 +289,9 @@ MembersPostRequest:
         customRoles:
           type: array
           items:
-            $ref: '#/definitions/CustomRoleKeyOrId'
+            type: string
+            description: The 20-hexdigit id or the key for a custom role.
+            example: "revenue-team"
         inlineRole:
           $ref: '#/definitions/Statements'
       required:
@@ -316,7 +319,9 @@ CustomRolePostRequest:
         description: Description of the custom role.
         example: "Description of revenue team role here"
       key:
-        $ref: '#/definitions/CustomRoleKeyOrId'
+        type: string
+        description: The 20-hexdigit id or the key for a custom role.
+        example: "revenue-team"
       policy:
         type: array
         items:
