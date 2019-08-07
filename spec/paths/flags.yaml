@@ -161,5 +161,7 @@ FlagStatusAcrossEnvironments:
           $ref: '#/definitions/FeatureFlagStatusAcrossEnvironments'
       '401':
         $ref: '#/responses/Standard401'
+      '403':
+        $ref: '#/responses/BetaApi403'
     tags:
       - Feature flags

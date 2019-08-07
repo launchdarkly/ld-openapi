@@ -38,3 +38,7 @@
     description: Environment response.
     schema:
       $ref: '#/definitions/Environment'
+  BetaApi403:
+    description: This is a beta API, you must pass beta in the LD-API-Version header to use it.
+    schema:
+      $ref: '#/definitions/UsageError'
