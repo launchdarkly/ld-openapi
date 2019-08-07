@@ -117,6 +117,15 @@ FeatureFlag:
       $ref: '#/definitions/Links'
     _maintainer:
       $ref: '#/definitions/Member'
+    archivedDate:
+      type: number
+      format: int64
+      description: A unix epoch time in milliseconds specifying the archived time of this flag.
+      example: 1443652232590
+    archived:
+      type: boolean
+      description: Whether or not this flag is archived.
+      example: false
     environments:
       type: object
       additionalProperties:
