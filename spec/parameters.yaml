@@ -366,26 +366,26 @@ StreamSource:
   required: true
   description: The source of where the stream comes from.
   type: string
-  example: 'client'
+#  example: 'client'
 EventType:
   name: type
   in: path
   required: true
   description: The type of event we would like to track.
   type: string
-  example: 'published'
+#  example: 'published'
 EvaluationEnvId:
   name: envId
   in: path
   required: true
   description: The environment id for the flag evaluations in question.
   type: string
-  example: ''
+#  example: ''
 EvaluationFlagKey:
   name: flagKey
   in: path
   required: true
   description: The key of the flag we want metrics for.
   type: string
-  example: ''
+#  example: ''
 

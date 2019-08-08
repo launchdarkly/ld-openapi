@@ -295,11 +295,12 @@ Prerequisite:
     variation:
       type: integer
 FeatureFlagStatus:
-  allOf:
-    - $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
-      properties:
-        _links:
-          $ref: '#/definitions/Links'
+  type: object
+  properties:
+    _links:
+      $ref: '#/definitions/Links'
+  additionalProperties:
+    $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
 FeatureFlagStatuses:
   type: object
   properties:
