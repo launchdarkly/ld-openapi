@@ -3,7 +3,7 @@ Link:
   properties:
     href:
       type: string
-      example: "/api/v2/endpoint"     
+      example: "/api/v2/endpoint"
     type:
       type: string
       example: "application/json"
@@ -40,7 +40,7 @@ Webhook:
     tags:
       type: array
       description: Tags assigned to this webhook.
-      items: 
+      items:
         type: string
         example: []
 Webhooks:
@@ -86,7 +86,7 @@ FeatureFlag:
       type: string
       description: The ID of the member that should maintain this flag.
       example: 561c579cd8fd5c2704000001
-    tags: 
+    tags:
       type: array
       description: An array of tags for this feature flag.
       items:
@@ -139,7 +139,7 @@ Member:
       $ref: '#/definitions/Id'
     role:
       $ref: '#/definitions/Role'
-    email: 
+    email:
       type: string
       example: "user@launchdarkly.com"
     firstName:
@@ -148,7 +148,7 @@ Member:
     lastName:
       type: string
       example: "Turing"
-    _pendingInvite: 
+    _pendingInvite:
       type: boolean
     isBeta:
       type: boolean
@@ -234,7 +234,7 @@ Fallthrough:
     variation:
       type: integer
     rollout:
-      $ref: '#/definitions/Rollout'    
+      $ref: '#/definitions/Rollout'
 Rollout:
   type: object
   properties:
@@ -408,7 +408,7 @@ Project:
       type: array
       items:
         type: string
-      description: An array of tags for this project.              
+      description: An array of tags for this project.
 Projects:
   type: object
   properties:
@@ -574,7 +574,7 @@ AuditLogEntry:
     shortDescription:
       type: string
       example: '""'
-    comment: 
+    comment:
       type: string
       example: This is a comment string
     member:
@@ -776,4 +776,11 @@ CustomProperty:
         example: ["Value 1", "Value 2"]
   required:
     - name
-
+FlagCopyObject:
+  type: object
+  properties:
+    key:
+      type: string
+    version:
+      type: integer
+      example: 65

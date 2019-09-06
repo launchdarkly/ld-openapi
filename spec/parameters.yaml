@@ -35,6 +35,30 @@ WebhookPostRequest:
       - url
       - sign
       - on
+FlagCopyConfigEnvironment:
+  name: flagCopyConfigEnvironment
+  in: body
+  required: true
+  description: Copy feature flag configurations between environments.
+  schema:
+    type: object
+    properties:
+      source:
+        $ref: '#/definitions/FlagCopyObject'
+      target:
+        $ref: '#/definitions/FlagCopyObject'
+      includedActions:
+        type: array
+        items:
+          type: string
+          example: []
+        description: Define the parts of the flag configuration that will be copied.
+      excludedActions:
+        type: array
+        items:
+          type: string
+          example: []
+        description: Define the parts of the flag configuration that will not be copied.
 FeatureFlagPostRequest:
   name: featureFlagBody
   in: body
@@ -158,7 +182,7 @@ FeatureFlagKey:
   required: true
   description: The feature flag's key. The key identifies the flag in your code.
   type: string
-CloneFlagKeyQuery:   
+CloneFlagKeyQuery:
   name: clone
   in: query
   required: false

@@ -98,11 +98,11 @@ FlagCopy:
     operationId: copyFeatureFlag
     parameters:
       - $ref: '#/parameters/ProjectKey'
-      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/FlagCopyConfigEnvironment'
     responses:
       '201':
-        description: Flag confguration copy response.
+        description: Flag configuration copy response.
         schema:
           $ref: '#/definitions/FeatureFlag'
       '400':
@@ -112,8 +112,8 @@ FlagCopy:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - Feature flags    
-      
+      - Feature flags
+
 FlagStatuses:
   get:
     summary: Get a list of statuses for all feature flags. The status includes the last time the feature flag was requested, as well as the state of the flag.
@@ -147,4 +147,3 @@ FlagStatus:
         $ref: '#/responses/Standard401'
     tags:
       - Feature flags
-      
