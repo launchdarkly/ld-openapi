@@ -1350,6 +1350,18 @@ definitions:
         items:
           type: string
         description: An array of tags for this environment.
+      requireComments:
+        type: boolean
+        example: false
+        description: >-
+          Determines if this environment requires comments for flag and segment
+          changes.
+      confirmChanges:
+        type: boolean
+        example: false
+        description: >-
+          Determines if this environment requires confirmation for flag and
+          segment changes.
   EnvironmentPost:
     type: object
     properties:
