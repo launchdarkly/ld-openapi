@@ -35,8 +35,8 @@ WebhookPostRequest:
       - url
       - sign
       - on
-FlagCopyConfigEnvironment:
-  name: flagCopyConfigEnvironment
+FeatureFlagCopyBody:
+  name: featureFlagCopyBody
   in: body
   required: true
   description: Copy feature flag configurations between environments.
@@ -44,9 +44,9 @@ FlagCopyConfigEnvironment:
     type: object
     properties:
       source:
-        $ref: '#/definitions/FlagCopyObject'
+        $ref: '#/definitions/FeatureFlagCopyObject'
       target:
-        $ref: '#/definitions/FlagCopyObject'
+        $ref: '#/definitions/FeatureFlagCopyObject'
       includedActions:
         type: array
         items:

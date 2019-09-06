@@ -776,7 +776,7 @@ CustomProperty:
         example: ["Value 1", "Value 2"]
   required:
     - name
-FlagCopyObject:
+FeatureFlagCopyObject:
   type: object
   properties:
     key:
