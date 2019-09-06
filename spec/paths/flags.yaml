@@ -99,7 +99,7 @@ FlagCopy:
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/FlagCopyConfigEnvironment'
+      - $ref: '#/parameters/FeatureFlagCopyBody'
     responses:
       '201':
         description: Flag configuration copy response.
