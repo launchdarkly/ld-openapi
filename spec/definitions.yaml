@@ -784,3 +784,5 @@ FeatureFlagCopyObject:
     version:
       type: integer
       example: 65
+  required:
+    - key
