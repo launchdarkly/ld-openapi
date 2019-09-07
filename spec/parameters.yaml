@@ -52,12 +52,14 @@ FeatureFlagCopyBody:
         items:
           type: string
           example: []
+          enum: [updateOn, updatePrerequisites, updateTargets, updateRules, updateFallthrough, updateOffVariation]
         description: Define the parts of the flag configuration that will be copied.
       excludedActions:
         type: array
         items:
           type: string
           example: []
+          enum: [updateOn, updatePrerequisites, updateTargets, updateRules, updateFallthrough, updateOffVariation]
         description: Define the parts of the flag configuration that will not be copied.
 FeatureFlagPostRequest:
   name: featureFlagBody
