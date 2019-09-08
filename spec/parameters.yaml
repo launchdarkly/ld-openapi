@@ -47,6 +47,9 @@ FeatureFlagCopyBody:
         $ref: '#/definitions/FeatureFlagCopyObject'
       target:
         $ref: '#/definitions/FeatureFlagCopyObject'
+      comment:
+        type: string
+        example: "This is a comment string"
       includedActions:
         type: array
         items:
