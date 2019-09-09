@@ -781,8 +781,19 @@ FeatureFlagCopyObject:
   properties:
     key:
       type: string
-    version:
+    currentVersion:
       type: integer
+      description: If the latest version of the flag matches provided version it will copy, otherwise it will return a conflict.
       example: 65
   required:
     - key
+CopyActions:
+  type: string
+  example: []
+  enum:
+    - updateOn
+    - updatePrerequisites
+    - updateTargets
+    - updateRules
+    - updateFallthrough
+    - updateOffVariation
