@@ -781,6 +781,8 @@ FeatureFlagCopyObject:
   properties:
     key:
       type: string
+      description: The environment key to be used.
+      example: "staging"
     currentVersion:
       type: integer
       description: If the latest version of the flag matches provided version it will copy, otherwise it will return a conflict.
