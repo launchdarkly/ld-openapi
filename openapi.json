@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.18"
+    "version": "2.0.19"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -450,7 +450,7 @@
         ]
       }
     },
-    "/flags/{projectKey}/{environmentKey}/{featureFlagKey}/copy": {
+    "/flags/{projectKey}/{featureFlagKey}/copy": {
       "post": {
         "summary": "Copies the feature flag configuration from one environment to the same feature flag in another environment.",
         "operationId": "copyFeatureFlag",
@@ -459,15 +459,15 @@
             "$ref": "#/parameters/ProjectKey"
           },
           {
-            "$ref": "#/parameters/EnvironmentKey"
+            "$ref": "#/parameters/FeatureFlagKey"
           },
           {
-            "$ref": "#/parameters/FeatureFlagKey"
+            "$ref": "#/parameters/FeatureFlagCopyBody"
           }
         ],
         "responses": {
           "201": {
-            "description": "Flag confguration copy response.",
+            "description": "Flag configuration copy response.",
             "schema": {
               "$ref": "#/definitions/FeatureFlag"
             }
@@ -2541,6 +2541,36 @@
       "required": [
         "name"
       ]
+    },
+    "FeatureFlagCopyObject": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "The environment key to be used.",
+          "example": "staging"
+        },
+        "currentVersion": {
+          "type": "integer",
+          "description": "If the latest version of the flag matches provided version it will copy, otherwise it will return a conflict.",
+          "example": 65
+        }
+      },
+      "required": [
+        "key"
+      ]
+    },
+    "CopyActions": {
+      "type": "string",
+      "example": [],
+      "enum": [
+        "updateOn",
+        "updatePrerequisites",
+        "updateTargets",
+        "updateRules",
+        "updateFallthrough",
+        "updateOffVariation"
+      ]
     }
   },
   "responses": {
@@ -2651,6 +2681,42 @@
           "sign",
           "on"
         ]
+      }
+    },
+    "FeatureFlagCopyBody": {
+      "name": "featureFlagCopyBody",
+      "in": "body",
+      "required": true,
+      "description": "Copy feature flag configurations between environments.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "$ref": "#/definitions/FeatureFlagCopyObject"
+          },
+          "target": {
+            "$ref": "#/definitions/FeatureFlagCopyObject"
+          },
+          "comment": {
+            "type": "string",
+            "description": "comment will be included in audit log item for change.",
+            "example": "This is a comment string"
+          },
+          "includedActions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/CopyActions"
+            },
+            "description": "Define the parts of the flag configuration that will be copied."
+          },
+          "excludedActions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/CopyActions"
+            },
+            "description": "Define the parts of the flag configuration that will not be copied."
+          }
+        }
       }
     },
     "FeatureFlagPostRequest": {
