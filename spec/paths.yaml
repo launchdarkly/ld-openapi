@@ -10,7 +10,7 @@
   $ref: ./paths/flags.yaml#/Flags
 /flags/{projectKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/Flag
-/flags/{projectKey}/{environmentKey}/{featureFlagKey}/copy:
+/flags/{projectKey}/{featureFlagKey}/copy:
   $ref: ./paths/flags.yaml#/FlagCopy
 /flag-statuses/{projectKey}/{environmentKey}:
   $ref: ./paths/flags.yaml#/FlagStatuses
@@ -36,9 +36,9 @@
   $ref: ./paths/audit.yaml#/AuditLogEntries
 /auditlog/{resourceId}:
   $ref: ./paths/audit.yaml#/AuditLogEntry
-/webhooks: 
+/webhooks:
   $ref: ./paths/webhooks.yaml#/Webhooks
-/webhooks/{resourceId}: 
+/webhooks/{resourceId}:
   $ref: ./paths/webhooks.yaml#/Webhook
 /roles:
   $ref: ./paths/roles.yaml#/CustomRoles

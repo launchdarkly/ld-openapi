@@ -35,6 +35,32 @@ WebhookPostRequest:
       - url
       - sign
       - on
+FeatureFlagCopyBody:
+  name: featureFlagCopyBody
+  in: body
+  required: true
+  description: Copy feature flag configurations between environments.
+  schema:
+    type: object
+    properties:
+      source:
+        $ref: '#/definitions/FeatureFlagCopyObject'
+      target:
+        $ref: '#/definitions/FeatureFlagCopyObject'
+      comment:
+        type: string
+        description: comment will be included in audit log item for change.
+        example: "This is a comment string"
+      includedActions:
+        type: array
+        items:
+          $ref: '#/definitions/CopyActions'
+        description: Define the parts of the flag configuration that will be copied.
+      excludedActions:
+        type: array
+        items:
+          $ref: '#/definitions/CopyActions'
+        description: Define the parts of the flag configuration that will not be copied.
 FeatureFlagPostRequest:
   name: featureFlagBody
   in: body
@@ -158,7 +184,7 @@ FeatureFlagKey:
   required: true
   description: The feature flag's key. The key identifies the flag in your code.
   type: string
-CloneFlagKeyQuery:   
+CloneFlagKeyQuery:
   name: clone
   in: query
   required: false
