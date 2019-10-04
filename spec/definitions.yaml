@@ -809,7 +809,7 @@ CustomPropertyValues:
   items:
     type: string
   example: ["Value 1", "Value 2"]
-# Customer Metrics Definitions
+# Usage Definitions
 UsageLinks:
   type: object
   properties:

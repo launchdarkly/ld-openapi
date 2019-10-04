@@ -10,7 +10,7 @@ Usage:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics
+      - Usage
 Streams:
   get:
     summary: Returns a list of all streams.
@@ -23,7 +23,7 @@ Streams:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics
+      - Usage
 Stream:
   get:
     summary: Get a stream endpoint and return timeseries data.
@@ -42,7 +42,7 @@ Stream:
         description: Resource could not be found.
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Customer Metrics
+      - Usage
 StreamBySDKVersion:
   get:
     summary: Get a stream timeseries data by source show sdk version metadata.
@@ -59,7 +59,7 @@ StreamBySDKVersion:
       '404':
           $ref: '#/responses/StreamUsage404'
     tags:
-      - Customer Metrics
+      - Usage
 StreamSDKVersions:
   get:
     summary: Get a stream timeseries data by source and show all sdk version associated.
@@ -76,7 +76,7 @@ StreamSDKVersions:
       '404':
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Customer Metrics
+      - Usage
 MAU:
   get:
     summary: Get monthly active user data.
@@ -89,7 +89,7 @@ MAU:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics
+      - Usage
 MAUbyCategory:
   get:
     summary: Get monthly active user data by category.
@@ -102,7 +102,7 @@ MAUbyCategory:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics
+      - Usage
 Events:
   get:
     summary: Get events usage endpoints.
@@ -115,10 +115,10 @@ Events:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Customer Metrics
+      - Usage
 Event:
   get:
-    summary: Get events usage by event type. 
+    summary: Get events usage by event type.
     operationId: getEvent
     parameters:
       - $ref: '#/parameters/EventType'
@@ -132,11 +132,11 @@ Event:
       '404':
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Customer Metrics
+      - Usage
 Evaluations:
   get:
     summary: Get events usage by event id and the feature flag key.
-    operationId: getEvaluations 
+    operationId: getEvaluations
     parameters:
       - $ref: '#/parameters/EvaluationEnvId'
       - $ref: '#/parameters/EvaluationFlagKey'
@@ -150,4 +150,4 @@ Evaluations:
       '404':
         $ref: '#/responses/EvaluationUsage404'
     tags:
-      - Customer Metrics
+      - Usage

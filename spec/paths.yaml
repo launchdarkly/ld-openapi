@@ -49,24 +49,24 @@
 /members/{memberId}:
   $ref: ./paths/members.yaml#/Member
 /usage:
-  $ref: ./paths/cmetrics.yaml#/Usage
+  $ref: ./paths/usage.yaml#/Usage
 /usage/streams:
- $ref: ./paths/cmetrics.yaml#/Streams
+ $ref: ./paths/usage.yaml#/Streams
 /usage/streams/{source}:
-  $ref: ./paths/cmetrics.yaml#/Stream
+  $ref: ./paths/usage.yaml#/Stream
 /usage/streams/{source}/bysdkversion:
-  $ref: ./paths/cmetrics.yaml#/StreamBySDKVersion
+  $ref: ./paths/usage.yaml#/StreamBySDKVersion
 /usage/streams/{source}/sdkversions:
-  $ref: ./paths/cmetrics.yaml#/StreamSDKVersions
+  $ref: ./paths/usage.yaml#/StreamSDKVersions
 /usage/mau:
-  $ref: ./paths/cmetrics.yaml#/MAU
+  $ref: ./paths/usage.yaml#/MAU
 /usage/mau/bycategory:
-  $ref: ./paths/cmetrics.yaml#/MAUbyCategory
+  $ref: ./paths/usage.yaml#/MAUbyCategory
 /usage/events:
-  $ref: ./paths/cmetrics.yaml#/Events
+  $ref: ./paths/usage.yaml#/Events
 /usage/events/{type}:
-  $ref: ./paths/cmetrics.yaml#/Event
+  $ref: ./paths/usage.yaml#/Event
 /usage/evaluations/{envId}/{flagKey}:
-  $ref: ./paths/cmetrics.yaml#/Evaluations
+  $ref: ./paths/usage.yaml#/Evaluations
 /:
   $ref: ./paths/root.yaml#/Root
