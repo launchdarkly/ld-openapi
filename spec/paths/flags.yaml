@@ -149,7 +149,7 @@ FlagStatus:
       - Feature flags
 FlagStatusAcrossEnvironments:
   get:
-    summary: [BETA] Get the status for a particular feature flag across environments
+    summary: "[BETA] Get the status for a particular feature flag across environments"
     operationId: getFeatureFlagStatusAcrossEnvironments
     parameters:
       - $ref: '#/parameters/ProjectKey'
