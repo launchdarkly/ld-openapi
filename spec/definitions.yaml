@@ -37,6 +37,8 @@ Webhook:
       type: string
       description: The name of the webhook.
       example: "Example hook"
+    statements:
+      $ref: '#/definitions/Statements'
     tags:
       type: array
       description: Tags assigned to this webhook.
@@ -807,7 +809,7 @@ CustomPropertyValues:
   items:
     type: string
   example: ["Value 1", "Value 2"]
-# Customer Metrics Definitions 
+# Customer Metrics Definitions
 UsageLinks:
   type: object
   properties:
@@ -838,16 +840,16 @@ Usage:
     _links:
       $ref: '#/definitions/UsageLinks'
     # metadata:
-    #   type: string 
+    #   type: string
     #   example: null
-    series: 
+    series:
       type: array
       items:
         $ref: '#/definitions/StreamUsageSeries'
 UsageError:
   type: object
   properties:
-    'message': 
+    'message':
       type: string
       example: "This is a beta API, you must pass beta in the LD-API-Version header to use it."
 Streams:
@@ -913,7 +915,7 @@ StreamUsageError:
     'code':
       type: string
       example: "not_found"
-    'message': 
+    'message':
       type: string
       example: "Stream source not found"
 StreamBySDK:
@@ -1017,7 +1019,7 @@ EvaluationUsageError:
     'code':
       type: string
       example: "not_found"
-    'message': 
+    'message':
       type: string
       example: "unknown environment"
 

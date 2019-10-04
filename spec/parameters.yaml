@@ -31,6 +31,14 @@ WebhookPostRequest:
         type: string
         example: "Example hook"
         description: The name of the webhook.
+      statements:
+        $ref: '#/definitions/Statements'
+      tags:
+        type: array
+        items:
+          type: string
+        example: []
+        description: Tags for the webhook.
     required:
       - url
       - sign
@@ -414,4 +422,3 @@ EvaluationFlagKey:
   description: The key of the flag we want metrics for.
   type: string
 #  example: ''
-
