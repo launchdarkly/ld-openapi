@@ -16,6 +16,8 @@
   $ref: ./paths/flags.yaml#/FlagStatuses
 /flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/FlagStatus
+/flag-status/{projectKey}/{featureFlagKey}:
+  $ref: ./paths/flags.yaml#/FlagStatusAcrossEnvironments
 /segments/{projectKey}/{environmentKey}:
   $ref: ./paths/segments.yaml#/UserSegments
 /segments/{projectKey}/{environmentKey}/{userSegmentKey}:
@@ -46,5 +48,25 @@
   $ref: ./paths/members.yaml#/Members
 /members/{memberId}:
   $ref: ./paths/members.yaml#/Member
+/usage:
+  $ref: ./paths/usage.yaml#/Usage
+/usage/streams:
+ $ref: ./paths/usage.yaml#/Streams
+/usage/streams/{source}:
+  $ref: ./paths/usage.yaml#/Stream
+/usage/streams/{source}/bysdkversion:
+  $ref: ./paths/usage.yaml#/StreamBySDKVersion
+/usage/streams/{source}/sdkversions:
+  $ref: ./paths/usage.yaml#/StreamSDKVersions
+/usage/mau:
+  $ref: ./paths/usage.yaml#/MAU
+/usage/mau/bycategory:
+  $ref: ./paths/usage.yaml#/MAUbyCategory
+/usage/events:
+  $ref: ./paths/usage.yaml#/Events
+/usage/events/{type}:
+  $ref: ./paths/usage.yaml#/Event
+/usage/evaluations/{envId}/{flagKey}:
+  $ref: ./paths/usage.yaml#/Evaluations
 /:
   $ref: ./paths/root.yaml#/Root
