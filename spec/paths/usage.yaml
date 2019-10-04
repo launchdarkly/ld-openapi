@@ -1,6 +1,6 @@
 Usage:
   get:
-    summary: Returns of the usage endpoints available.
+    summary: [BETA] Returns of the usage endpoints available.
     operationId: getUsage
     responses:
       '200':
@@ -13,7 +13,7 @@ Usage:
       - Usage
 Streams:
   get:
-    summary: Returns a list of all streams.
+    summary: [BETA] Returns a list of all streams.
     operationId: getStreams
     responses:
       '200':
@@ -26,7 +26,7 @@ Streams:
       - Usage
 Stream:
   get:
-    summary: Get a stream endpoint and return timeseries data.
+    summary: [BETA] Get a stream endpoint and return timeseries data.
     operationId: getStream
     parameters:
       - $ref: '#/parameters/StreamSource'
@@ -45,7 +45,7 @@ Stream:
       - Usage
 StreamBySDKVersion:
   get:
-    summary: Get a stream timeseries data by source show sdk version metadata.
+    summary: [BETA] Get a stream timeseries data by source show sdk version metadata.
     operationId: getStreamBySDK
     parameters:
       - $ref: '#/parameters/StreamSource'
@@ -62,7 +62,7 @@ StreamBySDKVersion:
       - Usage
 StreamSDKVersions:
   get:
-    summary: Get a stream timeseries data by source and show all sdk version associated.
+    summary: [BETA] Get a stream timeseries data by source and show all sdk version associated.
     operationId: getStreamSDKVersion
     parameters:
       - $ref: '#/parameters/StreamSource'
@@ -79,7 +79,7 @@ StreamSDKVersions:
       - Usage
 MAU:
   get:
-    summary: Get monthly active user data.
+    summary: [BETA] Get monthly active user data.
     operationId: getMAU
     responses:
       '200':
@@ -92,7 +92,7 @@ MAU:
       - Usage
 MAUbyCategory:
   get:
-    summary: Get monthly active user data by category.
+    summary: [BETA] Get monthly active user data by category.
     operationId: getMAUByCategory
     responses:
       '200':
@@ -105,7 +105,7 @@ MAUbyCategory:
       - Usage
 Events:
   get:
-    summary: Get events usage endpoints.
+    summary: [BETA] Get events usage endpoints.
     operationId: getEvents
     responses:
       '200':
@@ -118,7 +118,7 @@ Events:
       - Usage
 Event:
   get:
-    summary: Get events usage by event type.
+    summary: [BETA] Get events usage by event type.
     operationId: getEvent
     parameters:
       - $ref: '#/parameters/EventType'
@@ -135,7 +135,7 @@ Event:
       - Usage
 Evaluations:
   get:
-    summary: Get events usage by event id and the feature flag key.
+    summary: [BETA] Get events usage by event id and the feature flag key.
     operationId: getEvaluations
     parameters:
       - $ref: '#/parameters/EvaluationEnvId'
