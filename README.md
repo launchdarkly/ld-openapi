@@ -31,7 +31,7 @@ We use the spec to build some internals tools in go.  Tests for other specs are 
 
 Server/client code for the API can be automatically generated. To generate the code:
 
-
+  1. Ensure that you have `wget`, `yarn`, and `jq` installed. 
   1. Run the `generate` command:
 ```
 > make
