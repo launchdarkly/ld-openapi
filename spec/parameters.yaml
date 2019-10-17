@@ -153,6 +153,14 @@ ProjectPostRequest:
       key:
         type: string
         example: new-project
+      includeInSnippetByDefault:
+        type: boolean
+        example: false
+      tags:
+        type: array
+        items:
+          type: string
+        example: ["ops", "dev"]
       environments:
         type: array
         items:
