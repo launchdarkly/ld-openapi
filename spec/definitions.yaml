@@ -10,17 +10,17 @@ Link:
 Links:
   type: object
   properties:
-    'self':
-      $ref: '#/definitions/Link'
-    'next':
-      $ref: '#/definitions/Link'
+    "self":
+      $ref: "#/definitions/Link"
+    "next":
+      $ref: "#/definitions/Link"
 Webhook:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _id:
-      $ref: '#/definitions/Id'
+      $ref: "#/definitions/Id"
     url:
       type: string
       description: The URL of the remote webhook.
@@ -38,7 +38,7 @@ Webhook:
       description: The name of the webhook.
       example: "Example hook"
     statements:
-      $ref: '#/definitions/Statements'
+      $ref: "#/definitions/Statements"
     tags:
       type: array
       description: Tags assigned to this webhook.
@@ -49,11 +49,11 @@ Webhooks:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: array
       items:
-        $ref: '#/definitions/Webhook'
+        $ref: "#/definitions/Webhook"
 FeatureFlag:
   type: object
   properties:
@@ -98,8 +98,8 @@ FeatureFlag:
       type: array
       description: The variations for this feature flag.
       items:
-        $ref: '#/definitions/Variation'
-      example: [ { "value": "a" }, { "value": "b" } ]
+        $ref: "#/definitions/Variation"
+      example: [{ "value": "a" }, { "value": "b" }]
     goalIds:
       type: array
       description: An array goals from all environments associated with this feature flag
@@ -113,16 +113,20 @@ FeatureFlag:
       type: object
       description: A mapping of keys to CustomProperty entries.
       additionalProperties:
-        $ref: '#/definitions/CustomProperty'
-      example: { "bugs": { "name": "Issue tracker ids", "value": ["123", "456"] }, "deprecated": { "name": "Deprecated Date", "value": [] } }
+        $ref: "#/definitions/CustomProperty"
+      example:
+        {
+          "bugs": { "name": "Issue tracker ids", "value": ["123", "456"] },
+          "deprecated": { "name": "Deprecated Date", "value": [] },
+        }
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _maintainer:
-      $ref: '#/definitions/Member'
+      $ref: "#/definitions/Member"
     environments:
       type: object
       additionalProperties:
-        $ref: '#/definitions/FeatureFlagConfig'
+        $ref: "#/definitions/FeatureFlagConfig"
     archivedDate:
       type: number
       format: int64
@@ -136,20 +140,20 @@ FeatureFlags:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: array
       items:
-        $ref: '#/definitions/FeatureFlag'
+        $ref: "#/definitions/FeatureFlag"
 Member:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _id:
-      $ref: '#/definitions/Id'
+      $ref: "#/definitions/Id"
     role:
-      $ref: '#/definitions/Role'
+      $ref: "#/definitions/Role"
     email:
       type: string
       example: "user@launchdarkly.com"
@@ -166,20 +170,20 @@ Member:
     customRoles:
       type: array
       items:
-        $ref: '#/definitions/Id'
+        $ref: "#/definitions/Id"
 Members:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: array
       items:
-        $ref: '#/definitions/Member'
+        $ref: "#/definitions/Member"
 FeatureFlagConfig:
   type: object
   properties:
-    'on':
+    "on":
       type: boolean
     archived:
       type: boolean
@@ -199,19 +203,19 @@ FeatureFlagConfig:
     targets:
       type: array
       items:
-        $ref: '#/definitions/Target'
+        $ref: "#/definitions/Target"
     rules:
       type: array
       items:
-        $ref: '#/definitions/Rule'
+        $ref: "#/definitions/Rule"
     fallthrough:
-      $ref: '#/definitions/Fallthrough'
+      $ref: "#/definitions/Fallthrough"
     offVariation:
       type: integer
     prerequisites:
       type: array
       items:
-        $ref: '#/definitions/Prerequisite'
+        $ref: "#/definitions/Prerequisite"
     trackEvents:
       type: boolean
       example: false
@@ -234,25 +238,25 @@ Rule:
     variation:
       type: integer
     rollout:
-      $ref: '#/definitions/Rollout'
+      $ref: "#/definitions/Rollout"
     clauses:
       type: array
       items:
-        $ref: '#/definitions/Clause'
+        $ref: "#/definitions/Clause"
 Fallthrough:
   type: object
   properties:
     variation:
       type: integer
     rollout:
-      $ref: '#/definitions/Rollout'
+      $ref: "#/definitions/Rollout"
 Rollout:
   type: object
   properties:
     variations:
       type: array
       items:
-        $ref: '#/definitions/WeightedVariation'
+        $ref: "#/definitions/WeightedVariation"
 WeightedVariation:
   type: object
   properties:
@@ -300,18 +304,18 @@ FeatureFlagStatus:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
   additionalProperties:
-    $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
+    $ref: "#/definitions/FeatureFlagStatusForQueriedEnvironment"
 FeatureFlagStatuses:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: array
       items:
-        $ref: '#/definitions/FeatureFlagStatus'
+        $ref: "#/definitions/FeatureFlagStatus"
 FeatureFlagStatusForQueriedEnvironment:
   type: object
   properties:
@@ -338,13 +342,13 @@ FeatureFlagStatusAcrossEnvironments:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     key:
       type: string
     environments:
       type: object
       additionalProperties:
-        $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
+        $ref: "#/definitions/FeatureFlagStatusForQueriedEnvironment"
 UserSegment:
   type: object
   required:
@@ -368,7 +372,7 @@ UserSegment:
       type: array
       items:
         type: string
-      example: ['dev', 'ops']
+      example: ["dev", "ops"]
       description: An array of tags for this user segment.
     creationDate:
       type: number
@@ -388,19 +392,19 @@ UserSegment:
     rules:
       type: array
       items:
-        $ref: '#/definitions/UserSegmentRule'
+        $ref: "#/definitions/UserSegmentRule"
       description: An array of rules that can cause a user to be included in this segment.
     version:
       type: integer
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
 UserSegmentRule:
   type: object
   properties:
     clauses:
       type: array
       items:
-        $ref: '#/definitions/Clause'
+        $ref: "#/definitions/Clause"
     weight:
       type: integer
     bucketBy:
@@ -409,18 +413,18 @@ UserSegments:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: array
       items:
-        $ref: '#/definitions/UserSegment'
+        $ref: "#/definitions/UserSegment"
 Project:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _id:
-      $ref: '#/definitions/Id'
+      $ref: "#/definitions/Id"
     key:
       type: string
       example: zentasks
@@ -430,7 +434,7 @@ Project:
     environments:
       type: array
       items:
-        $ref: '#/definitions/Environment'
+        $ref: "#/definitions/Environment"
     tags:
       type: array
       items:
@@ -440,18 +444,98 @@ Projects:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: array
       items:
-        $ref: '#/definitions/Project'
+        $ref: "#/definitions/Project"
+Destination:
+  type: object
+  properties:
+    _links:
+      $ref: "#/definitions/Links"
+    _id:
+      type: string
+      example: 37ed9aad-de0a-4665-932e-41c35587aeea
+      description: Unique destination ID.
+    name:
+      type: string
+      example: Example Google Pub/Sub Destination
+      description: The destination name
+    kind:
+      type: string
+      example: google-pubsub
+      description: Destination type ("google-pubsub", "kinesis", "mparticle", or "segment")
+      enum: [google-pubsub, kinesis, mparticle, segment]
+    config:
+      type: object
+      description: destination-specific configuration.
+      example: { "project": "cool-project", "topic": "test" }
+    on:
+      type: boolean
+      example: true
+      description: Whether the data export destination is on or not.
+    version:
+      type: integer
+      example: 2
+Destinations:
+  type: object
+  properties:
+    _links:
+      $ref: "#/definitions/Links"
+    items:
+      type: array
+      items:
+        $ref: "#/definitions/Destination"
+DestinationGooglePubSub:
+  type: object
+  properties:
+    project:
+      type: string
+      example: "cool-project"
+    topic:
+      type: string
+      example: "test"
+DestinationAmazonKinesis:
+  type: object
+  properties:
+    region:
+      type: string
+      example: us-east-1
+    roleArn:
+      type: string
+      example: arn:aws:iam::123456789012:role/marketingadmin
+    streamName:
+      type: string
+      example: cat-stream
+DestinationMParticle:
+  type: object
+  properties:
+    apiKey:
+      type: string
+      example: apiKeyfromMParticle
+    secret:
+      type: string
+      example: mParticleSecret
+    userIdentity:
+      type: string
+      example: customer_id
+    environment:
+      type: string
+      example: production
+DestinationSegment:
+  type: object
+  properties:
+    writeKey:
+      type: string
+      example: segmentWriteKey
 Environment:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _id:
-      $ref: '#/definitions/Id'
+      $ref: "#/definitions/Id"
     key:
       type: string
       example: production
@@ -517,9 +601,9 @@ EnvironmentPost:
       description: The default TTL for the new environment.
       example: 0
   required:
-  - name
-  - key
-  - color
+    - name
+    - key
+    - color
 User:
   type: object
   properties:
@@ -555,36 +639,36 @@ UserRecord:
     lastPing:
       type: string
       format: int64
-      example: '2015-03-03T02:37:22.492Z'
+      example: "2015-03-03T02:37:22.492Z"
     environmentId:
       type: string
       example: 54ac2d97de674204ddd61096
     ownerId:
-      $ref: '#/definitions/Id'
+      $ref: "#/definitions/Id"
     user:
-      $ref: '#/definitions/User'
+      $ref: "#/definitions/User"
     avatar:
       type: string
-      example: 'https://s3.amazonaws.com/uifaces/faces/twitter/shylockjoy/73.jpg'
+      example: "https://s3.amazonaws.com/uifaces/faces/twitter/shylockjoy/73.jpg"
 Users:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     totalCount:
       type: number
       example: 3
     items:
       type: array
       items:
-        $ref: '#/definitions/UserRecord'
+        $ref: "#/definitions/UserRecord"
 AuditLogEntry:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _id:
-      $ref: '#/definitions/Id'
+      $ref: "#/definitions/Id"
     date:
       type: integer
       format: int64
@@ -605,18 +689,18 @@ AuditLogEntry:
       type: string
       example: This is a comment string
     member:
-      $ref: '#/definitions/Member'
+      $ref: "#/definitions/Member"
     titleVerb:
       type: string
       example: changed the name of
     title:
       type: string
-      example: '[Reese Applebaum](mailto:refapp@launchdarkly.com) changed the name of [Testing](https://app.launchdarkly.com/settings#/projects)'
+      example: "[Reese Applebaum](mailto:refapp@launchdarkly.com) changed the name of [Testing](https://app.launchdarkly.com/settings#/projects)"
     target:
       type: object
       properties:
         _links:
-          $ref: '#/definitions/Links'
+          $ref: "#/definitions/Links"
         name:
           type: string
           example: Testing
@@ -629,16 +713,16 @@ AuditLogEntries:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: array
       items:
-        $ref: '#/definitions/AuditLogEntry'
+        $ref: "#/definitions/AuditLogEntry"
 UserFlagSetting:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _value:
       type: boolean
       description: The most important attribute in the response. The _value is the current setting for the user. For a boolean feature toggle, this will be true, false, or null if there is no defined fallthrough value.
@@ -652,11 +736,11 @@ UserFlagSettings:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: object
       additionalProperties:
-        $ref: '#/definitions/UserFlagSetting'
+        $ref: "#/definitions/UserFlagSetting"
       example:
         sort.order:
           _links:
@@ -675,7 +759,7 @@ UserFlagSettings:
 Statements:
   type: array
   items:
-    $ref: '#/definitions/Statement'
+    $ref: "#/definitions/Statement"
 Statement:
   type: object
   properties:
@@ -721,7 +805,7 @@ CustomRole:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     name:
       type: string
       description: Name of the custom role.
@@ -735,20 +819,20 @@ CustomRole:
       description: Description of the custom role.
       example: "Description of revenue team role here"
     _id:
-      $ref: '#/definitions/Id'
+      $ref: "#/definitions/Id"
     policy:
       type: array
       items:
-        $ref: '#/definitions/Policy'
+        $ref: "#/definitions/Policy"
 CustomRoles:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     items:
       type: array
       items:
-        $ref: '#/definitions/CustomRole'
+        $ref: "#/definitions/CustomRole"
 Policy:
   type: object
   properties:
@@ -780,7 +864,7 @@ PatchOperation:
       example: replace
     path:
       type: string
-      example: '/on'
+      example: "/on"
     value:
       type: object
   required:
@@ -813,84 +897,84 @@ CustomPropertyValues:
 UsageLinks:
   type: object
   properties:
-    'parent':
-      $ref: '#/definitions/Link'
-    'self':
-      $ref: '#/definitions/Link'
-    'subseries':
-        type: array
-        description: The following links that are in the response.
-        items:
-          $ref: '#/definitions/Link'
+    "parent":
+      $ref: "#/definitions/Link"
+    "self":
+      $ref: "#/definitions/Link"
+    "subseries":
+      type: array
+      description: The following links that are in the response.
+      items:
+        $ref: "#/definitions/Link"
 StreamLinks:
   type: object
   properties:
-    'parent':
-      $ref: '#/definitions/Link'
-    'self':
-      $ref: '#/definitions/Link'
-    'subseries':
-        type: array
-        description: Links to endpoints that are in the request path.
-        items:
-          $ref: '#/definitions/Link'
+    "parent":
+      $ref: "#/definitions/Link"
+    "self":
+      $ref: "#/definitions/Link"
+    "subseries":
+      type: array
+      description: Links to endpoints that are in the request path.
+      items:
+        $ref: "#/definitions/Link"
 Usage:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/UsageLinks'
+      $ref: "#/definitions/UsageLinks"
     # metadata:
     #   type: string
     #   example: null
     series:
       type: array
       items:
-        $ref: '#/definitions/StreamUsageSeries'
+        $ref: "#/definitions/StreamUsageSeries"
 UsageError:
   type: object
   properties:
-    'message':
+    "message":
       type: string
       example: "This is a beta API, you must pass beta in the LD-API-Version header to use it."
 Streams:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/StreamUsageLinks'
+      $ref: "#/definitions/StreamUsageLinks"
 Stream:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/StreamUsageLinks'
+      $ref: "#/definitions/StreamUsageLinks"
     metadata:
       type: array
       items:
-        $ref: '#/definitions/StreamUsageMetadata'
+        $ref: "#/definitions/StreamUsageMetadata"
     series:
       type: array
       items:
-        $ref: '#/definitions/StreamUsageSeries'
+        $ref: "#/definitions/StreamUsageSeries"
 StreamUsageLinks:
   type: object
   properties:
-    'parent':
-      $ref: '#/definitions/Link'
-    'self':
-      $ref: '#/definitions/Link'
-    'subseries':
-        type: array
-        description: The following links that are in the response.
-        items:
-          $ref: '#/definitions/Link'
+    "parent":
+      $ref: "#/definitions/Link"
+    "self":
+      $ref: "#/definitions/Link"
+    "subseries":
+      type: array
+      description: The following links that are in the response.
+      items:
+        $ref: "#/definitions/Link"
 StreamUsageSeries:
   type: object
   properties:
-    '0':
+    "0":
       type: number
       format: int64
       description: A key corresponding to a time series data point.
       example: 0
-    'time':
+    "time":
       type: number
       format: int64
       description: A unix epoch time in milliseconds specifying the creation time of this flag.
@@ -898,75 +982,75 @@ StreamUsageSeries:
 StreamUsageMetadata:
   type: object
   properties:
-    'sdk':
+    "sdk":
       type: string
       description: The language of the sdk
-      example: 'ruby'
-    'version':
+      example: "ruby"
+    "version":
       type: string
       description: The version of the SDK
-      example: '5.4.3'
-    'source':
+      example: "5.4.3"
+    "source":
       type: string
-      example: 'server'
+      example: "server"
 StreamUsageError:
   type: object
   properties:
-    'code':
+    "code":
       type: string
       example: "not_found"
-    'message':
+    "message":
       type: string
       example: "Stream source not found"
 StreamBySDK:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/StreamBySDKLinks'
+      $ref: "#/definitions/StreamBySDKLinks"
     metadata:
       type: array
       items:
-        $ref: '#/definitions/StreamBySDKLinksMetadata'
+        $ref: "#/definitions/StreamBySDKLinksMetadata"
     series:
       type: array
       items:
-        $ref: '#/definitions/StreamUsageSeries'
+        $ref: "#/definitions/StreamUsageSeries"
 StreamBySDKLinks:
   type: object
   properties:
-    'parent':
-      $ref: '#/definitions/Link'
-    'self':
-      $ref: '#/definitions/Link'
+    "parent":
+      $ref: "#/definitions/Link"
+    "self":
+      $ref: "#/definitions/Link"
 StreamBySDKLinksMetadata:
   type: object
   properties:
-    'sdk':
+    "sdk":
       type: string
-      example: 'ruby'
-    'version':
+      example: "ruby"
+    "version":
       type: string
-      example: '5.4.3'
-    'source':
+      example: "5.4.3"
+    "source":
       type: string
-      example: 'server'
+      example: "server"
 StreamSDKVersion:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/StreamBySDKLinks'
+      $ref: "#/definitions/StreamBySDKLinks"
     sdkVersions:
       type: array
       items:
-        $ref: '#/definitions/StreamSDKVersionData'
+        $ref: "#/definitions/StreamSDKVersionData"
 StreamSDKVersionData:
   type: object
   properties:
-    'sdk':
+    "sdk":
       type: string
       description: The language of the sdk
       example: "ruby"
-    'version':
+    "version":
       type: string
       description: The version of the sdk
       example: "5.4.3"
@@ -974,28 +1058,28 @@ MAU:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/UsageLinks'
+      $ref: "#/definitions/UsageLinks"
     metadata:
       type: array
       items:
-        $ref: '#/definitions/StreamBySDKLinksMetadata'
+        $ref: "#/definitions/StreamBySDKLinksMetadata"
     series:
       type: array
       items:
-        $ref: '#/definitions/StreamUsageSeries'
+        $ref: "#/definitions/StreamUsageSeries"
 MAUbyCategory:
   type: object
   properties:
     _links:
-      $ref: '#/definitions/StreamBySDKLinks'
+      $ref: "#/definitions/StreamBySDKLinks"
     metadata:
       type: array
       items:
-        $ref: '#/definitions/MAUMetadata'
+        $ref: "#/definitions/MAUMetadata"
     series:
       type: array
       items:
-        $ref: '#/definitions/StreamUsageSeries'
+        $ref: "#/definitions/StreamUsageSeries"
 MAUMetadata:
   type: object
   properties:
@@ -1012,14 +1096,14 @@ Events:
   type: object
   properties:
     links:
-      $ref: '#/definitions/UsageLinks'
+      $ref: "#/definitions/UsageLinks"
 EvaluationUsageError:
   type: object
   properties:
-    'code':
+    "code":
       type: string
       example: "not_found"
-    'message':
+    "message":
       type: string
       example: "unknown environment"
 

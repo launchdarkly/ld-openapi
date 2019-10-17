@@ -48,10 +48,16 @@
   $ref: ./paths/members.yaml#/Members
 /members/{memberId}:
   $ref: ./paths/members.yaml#/Member
+/destinations:
+  $ref: ./paths/destinations.yaml#/Destinations
+/destinations/{projectKey}/{environmentKey}:
+  $ref: ./paths/destinations.yaml#/CreateDestination
+/destinations/{projectKey}/{environmentKey}/{destinationId}:
+  $ref: ./paths/destinations.yaml#/Destination
 /usage:
   $ref: ./paths/cmetrics.yaml#/Usage
 /usage/streams:
- $ref: ./paths/cmetrics.yaml#/Streams
+  $ref: ./paths/cmetrics.yaml#/Streams
 /usage/streams/{source}:
   $ref: ./paths/cmetrics.yaml#/Stream
 /usage/streams/{source}/bysdkversion:
