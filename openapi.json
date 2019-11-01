@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.19"
+    "version": "2.0.20"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -539,6 +539,37 @@
           },
           "401": {
             "$ref": "#/responses/Standard401"
+          }
+        },
+        "tags": [
+          "Feature flags"
+        ]
+      }
+    },
+    "/flag-status/{projectKey}/{featureFlagKey}": {
+      "get": {
+        "summary": "[BETA] Get the status for a particular feature flag across environments",
+        "operationId": "getFeatureFlagStatusAcrossEnvironments",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/FeatureFlagKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status of the requested feature flag across environments",
+            "schema": {
+              "$ref": "#/definitions/FeatureFlagStatusAcrossEnvironments"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
           }
         },
         "tags": [
@@ -1402,6 +1433,251 @@
         ]
       }
     },
+    "/usage": {
+      "get": {
+        "summary": "[BETA] Returns of the usage endpoints available.",
+        "operationId": "getUsage",
+        "responses": {
+          "200": {
+            "description": "Usage endpoints",
+            "schema": {
+              "$ref": "#/definitions/Usage"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/streams": {
+      "get": {
+        "summary": "[BETA] Returns a list of all streams.",
+        "operationId": "getStreams",
+        "responses": {
+          "200": {
+            "description": "Stream usage endpoints",
+            "schema": {
+              "$ref": "#/definitions/Streams"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/streams/{source}": {
+      "get": {
+        "summary": "[BETA] Get a stream endpoint and return timeseries data.",
+        "operationId": "getStream",
+        "parameters": [
+          {
+            "$ref": "#/parameters/StreamSource"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with time series data on stream usage.",
+            "schema": {
+              "$ref": "#/definitions/Stream"
+            }
+          },
+          "403": {
+            "description": "Resource could not be accessed.",
+            "$ref": "#/responses/BetaApi403"
+          },
+          "404": {
+            "description": "Resource could not be found.",
+            "$ref": "#/responses/StreamUsage404"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/streams/{source}/bysdkversion": {
+      "get": {
+        "summary": "[BETA] Get a stream timeseries data by source show sdk version metadata.",
+        "operationId": "getStreamBySDK",
+        "parameters": [
+          {
+            "$ref": "#/parameters/StreamSource"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns timeseries data and metadata on sdk version.",
+            "schema": {
+              "$ref": "#/definitions/StreamBySDK"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          },
+          "404": {
+            "$ref": "#/responses/StreamUsage404"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/streams/{source}/sdkversions": {
+      "get": {
+        "summary": "[BETA] Get a stream timeseries data by source and show all sdk version associated.",
+        "operationId": "getStreamSDKVersion",
+        "parameters": [
+          {
+            "$ref": "#/parameters/StreamSource"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns timeseries data and all sdk versions.",
+            "schema": {
+              "$ref": "#/definitions/StreamSDKVersion"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          },
+          "404": {
+            "$ref": "#/responses/StreamUsage404"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/mau": {
+      "get": {
+        "summary": "[BETA] Get monthly active user data.",
+        "operationId": "getMAU",
+        "responses": {
+          "200": {
+            "description": "Returns timeseries data and all sdk versions.",
+            "schema": {
+              "$ref": "#/definitions/MAU"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/mau/bycategory": {
+      "get": {
+        "summary": "[BETA] Get monthly active user data by category.",
+        "operationId": "getMAUByCategory",
+        "responses": {
+          "200": {
+            "description": "Returns timeseries data and all sdk versions.",
+            "schema": {
+              "$ref": "#/definitions/MAUbyCategory"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/events": {
+      "get": {
+        "summary": "[BETA] Get events usage endpoints.",
+        "operationId": "getEvents",
+        "responses": {
+          "200": {
+            "description": "Returns timeseries data and all sdk versions.",
+            "schema": {
+              "$ref": "#/definitions/Events"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/events/{type}": {
+      "get": {
+        "summary": "[BETA] Get events usage by event type.",
+        "operationId": "getEvent",
+        "parameters": [
+          {
+            "$ref": "#/parameters/EventType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns timeseries data and all sdk versions.",
+            "schema": {
+              "$ref": "#/definitions/StreamSDKVersion"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          },
+          "404": {
+            "$ref": "#/responses/StreamUsage404"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
+    "/usage/evaluations/{envId}/{flagKey}": {
+      "get": {
+        "summary": "[BETA] Get events usage by event id and the feature flag key.",
+        "operationId": "getEvaluations",
+        "parameters": [
+          {
+            "$ref": "#/parameters/EvaluationEnvId"
+          },
+          {
+            "$ref": "#/parameters/EvaluationFlagKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns timeseries data and all sdk versions.",
+            "schema": {
+              "$ref": "#/definitions/StreamSDKVersion"
+            }
+          },
+          "403": {
+            "$ref": "#/responses/BetaApi403"
+          },
+          "404": {
+            "$ref": "#/responses/EvaluationUsage404"
+          }
+        },
+        "tags": [
+          "Usage"
+        ]
+      }
+    },
     "/": {
       "get": {
         "description": "You can issue a GET request to the root resource to find all of the resource categories supported by the API.",
@@ -1473,6 +1749,9 @@
           "type": "string",
           "description": "The name of the webhook.",
           "example": "Example hook"
+        },
+        "statements": {
+          "$ref": "#/definitions/Statements"
         },
         "tags": {
           "type": "array",
@@ -1609,6 +1888,17 @@
           "additionalProperties": {
             "$ref": "#/definitions/FeatureFlagConfig"
           }
+        },
+        "archivedDate": {
+          "type": "number",
+          "format": "int64",
+          "description": "A unix epoch time in milliseconds specifying the archived time of this flag.",
+          "example": 1443652232590
+        },
+        "archived": {
+          "type": "boolean",
+          "description": "Whether or not this flag is archived.",
+          "example": false
         }
       }
     },
@@ -1861,7 +2151,29 @@
       "properties": {
         "_links": {
           "$ref": "#/definitions/Links"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/FeatureFlagStatusForQueriedEnvironment"
+      }
+    },
+    "FeatureFlagStatuses": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/Links"
         },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FeatureFlagStatus"
+          }
+        }
+      }
+    },
+    "FeatureFlagStatusForQueriedEnvironment": {
+      "type": "object",
+      "properties": {
         "name": {
           "type": "string",
           "description": "| Name     | Description |\n| --------:| ----------- |\n| new      | the feature flag was created within the last 7 days, and has not been requested yet |\n| active   | the feature flag was requested by your servers or clients within the last 7 days |\n| inactive | the feature flag was created more than 7 days ago, and hasn't been requested by your servers or clients within the past 7 days |\n| launched | one variation of the feature flag has been rolled out to all your users for at least 7 days |\n",
@@ -1881,16 +2193,19 @@
         }
       }
     },
-    "FeatureFlagStatuses": {
+    "FeatureFlagStatusAcrossEnvironments": {
       "type": "object",
       "properties": {
         "_links": {
           "$ref": "#/definitions/Links"
         },
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/FeatureFlagStatus"
+        "key": {
+          "type": "string"
+        },
+        "environments": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/FeatureFlagStatusForQueriedEnvironment"
           }
         }
       }
@@ -2542,6 +2857,313 @@
         "name"
       ]
     },
+    "CustomPropertyValues": {
+      "type": "array",
+      "description": "Values for this property.",
+      "items": {
+        "type": "string"
+      },
+      "example": [
+        "Value 1",
+        "Value 2"
+      ]
+    },
+    "UsageLinks": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "$ref": "#/definitions/Link"
+        },
+        "self": {
+          "$ref": "#/definitions/Link"
+        },
+        "subseries": {
+          "type": "array",
+          "description": "The following links that are in the response.",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "StreamLinks": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "$ref": "#/definitions/Link"
+        },
+        "self": {
+          "$ref": "#/definitions/Link"
+        },
+        "subseries": {
+          "type": "array",
+          "description": "Links to endpoints that are in the request path.",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "Usage": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/UsageLinks"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamUsageSeries"
+          }
+        }
+      }
+    },
+    "UsageError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "This is a beta API, you must pass beta in the LD-API-Version header to use it."
+        }
+      }
+    },
+    "Streams": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/StreamUsageLinks"
+        }
+      }
+    },
+    "Stream": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/StreamUsageLinks"
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamUsageMetadata"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamUsageSeries"
+          }
+        }
+      }
+    },
+    "StreamUsageLinks": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "$ref": "#/definitions/Link"
+        },
+        "self": {
+          "$ref": "#/definitions/Link"
+        },
+        "subseries": {
+          "type": "array",
+          "description": "The following links that are in the response.",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "StreamUsageSeries": {
+      "type": "object",
+      "properties": {
+        "0": {
+          "type": "number",
+          "format": "int64",
+          "description": "A key corresponding to a time series data point.",
+          "example": 0
+        },
+        "time": {
+          "type": "number",
+          "format": "int64",
+          "description": "A unix epoch time in milliseconds specifying the creation time of this flag.",
+          "example": 1551740400000
+        }
+      }
+    },
+    "StreamUsageMetadata": {
+      "type": "object",
+      "properties": {
+        "sdk": {
+          "type": "string",
+          "description": "The language of the sdk",
+          "example": "ruby"
+        },
+        "version": {
+          "type": "string",
+          "description": "The version of the SDK",
+          "example": "5.4.3"
+        },
+        "source": {
+          "type": "string",
+          "example": "server"
+        }
+      }
+    },
+    "StreamUsageError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "not_found"
+        },
+        "message": {
+          "type": "string",
+          "example": "Stream source not found"
+        }
+      }
+    },
+    "StreamBySDK": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/StreamBySDKLinks"
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamBySDKLinksMetadata"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamUsageSeries"
+          }
+        }
+      }
+    },
+    "StreamBySDKLinks": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "$ref": "#/definitions/Link"
+        },
+        "self": {
+          "$ref": "#/definitions/Link"
+        }
+      }
+    },
+    "StreamBySDKLinksMetadata": {
+      "type": "object",
+      "properties": {
+        "sdk": {
+          "type": "string",
+          "example": "ruby"
+        },
+        "version": {
+          "type": "string",
+          "example": "5.4.3"
+        },
+        "source": {
+          "type": "string",
+          "example": "server"
+        }
+      }
+    },
+    "StreamSDKVersion": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/StreamBySDKLinks"
+        },
+        "sdkVersions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamSDKVersionData"
+          }
+        }
+      }
+    },
+    "StreamSDKVersionData": {
+      "type": "object",
+      "properties": {
+        "sdk": {
+          "type": "string",
+          "description": "The language of the sdk",
+          "example": "ruby"
+        },
+        "version": {
+          "type": "string",
+          "description": "The version of the sdk",
+          "example": "5.4.3"
+        }
+      }
+    },
+    "MAU": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/UsageLinks"
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamBySDKLinksMetadata"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamUsageSeries"
+          }
+        }
+      }
+    },
+    "MAUbyCategory": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/StreamBySDKLinks"
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MAUMetadata"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StreamUsageSeries"
+          }
+        }
+      }
+    },
+    "MAUMetadata": {
+      "type": "object",
+      "properties": null
+    },
+    "Events": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "$ref": "#/definitions/UsageLinks"
+        }
+      }
+    },
+    "EvaluationUsageError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "not_found"
+        },
+        "message": {
+          "type": "string",
+          "example": "unknown environment"
+        }
+      }
+    },
     "FeatureFlagCopyObject": {
       "type": "object",
       "properties": {
@@ -2628,6 +3250,24 @@
         "$ref": "#/definitions/CustomRole"
       }
     },
+    "BetaApi403": {
+      "description": "This is a beta API, you must pass beta in the LD-API-Version header to use it.",
+      "schema": {
+        "$ref": "#/definitions/UsageError"
+      }
+    },
+    "StreamUsage404": {
+      "description": "The stream source you requested could not be found",
+      "schema": {
+        "$ref": "#/definitions/StreamUsageError"
+      }
+    },
+    "EvaluationUsage404": {
+      "description": "The environment or flag you requested could not be found",
+      "schema": {
+        "$ref": "#/definitions/EvaluationUsageError"
+      }
+    },
     "Environment2xx": {
       "description": "Environment response.",
       "schema": {
@@ -2674,6 +3314,17 @@
             "type": "string",
             "example": "Example hook",
             "description": "The name of the webhook."
+          },
+          "statements": {
+            "$ref": "#/definitions/Statements"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [],
+            "description": "Tags for the webhook."
           }
         },
         "required": [
@@ -3130,6 +3781,34 @@
           "$ref": "#/definitions/PatchOperation"
         }
       }
+    },
+    "StreamSource": {
+      "name": "source",
+      "in": "path",
+      "required": true,
+      "description": "The source of where the stream comes from.",
+      "type": "string"
+    },
+    "EventType": {
+      "name": "type",
+      "in": "path",
+      "required": true,
+      "description": "The type of event we would like to track.",
+      "type": "string"
+    },
+    "EvaluationEnvId": {
+      "name": "envId",
+      "in": "path",
+      "required": true,
+      "description": "The environment id for the flag evaluations in question.",
+      "type": "string"
+    },
+    "EvaluationFlagKey": {
+      "name": "flagKey",
+      "in": "path",
+      "required": true,
+      "description": "The key of the flag we want metrics for.",
+      "type": "string"
     }
   }
 }
