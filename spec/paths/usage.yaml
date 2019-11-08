@@ -36,10 +36,8 @@ Stream:
         schema:
           $ref: '#/definitions/Stream'
       '403':
-        description: Resource could not be accessed.
         $ref: '#/responses/BetaApi403'
       '404':
-        description: Resource could not be found.
         $ref: '#/responses/StreamUsage404'
     tags:
       - Usage

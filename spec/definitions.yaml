@@ -1082,7 +1082,7 @@ MAUbyCategory:
         $ref: "#/definitions/StreamUsageSeries"
 MAUMetadata:
   type: object
-  properties:
+  # properties:
     # 'sdk':
     #   type: string
     #   example: ''
