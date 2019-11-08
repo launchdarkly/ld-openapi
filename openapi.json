@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.20"
+    "version": "2.0.21"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -548,7 +548,7 @@
     },
     "/flag-status/{projectKey}/{featureFlagKey}": {
       "get": {
-        "summary": "[BETA] Get the status for a particular feature flag across environments",
+        "summary": "Get the status for a particular feature flag across environments",
         "operationId": "getFeatureFlagStatusAcrossEnvironments",
         "parameters": [
           {
@@ -1433,9 +1433,161 @@
         ]
       }
     },
+    "/destinations": {
+      "get": {
+        "summary": "Returns a list of all data export destinations.",
+        "operationId": "getDestinations",
+        "responses": {
+          "200": {
+            "description": "Destinations response.",
+            "schema": {
+              "$ref": "#/definitions/Destinations"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          }
+        },
+        "tags": [
+          "Data export destinations"
+        ]
+      }
+    },
+    "/destinations/{projectKey}/{environmentKey}": {
+      "post": {
+        "summary": "Create a new data export destination",
+        "operationId": "postDestination",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/DestinationPostRequest"
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/responses/Destination2xx"
+          },
+          "400": {
+            "$ref": "#/responses/Standard400"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "409": {
+            "$ref": "#/responses/Standard409"
+          }
+        },
+        "tags": [
+          "Data export destinations"
+        ]
+      }
+    },
+    "/destinations/{projectKey}/{environmentKey}/{destinationId}": {
+      "get": {
+        "summary": "Get a single data export destination by ID",
+        "operationId": "getDestination",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/DestinationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Destination2xx"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "404": {
+            "$ref": "#/responses/Standard404"
+          }
+        },
+        "tags": [
+          "Data export destinations"
+        ]
+      },
+      "patch": {
+        "summary": "Perform a partial update to a data export destination.",
+        "operationId": "patchDestination",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/DestinationId"
+          },
+          {
+            "$ref": "#/parameters/PatchOnly"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Destination2xx"
+          },
+          "400": {
+            "$ref": "#/responses/Standard400"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "404": {
+            "$ref": "#/responses/Standard404"
+          },
+          "409": {
+            "$ref": "#/responses/Standard409"
+          }
+        },
+        "tags": [
+          "Data export destinations"
+        ]
+      },
+      "delete": {
+        "summary": "Get a single data export destination by ID",
+        "operationId": "deleteDestination",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/DestinationId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/responses/Standard204"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "404": {
+            "$ref": "#/responses/Standard404"
+          }
+        },
+        "tags": [
+          "Data export destinations"
+        ]
+      }
+    },
     "/usage": {
       "get": {
-        "summary": "[BETA] Returns of the usage endpoints available.",
+        "summary": "Returns of the usage endpoints available.",
         "operationId": "getUsage",
         "responses": {
           "200": {
@@ -1449,13 +1601,13 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/streams": {
       "get": {
-        "summary": "[BETA] Returns a list of all streams.",
+        "summary": "Returns a list of all streams.",
         "operationId": "getStreams",
         "responses": {
           "200": {
@@ -1469,13 +1621,13 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/streams/{source}": {
       "get": {
-        "summary": "[BETA] Get a stream endpoint and return timeseries data.",
+        "summary": "Get a stream endpoint and return timeseries data.",
         "operationId": "getStream",
         "parameters": [
           {
@@ -1490,22 +1642,20 @@
             }
           },
           "403": {
-            "description": "Resource could not be accessed.",
             "$ref": "#/responses/BetaApi403"
           },
           "404": {
-            "description": "Resource could not be found.",
             "$ref": "#/responses/StreamUsage404"
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/streams/{source}/bysdkversion": {
       "get": {
-        "summary": "[BETA] Get a stream timeseries data by source show sdk version metadata.",
+        "summary": "Get a stream timeseries data by source show sdk version metadata.",
         "operationId": "getStreamBySDK",
         "parameters": [
           {
@@ -1527,13 +1677,13 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/streams/{source}/sdkversions": {
       "get": {
-        "summary": "[BETA] Get a stream timeseries data by source and show all sdk version associated.",
+        "summary": "Get a stream timeseries data by source and show all sdk version associated.",
         "operationId": "getStreamSDKVersion",
         "parameters": [
           {
@@ -1555,13 +1705,13 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/mau": {
       "get": {
-        "summary": "[BETA] Get monthly active user data.",
+        "summary": "Get monthly active user data.",
         "operationId": "getMAU",
         "responses": {
           "200": {
@@ -1575,13 +1725,13 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/mau/bycategory": {
       "get": {
-        "summary": "[BETA] Get monthly active user data by category.",
+        "summary": "Get monthly active user data by category.",
         "operationId": "getMAUByCategory",
         "responses": {
           "200": {
@@ -1595,13 +1745,13 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/events": {
       "get": {
-        "summary": "[BETA] Get events usage endpoints.",
+        "summary": "Get events usage endpoints.",
         "operationId": "getEvents",
         "responses": {
           "200": {
@@ -1615,13 +1765,13 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/events/{type}": {
       "get": {
-        "summary": "[BETA] Get events usage by event type.",
+        "summary": "Get events usage by event type.",
         "operationId": "getEvent",
         "parameters": [
           {
@@ -1643,13 +1793,13 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
     "/usage/evaluations/{envId}/{flagKey}": {
       "get": {
-        "summary": "[BETA] Get events usage by event id and the feature flag key.",
+        "summary": "Get events usage by event id and the feature flag key.",
         "operationId": "getEvaluations",
         "parameters": [
           {
@@ -1674,7 +1824,7 @@
           }
         },
         "tags": [
-          "Usage"
+          "Customer Metrics"
         ]
       }
     },
@@ -2353,6 +2503,126 @@
           "items": {
             "$ref": "#/definitions/Project"
           }
+        }
+      }
+    },
+    "Destination": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/Links"
+        },
+        "_id": {
+          "type": "string",
+          "example": "37ed9aad-de0a-4665-932e-41c35587aeea",
+          "description": "Unique destination ID."
+        },
+        "name": {
+          "type": "string",
+          "example": "Example Google Pub/Sub Destination",
+          "description": "The destination name"
+        },
+        "kind": {
+          "type": "string",
+          "example": "google-pubsub",
+          "description": "Destination type (\"google-pubsub\", \"kinesis\", \"mparticle\", or \"segment\")",
+          "enum": [
+            "google-pubsub",
+            "kinesis",
+            "mparticle",
+            "segment"
+          ]
+        },
+        "config": {
+          "type": "object",
+          "description": "destination-specific configuration.",
+          "example": {
+            "project": "cool-project",
+            "topic": "test"
+          }
+        },
+        "on": {
+          "type": "boolean",
+          "example": true,
+          "description": "Whether the data export destination is on or not."
+        },
+        "version": {
+          "type": "integer",
+          "example": 2
+        }
+      }
+    },
+    "Destinations": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "$ref": "#/definitions/Links"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Destination"
+          }
+        }
+      }
+    },
+    "DestinationGooglePubSub": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "type": "string",
+          "example": "cool-project"
+        },
+        "topic": {
+          "type": "string",
+          "example": "test"
+        }
+      }
+    },
+    "DestinationAmazonKinesis": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "string",
+          "example": "us-east-1"
+        },
+        "roleArn": {
+          "type": "string",
+          "example": "arn:aws:iam::123456789012:role/marketingadmin"
+        },
+        "streamName": {
+          "type": "string",
+          "example": "cat-stream"
+        }
+      }
+    },
+    "DestinationMParticle": {
+      "type": "object",
+      "properties": {
+        "apiKey": {
+          "type": "string",
+          "example": "apiKeyfromMParticle"
+        },
+        "secret": {
+          "type": "string",
+          "example": "mParticleSecret"
+        },
+        "userIdentity": {
+          "type": "string",
+          "example": "customer_id"
+        },
+        "environment": {
+          "type": "string",
+          "example": "production"
+        }
+      }
+    },
+    "DestinationSegment": {
+      "type": "object",
+      "properties": {
+        "writeKey": {
+          "type": "string",
+          "example": "segmentWriteKey"
         }
       }
     },
@@ -3140,8 +3410,7 @@
       }
     },
     "MAUMetadata": {
-      "type": "object",
-      "properties": null
+      "type": "object"
     },
     "Events": {
       "type": "object",
@@ -3272,6 +3541,12 @@
       "description": "Environment response.",
       "schema": {
         "$ref": "#/definitions/Environment"
+      }
+    },
+    "Destination2xx": {
+      "description": "Destination response.",
+      "schema": {
+        "$ref": "#/definitions/Destination"
       }
     }
   },
@@ -3424,6 +3699,51 @@
         ]
       }
     },
+    "DestinationPostRequest": {
+      "name": "destinationBody",
+      "in": "body",
+      "required": true,
+      "description": "Create a new data export destination.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "A human-readable name for your data export destination.",
+            "example": "Example Google Pub/Sub Destination"
+          },
+          "kind": {
+            "type": "string",
+            "description": "The data export destination type. Available choices are kinesis, google-pubsub, mparticle, or segment.",
+            "example": "google-pubsub",
+            "enum": [
+              "google-pubsub",
+              "kinesis",
+              "mparticle",
+              "segment"
+            ]
+          },
+          "config": {
+            "type": "object",
+            "description": "destination-specific configuration.",
+            "example": {
+              "project": "cool-project",
+              "topic": "test"
+            }
+          },
+          "on": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the data export destination is on or not."
+          }
+        },
+        "required": [
+          "name",
+          "kind",
+          "config"
+        ]
+      }
+    },
     "UserSegmentPostRequest": {
       "name": "userSegmentBody",
       "in": "body",
@@ -3477,6 +3797,20 @@
           "key": {
             "type": "string",
             "example": "new-project"
+          },
+          "includeInSnippetByDefault": {
+            "type": "boolean",
+            "example": false
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "ops",
+              "dev"
+            ]
           },
           "environments": {
             "type": "array",
@@ -3541,6 +3875,13 @@
       "in": "path",
       "required": true,
       "description": "The user segment's key. The key identifies the user segment in your code.",
+      "type": "string"
+    },
+    "DestinationId": {
+      "name": "destinationId",
+      "in": "path",
+      "required": true,
+      "description": "The data export destination ID.",
       "type": "string"
     },
     "UserKey": {
