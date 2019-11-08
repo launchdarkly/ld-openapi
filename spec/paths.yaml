@@ -48,25 +48,31 @@
   $ref: ./paths/members.yaml#/Members
 /members/{memberId}:
   $ref: ./paths/members.yaml#/Member
+/destinations:
+  $ref: ./paths/destinations.yaml#/Destinations
+/destinations/{projectKey}/{environmentKey}:
+  $ref: ./paths/destinations.yaml#/CreateDestination
+/destinations/{projectKey}/{environmentKey}/{destinationId}:
+  $ref: ./paths/destinations.yaml#/Destination
 /usage:
-  $ref: ./paths/usage.yaml#/Usage
+  $ref: ./paths/cmetrics.yaml#/Usage
 /usage/streams:
- $ref: ./paths/usage.yaml#/Streams
+  $ref: ./paths/cmetrics.yaml#/Streams
 /usage/streams/{source}:
-  $ref: ./paths/usage.yaml#/Stream
+  $ref: ./paths/cmetrics.yaml#/Stream
 /usage/streams/{source}/bysdkversion:
-  $ref: ./paths/usage.yaml#/StreamBySDKVersion
+  $ref: ./paths/cmetrics.yaml#/StreamBySDKVersion
 /usage/streams/{source}/sdkversions:
-  $ref: ./paths/usage.yaml#/StreamSDKVersions
+  $ref: ./paths/cmetrics.yaml#/StreamSDKVersions
 /usage/mau:
-  $ref: ./paths/usage.yaml#/MAU
+  $ref: ./paths/cmetrics.yaml#/MAU
 /usage/mau/bycategory:
-  $ref: ./paths/usage.yaml#/MAUbyCategory
+  $ref: ./paths/cmetrics.yaml#/MAUbyCategory
 /usage/events:
-  $ref: ./paths/usage.yaml#/Events
+  $ref: ./paths/cmetrics.yaml#/Events
 /usage/events/{type}:
-  $ref: ./paths/usage.yaml#/Event
+  $ref: ./paths/cmetrics.yaml#/Event
 /usage/evaluations/{envId}/{flagKey}:
-  $ref: ./paths/usage.yaml#/Evaluations
+  $ref: ./paths/cmetrics.yaml#/Evaluations
 /:
   $ref: ./paths/root.yaml#/Root

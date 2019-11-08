@@ -1,6 +1,6 @@
 Usage:
   get:
-    summary: "[BETA] Returns of the usage endpoints available."
+    summary: Returns of the usage endpoints available.
     operationId: getUsage
     responses:
       '200':
@@ -10,10 +10,10 @@ Usage:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Usage
+      - Customer Metrics
 Streams:
   get:
-    summary: "[BETA] Returns a list of all streams."
+    summary: Returns a list of all streams.
     operationId: getStreams
     responses:
       '200':
@@ -23,10 +23,10 @@ Streams:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Usage
+      - Customer Metrics
 Stream:
   get:
-    summary: "[BETA] Get a stream endpoint and return timeseries data."
+    summary: Get a stream endpoint and return timeseries data.
     operationId: getStream
     parameters:
       - $ref: '#/parameters/StreamSource'
@@ -40,10 +40,10 @@ Stream:
       '404':
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Usage
+      - Customer Metrics
 StreamBySDKVersion:
   get:
-    summary: "[BETA] Get a stream timeseries data by source show sdk version metadata."
+    summary: Get a stream timeseries data by source show sdk version metadata.
     operationId: getStreamBySDK
     parameters:
       - $ref: '#/parameters/StreamSource'
@@ -57,10 +57,10 @@ StreamBySDKVersion:
       '404':
           $ref: '#/responses/StreamUsage404'
     tags:
-      - Usage
+      - Customer Metrics
 StreamSDKVersions:
   get:
-    summary: "[BETA] Get a stream timeseries data by source and show all sdk version associated."
+    summary: Get a stream timeseries data by source and show all sdk version associated.
     operationId: getStreamSDKVersion
     parameters:
       - $ref: '#/parameters/StreamSource'
@@ -74,10 +74,10 @@ StreamSDKVersions:
       '404':
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Usage
+      - Customer Metrics
 MAU:
   get:
-    summary: "[BETA] Get monthly active user data."
+    summary: Get monthly active user data.
     operationId: getMAU
     responses:
       '200':
@@ -87,10 +87,10 @@ MAU:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Usage
+      - Customer Metrics
 MAUbyCategory:
   get:
-    summary: "[BETA] Get monthly active user data by category."
+    summary: Get monthly active user data by category.
     operationId: getMAUByCategory
     responses:
       '200':
@@ -100,10 +100,10 @@ MAUbyCategory:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Usage
+      - Customer Metrics
 Events:
   get:
-    summary: "[BETA] Get events usage endpoints."
+    summary: Get events usage endpoints.
     operationId: getEvents
     responses:
       '200':
@@ -113,10 +113,10 @@ Events:
       '403':
         $ref: '#/responses/BetaApi403'
     tags:
-      - Usage
+      - Customer Metrics
 Event:
   get:
-    summary: "[BETA] Get events usage by event type."
+    summary: Get events usage by event type. 
     operationId: getEvent
     parameters:
       - $ref: '#/parameters/EventType'
@@ -130,11 +130,11 @@ Event:
       '404':
         $ref: '#/responses/StreamUsage404'
     tags:
-      - Usage
+      - Customer Metrics
 Evaluations:
   get:
-    summary: "[BETA] Get events usage by event id and the feature flag key."
-    operationId: getEvaluations
+    summary: Get events usage by event id and the feature flag key.
+    operationId: getEvaluations 
     parameters:
       - $ref: '#/parameters/EvaluationEnvId'
       - $ref: '#/parameters/EvaluationFlagKey'
@@ -148,4 +148,4 @@ Evaluations:
       '404':
         $ref: '#/responses/EvaluationUsage404'
     tags:
-      - Usage
+      - Customer Metrics

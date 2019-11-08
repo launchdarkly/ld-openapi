@@ -62,11 +62,12 @@ CODEGEN_PARAMS_java = \
 	-DscmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
 	-DscmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
 
-CODEGEN_PARAMS_javascript = -DprojectName=launchdarkly-api -DmoduleName=LaunchDarklyApi
+CODEGEN_PARAMS_javascript = -t $(TEMPLATES_PATH)/javascript -DprojectName=launchdarkly-api -DmoduleName=LaunchDarklyApi
 CODEGEN_PARAMS_php = -DpackagePath=LaunchDarklyApi -DcomposerVendorName=launchdarkly -DcomposerProjectName=api-client-php -DinvokerPackage=LaunchDarklyApi -DgitUserId=launchdarkly -DgitRepoId=api-client-php
 CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api -DpackageVersion=$(TAG)
 
 CODEGEN_PARAMS_ruby = \
+  -t $(TEMPLATES_PATH)/ruby \
   -DmoduleName=LaunchDarklyApi \
   -DgemName=launchdarkly_api \
   -DgemVersion=$(TAG) \
