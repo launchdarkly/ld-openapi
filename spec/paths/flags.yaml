@@ -5,6 +5,8 @@ Flags:
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKeyQuery'
+      - $ref: '#/parameters/SummaryQuery'
+      - $ref: '#/parameters/ArchivedQuery'
       - $ref: '#/parameters/Tag'
     responses:
       '200':
