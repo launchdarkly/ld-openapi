@@ -23,6 +23,10 @@ jobs:
           sudo chmod +x /usr/local/bin/swagger-codegen
 
     - run:
+        name: Install pip
+        command: sudo apt install python-pip
+
+    - run:
         name: Loading previous client repos
         command: |
           export REPO_USER_URL=https://github.com/$CIRCLE_PROJECT_USERNAME

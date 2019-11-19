@@ -3,7 +3,7 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
-SWAGGER_VERSION=2.4.0
+SWAGGER_VERSION=2.4.8
 SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
 SWAGGER_DOWNLOAD_URL=http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
 
@@ -99,9 +99,11 @@ load_prior_targets:
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
 openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
+	pip install bravado
 	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
 	$(MULTI_FILE_SWAGGER) -o yaml openapi.yaml > $(TARGET_OPENAPI_YAML)
 	$(CODEGEN) validate -i $(TARGET_OPENAPI_YAML)
+	python scripts/bravado-validate.py
 
 $(TARGETS_PATH):
 	mkdir -p $@
