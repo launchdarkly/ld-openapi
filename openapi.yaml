@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 2.0.21
+  version: 2.0.22
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -186,6 +186,8 @@ paths:
       parameters:
         - $ref: '#/parameters/ProjectKey'
         - $ref: '#/parameters/EnvironmentKeyQuery'
+        - $ref: '#/parameters/SummaryQuery'
+        - $ref: '#/parameters/ArchivedQuery'
         - $ref: '#/parameters/Tag'
       responses:
         '200':
@@ -2606,6 +2608,24 @@ parameters:
       You can filter environments with the env query parameter. For example,
       setting env=production will restrict the returned configurations to just
       your production environment.
+    type: string
+  SummaryQuery:
+    name: summary
+    in: query
+    required: false
+    description: >-
+      By default in api version >= 1, flags will _not_ include their list of
+      prerequisites, targets or rules.  Set summary=0 to include these fields
+      for each flag returned.
+    type: string
+  ArchivedQuery:
+    name: archived
+    in: query
+    required: false
+    description: >-
+      When set to 1, archived flags will be included in the list of flags
+      returned.  By default, archived flags are not included in the list of
+      flags.
     type: string
   FeatureFlagKey:
     name: featureFlagKey
