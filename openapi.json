@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.22"
+    "version": "2.0.23"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -2230,6 +2230,9 @@
     "Rollout": {
       "type": "object",
       "properties": {
+        "bucketBy": {
+          "type": "string"
+        },
         "variations": {
           "type": "array",
           "items": {
@@ -3867,14 +3870,14 @@
       "in": "query",
       "required": false,
       "description": "By default in api version >= 1, flags will _not_ include their list of prerequisites, targets or rules.  Set summary=0 to include these fields for each flag returned.",
-      "type": "string"
+      "type": "boolean"
     },
     "ArchivedQuery": {
       "name": "archived",
       "in": "query",
       "required": false,
       "description": "When set to 1, archived flags will be included in the list of flags returned.  By default, archived flags are not included in the list of flags.",
-      "type": "string"
+      "type": "boolean"
     },
     "FeatureFlagKey": {
       "name": "featureFlagKey",
