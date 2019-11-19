@@ -253,6 +253,8 @@ Fallthrough:
 Rollout:
   type: object
   properties:
+    bucketBy:
+      type: string
     variations:
       type: array
       items:
