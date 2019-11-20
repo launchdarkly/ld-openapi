@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 2.0.23
+  version: 2.0.24
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -1432,10 +1432,37 @@ definitions:
   FeatureFlagStatus:
     type: object
     properties:
+      name:
+        type: string
+        description: >
+          | Name     | Description |
+
+          | --------:| ----------- |
+
+          | new      | the feature flag was created within the last 7 days, and
+          has not been requested yet |
+
+          | active   | the feature flag was requested by your servers or clients
+          within the last 7 days |
+
+          | inactive | the feature flag was created more than 7 days ago, and
+          hasn't been requested by your servers or clients within the past 7
+          days |
+
+          | launched | one variation of the feature flag has been rolled out to
+          all your users for at least 7 days |
+        enum:
+          - new
+          - active
+          - inactive
+          - launched
+      lastRequested:
+        type: string
+        example: '2016-08-16T21:10:11.886Z'
+      default:
+        type: object
       _links:
         $ref: '#/definitions/Links'
-    additionalProperties:
-      $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
   FeatureFlagStatuses:
     type: object
     properties:
