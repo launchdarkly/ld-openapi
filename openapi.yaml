@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 2.0.24
+  version: 2.0.23
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -1786,6 +1786,36 @@ definitions:
         type: number
         description: The default TTL for the new environment.
         example: 0
+      secureMode:
+        type: boolean
+        description: Determines whether the environment is in secure mode.
+        example: false
+      defaultTrackEvents:
+        type: boolean
+        description: >-
+          Set to true to send detailed event information for newly created
+          flags.
+        example: false
+      tags:
+        type: array
+        description: An array of tags for this environment.
+        items:
+          type: string
+        example:
+          - tag1
+          - tag2
+      requireComments:
+        type: boolean
+        description: >-
+          Determines if this environment requires comments for flag and segment
+          changes.
+        example: false
+      confirmChanges:
+        type: boolean
+        description: >-
+          Determines if this environment requires confirmation for flag and
+          segment changes.
+        example: false
     required:
       - name
       - key
