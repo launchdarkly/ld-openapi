@@ -5,7 +5,7 @@ REVISION:=$(shell git rev-parse --short HEAD)
 
 SWAGGER_VERSION=2.4.8
 SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
-SWAGGER_DOWNLOAD_URL=http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
+SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
 
 API_TARGETS ?= \
 	bash \
