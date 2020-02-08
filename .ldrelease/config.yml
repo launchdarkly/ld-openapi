@@ -1,0 +1,26 @@
+repo:
+  public: ld-openapi
+  private: ld-openapi-private
+
+publications:
+  - url: https://oss.sonatype.org/content/groups/public/com/launchdarkly/api-client/
+    description: Java client (Sonatype)
+  - url: https://www.javadoc.io/doc/com.launchdarkly/api-client
+    description: Java docs (Javadoc)
+  - url: https://www.npmjs.com/package/launchdarkly-api
+    description: JavaScript client (NPM)
+  - url: https://pypi.org/project/launchdarkly-api/
+    description: Python client (PyPi)
+  - url: https://rubygems.org/gems/launchdarkly_api
+    description: Ruby client (RubyGems)
+  - url: https://www.rubydoc.info/gems/launchdarkly_api
+    description: Ruby docs (RubyDoc)
+
+circleci:
+  linux:
+    image: circleci/openjdk:10-node-browsers
+    env:
+      GRADLE_USER_HOME: /home/circleci
+
+documentation:
+  githubPages: true
