@@ -154,15 +154,18 @@ push:
 	$(GIT_COMMAND) submodule foreach git add .; \
 	$(GIT_COMMAND) submodule foreach git commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
+	    echo Publishing updates to the $(RELEASE_TARGET) client repository...; \
 		git -C ./api-client-$(RELEASE_TARGET) tag $(TAG); \
 		git -C ./api-client-$(RELEASE_TARGET) push origin $(TAG); \
-		git -C ./api-client-$(RELEASE_TARGET) push origin $(RELEASE_BRANCH); ) \
+		git -C ./api-client-$(RELEASE_TARGET) push origin $(RELEASE_BRANCH); \
+	) \
 	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
 		git -C ./gh-pages push; \
 	fi
 publish:
 	$(foreach TARGET, $(PUBLISH_TARGETS), \
-		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET); \
+	    echo Publishing client artifacts for $(TARGET)...; \
+		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET) $(VERSION); \
 	)
 
 $(SWAGGER_JAR):
