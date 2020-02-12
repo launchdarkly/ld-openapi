@@ -34,6 +34,7 @@ node_modules
 
 # Built clients and servers
 targets/
+client-clones/
 
 # Auto generated files
 .DS_Store
