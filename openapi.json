@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.26"
+    "version": "2.0.29"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -3014,7 +3014,7 @@
             "example": "proj/*:env/*:flag/my-flag"
           }
         },
-        "notresources": {
+        "notResources": {
           "type": "array",
           "items": {
             "type": "string",
@@ -3031,7 +3031,7 @@
             "example": "updateOn"
           }
         },
-        "notactions": {
+        "notActions": {
           "type": "array",
           "items": {
             "type": "string",
@@ -3115,6 +3115,15 @@
             "example": "proj/*:env/*:flag/my-flag"
           }
         },
+        "notResources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "A resource specifier string",
+            "example": "proj/*:env/*:flag/my-flag"
+          },
+          "description": "Targeted resource will be those resources NOT in this list. The \"resources`\" field must be empty to use this field."
+        },
         "actions": {
           "type": "array",
           "items": {
@@ -3122,6 +3131,15 @@
             "description": "An action to perform on a resource.",
             "example": "updateOn"
           }
+        },
+        "notActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "An action to perform on a resource.",
+            "example": "updateOn"
+          },
+          "description": "Targeted actions will be those actions NOT in this list. The \"actions\" field must be empty to use this field."
         },
         "effect": {
           "type": "string",
