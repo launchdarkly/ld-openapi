@@ -36,6 +36,7 @@ DOC_TARGETS = \
 API_CLIENT_PREFIX = api-client
 
 TARGETS_PATH ?= ./targets
+CLIENT_CLONES_PATH ?= ./client-clones
 TEMPLATES_PATH ?= ./swagger-codegen-templates
 SAMPLES_PATH ?= ./samples
 
@@ -150,18 +151,32 @@ push_test: push
 
 push_dry_run: GIT_PUSH_COMMAND=git push --dry-run
 push:
-	cd $(TARGETS_PATH); \
-	$(GIT_COMMAND) submodule foreach git add .; \
-	$(GIT_COMMAND) submodule foreach git commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
+	mkdir $(CLIENT_CLONES_PATH); \
+	cd $(CLIENT_CLONES_PATH); \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-	    echo Publishing updates to the $(RELEASE_TARGET) client repository...; \
-		git -C ./api-client-$(RELEASE_TARGET) tag $(TAG); \
-		git -C ./api-client-$(RELEASE_TARGET) push origin $(TAG); \
-		git -C ./api-client-$(RELEASE_TARGET) push origin $(RELEASE_BRANCH); \
+		echo Publishing updates to the $(RELEASE_TARGET) client repository...; \
+		$(GIT_COMMAND) clone git@github.com:launchdarkly/api-client-$(RELEASE_TARGET).git; \
+		cd api-client-$(RELEASE_TARGET); \
+		cp -r ../../$(TARGETS_PATH)/api-client-$(RELEASE_TARGET) .; \
+		$(GIT_COMMAND) add .; \
+		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
+		$(GIT_COMMAND) tag $(TAG); \
+		$(GIT_PUSH_COMMAND) origin $(TAG); \
+		$(GIT_PUSH_COMMAND) origin $(RELEASE_BRANCH); \
+		cd ..; \
 	) \
 	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
-		git -C ./gh-pages push; \
+		echo Publishing updates to GitHub pages...; \
+		$(GIT_COMMAND) clone git@github.com:launchdarkly/$(REPO).git; \
+		cd $(REPO); \
+		$(GIT_COMMAND) checkout gh-pages --; \
+		cp -r ../../$(TARGETS_PATH)/gh-pages .; \
+		$(GIT_COMMAND) add .; \
+		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
+		$(GIT_PUSH_COMMAND) origin gh-pages; \
+		cd ..; \
 	fi
+
 publish:
 	$(foreach TARGET, $(PUBLISH_TARGETS), \
 	    echo Publishing client artifacts for $(TARGET)...; \
@@ -173,5 +188,6 @@ $(SWAGGER_JAR):
 
 clean:
 	rm -rf $(TARGETS_PATH)
+	rm -rf $(CLIENT_CLONES_PATH)
 
 .PHONY: $(TARGETS) all clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
