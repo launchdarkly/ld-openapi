@@ -464,6 +464,9 @@ Project:
     name:
       type: string
       example: Zentasks
+    includeInSnippetByDefault:
+      type: boolean
+      example: true
     environments:
       type: array
       items:
