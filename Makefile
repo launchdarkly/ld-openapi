@@ -170,7 +170,7 @@ push:
 		$(GIT_COMMAND) clone git@github.com:launchdarkly/$(REPO).git; \
 		cd $(REPO); \
 		$(GIT_COMMAND) checkout gh-pages --; \
-		cp -r ../../$(TARGETS_PATH)/gh-pages .; \
+		cp -r ../../$(TARGETS_PATH)/gh-pages/. .; \
 		$(GIT_COMMAND) add .; \
 		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
 		$(GIT_PUSH_COMMAND) origin gh-pages; \

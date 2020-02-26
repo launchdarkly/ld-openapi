@@ -14,6 +14,15 @@ Links:
       $ref: "#/definitions/Link"
     "next":
       $ref: "#/definitions/Link"
+Site:
+  type: object
+  properties:
+    "href":
+      type: string
+      example: "/features/sort.order"
+    "type":
+      type: string
+      example: "text/html"
 Webhook:
   type: object
   properties:
@@ -220,6 +229,10 @@ FeatureFlagConfig:
       type: boolean
       example: false
       description: Set to true to send detailed event information for this flag.
+    trackEventsFallthrough:
+      type: boolean
+      example: true
+      description: Set to true to send detailed event information when targeting is enabled but no individual targeting rule is matched.
 Target:
   type: object
   properties:
@@ -237,6 +250,8 @@ Rule:
       type: string
     variation:
       type: integer
+    trackEvents:
+      type: boolean
     rollout:
       $ref: "#/definitions/Rollout"
     clauses:
@@ -417,6 +432,11 @@ UserSegment:
       type: integer
     _links:
       $ref: "#/definitions/Links"
+    _flags:
+      type: array
+      readOnly: true
+      items:
+        $ref: "#/definitions/FlagListItem"
 UserSegmentRule:
   type: object
   properties:
@@ -450,6 +470,9 @@ Project:
     name:
       type: string
       example: Zentasks
+    includeInSnippetByDefault:
+      type: boolean
+      example: true
     environments:
       type: array
       items:
@@ -1185,3 +1208,14 @@ CopyActions:
     - updateRules
     - updateFallthrough
     - updateOffVariation
+FlagListItem:
+  type: object
+  properties:
+    name:
+      type: string
+    key:
+      type: string
+    _links:
+      $ref: "#/definitions/Links"
+    _site:
+      $ref: "#/definitions/Site"
