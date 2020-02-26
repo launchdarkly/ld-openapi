@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 2.0.29
+  version: 2.0.30
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -1126,6 +1126,15 @@ definitions:
         $ref: '#/definitions/Link'
       next:
         $ref: '#/definitions/Link'
+  Site:
+    type: object
+    properties:
+      href:
+        type: string
+        example: /features/sort.order
+      type:
+        type: string
+        example: text/html
   Webhook:
     type: object
     properties:
@@ -1347,6 +1356,12 @@ definitions:
         type: boolean
         example: false
         description: Set to true to send detailed event information for this flag.
+      trackEventsFallthrough:
+        type: boolean
+        example: true
+        description: >-
+          Set to true to send detailed event information when targeting is
+          enabled but no individual targeting rule is matched.
   Target:
     type: object
     properties:
@@ -1364,6 +1379,8 @@ definitions:
         type: string
       variation:
         type: integer
+      trackEvents:
+        type: boolean
       rollout:
         $ref: '#/definitions/Rollout'
       clauses:
@@ -1572,6 +1589,11 @@ definitions:
         type: integer
       _links:
         $ref: '#/definitions/Links'
+      _flags:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/FlagListItem'
   UserSegmentRule:
     type: object
     properties:
@@ -1605,6 +1627,9 @@ definitions:
       name:
         type: string
         example: Zentasks
+      includeInSnippetByDefault:
+        type: boolean
+        example: true
       environments:
         type: array
         items:
@@ -2373,6 +2398,17 @@ definitions:
       - updateRules
       - updateFallthrough
       - updateOffVariation
+  FlagListItem:
+    type: object
+    properties:
+      name:
+        type: string
+      key:
+        type: string
+      _links:
+        $ref: '#/definitions/Links'
+      _site:
+        $ref: '#/definitions/Site'
 responses:
   Standard201:
     description: Resource created.
