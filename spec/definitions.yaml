@@ -229,6 +229,10 @@ FeatureFlagConfig:
       type: boolean
       example: false
       description: Set to true to send detailed event information for this flag.
+    trackEventsFallthrough:
+      type: boolean
+      example: true
+      description: Set to true to send detailed event information when targeting is off.
 Target:
   type: object
   properties:
@@ -246,6 +250,8 @@ Rule:
       type: string
     variation:
       type: integer
+    trackEvents:
+      type: boolean
     rollout:
       $ref: "#/definitions/Rollout"
     clauses:
