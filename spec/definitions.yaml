@@ -232,7 +232,7 @@ FeatureFlagConfig:
     trackEventsFallthrough:
       type: boolean
       example: true
-      description: Set to true to send detailed event information when targeting is off.
+      description: Set to true to send detailed event information when not individual targeting rule is selected.
 Target:
   type: object
   properties:
