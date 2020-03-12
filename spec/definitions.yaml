@@ -47,7 +47,9 @@ Webhook:
       description: The name of the webhook.
       example: "Example hook"
     statements:
-      $ref: "#/definitions/Statements"
+      type: array
+      items:
+        $ref: "#/definitions/Statement"
     tags:
       type: array
       description: Tags assigned to this webhook.
@@ -820,10 +822,6 @@ UserFlagSettings:
               type: application/json
           _value: false,
           setting: null
-Statements:
-  type: array
-  items:
-    $ref: "#/definitions/Statement"
 Statement:
   type: object
   properties:
@@ -1161,15 +1159,15 @@ MAUbyCategory:
 MAUMetadata:
   type: object
   # properties:
-    # 'sdk':
-    #   type: string
-    #   example: ''
-    # 'version':
-    #   type: string
-    #   example: ''
-    # 'source':
-    #   type: string
-    #   example: 'server'
+  # 'sdk':
+  #   type: string
+  #   example: ''
+  # 'version':
+  #   type: string
+  #   example: ''
+  # 'source':
+  #   type: string
+  #   example: 'server'
 Events:
   type: object
   properties:

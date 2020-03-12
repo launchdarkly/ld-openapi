@@ -32,7 +32,9 @@ WebhookPostRequest:
         example: "Example hook"
         description: The name of the webhook.
       statements:
-        $ref: "#/definitions/Statements"
+        type: array
+        items:
+          $ref: "#/definitions/Statement"
       tags:
         type: array
         items:
@@ -382,7 +384,9 @@ MembersPostRequest:
             description: The 20-hexdigit id or the key for a custom role.
             example: "revenue-team"
         inlineRole:
-          $ref: "#/definitions/Statements"
+          type: array
+          items:
+            $ref: "#/definitions/Statement"
       required:
         - email
 MemberId:
