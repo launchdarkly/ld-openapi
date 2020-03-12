@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 2.0.30
+  version: 2.0.31
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -1162,7 +1162,9 @@ definitions:
         description: The name of the webhook.
         example: Example hook
       statements:
-        $ref: '#/definitions/Statements'
+        type: array
+        items:
+          $ref: '#/definitions/Statement'
       tags:
         type: array
         description: Tags assigned to this webhook.
@@ -2007,10 +2009,6 @@ definitions:
                 type: application/json
             _value: 'false,'
             setting: null
-  Statements:
-    type: array
-    items:
-      $ref: '#/definitions/Statement'
   Statement:
     type: object
     properties:
@@ -2507,7 +2505,9 @@ parameters:
           example: Example hook
           description: The name of the webhook.
         statements:
-          $ref: '#/definitions/Statements'
+          type: array
+          items:
+            $ref: '#/definitions/Statement'
         tags:
           type: array
           items:
@@ -2904,7 +2904,9 @@ parameters:
               description: The 20-hexdigit id or the key for a custom role.
               example: revenue-team
           inlineRole:
-            $ref: '#/definitions/Statements'
+            type: array
+            items:
+              $ref: '#/definitions/Statement'
         required:
           - email
   MemberId:

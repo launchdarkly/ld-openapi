@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.30"
+    "version": "2.0.31"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -1920,7 +1920,10 @@
           "example": "Example hook"
         },
         "statements": {
-          "$ref": "#/definitions/Statements"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
         },
         "tags": {
           "type": "array",
@@ -3029,12 +3032,6 @@
         }
       }
     },
-    "Statements": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Statement"
-      }
-    },
     "Statement": {
       "type": "object",
       "properties": {
@@ -3712,7 +3709,10 @@
             "description": "The name of the webhook."
           },
           "statements": {
-            "$ref": "#/definitions/Statements"
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Statement"
+            }
           },
           "tags": {
             "type": "array",
@@ -4165,7 +4165,10 @@
               }
             },
             "inlineRole": {
-              "$ref": "#/definitions/Statements"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Statement"
+              }
             }
           },
           "required": [
