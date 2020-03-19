@@ -15,12 +15,12 @@ chmod 0600 /home/circleci/.gem/credentials
 git config --global user.name $GH_USER
 git config --global user.email $GH_EMAIL
 
-# Fetching credentials
+# Fetch credentials
 aws s3 cp s3://launchdarkly-pastebin/ci/openapi/gradle.properties.enc .
 aws s3 cp s3://launchdarkly-pastebin/ci/openapi/secring.gpg.enc .
 openssl enc -d -in gradle.properties.enc -aes-256-cbc -k $ENCRYPTION_SECRET -md md5 > ~/gradle.properties
 openssl enc -d -in secring.gpg.enc -aes-256-cbc -k $ENCRYPTION_SECRET -md md5 > ~/secring.gpg
 
-# Preparing configurations needed for client releases
+# Prepare configurations needed for client releases
 echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 echo -e "[pypi]\nusername=launchdarkly\npassword=$PYPI_PASSWORD" > ~/.pypirc
