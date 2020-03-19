@@ -24,7 +24,7 @@ jobs:
 
     - run:
         name: Install pip
-        command: sudo apt install python-pip
+        command: sudo apt install python3-pip
 
     - run:
         name: Loading previous client repos
@@ -98,7 +98,7 @@ jobs:
         at: targets
     - run: |
         cd samples/python
-        sudo pip install -e ../../targets/api-client-python
+        sudo pip3 install -e ../../targets/api-client-python
         python main.py
 
   test-ruby:

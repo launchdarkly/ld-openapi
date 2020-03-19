@@ -2,8 +2,8 @@
 
 # Install Python tools and AWS CLI
 sudo apt update
-sudo apt install awscli python-pip python-setuptools
-sudo pip install wheel twine
+sudo apt install awscli python3-pip python3-setuptools
+sudo pip3 install wheel twine
 
 # Set up Ruby and RubyGems credentials
 sudo apt-get install ruby
