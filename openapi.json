@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.31"
+    "version": "2.0.32"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -2071,6 +2071,9 @@
           "type": "boolean",
           "description": "Whether or not this flag is archived.",
           "example": false
+        },
+        "defaults": {
+          "$ref": "#/definitions/Defaults"
         }
       }
     },
@@ -2315,6 +2318,24 @@
         },
         "value": {
           "type": "object"
+        }
+      }
+    },
+    "Defaults": {
+      "type": "object",
+      "description": "Default values to be used when a new environment is created.",
+      "required": [
+        "onVariation",
+        "offVariation"
+      ],
+      "properties": {
+        "onVariation": {
+          "type": "integer",
+          "description": "The index of the variation to be served when a flag's targeting is on (default variation)."
+        },
+        "offVariation": {
+          "type": "integer",
+          "description": "The index of the variation to be served when a flag is off."
         }
       }
     },
@@ -3811,6 +3832,9 @@
           "includeInSnippet": {
             "type": "boolean",
             "description": "Whether or not this flag should be made available to the client-side JavaScript SDK."
+          },
+          "defaults": {
+            "$ref": "#/definitions/Defaults"
           }
         },
         "required": [
