@@ -9,14 +9,14 @@ SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/swagger-codegen-c
 
 API_TARGETS ?= \
 	bash \
-	csharp-dotnet2 \
+	dotnet \
 	go \
 	java \
 	javascript \
 	php \
 	python \
 	ruby \
-	typescript-node
+	typescript
 
 RELEASE_BRANCH ?= master                  # when we bump a major version, we may need to change this
 PREV_RELEASE_BRANCH ?= $(RELEASE_BRANCH)  # override this to create a revision of an older branch
