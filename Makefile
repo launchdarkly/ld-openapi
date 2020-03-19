@@ -100,11 +100,11 @@ load_prior_targets:
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
 openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
-	pip install bravado
+	pip3 install bravado
 	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
 	$(MULTI_FILE_SWAGGER) -o yaml openapi.yaml > $(TARGET_OPENAPI_YAML)
 	$(CODEGEN) validate -i $(TARGET_OPENAPI_YAML)
-	python scripts/bravado-validate.py
+	python3 scripts/bravado-validate.py
 
 $(TARGETS_PATH):
 	mkdir -p $@
