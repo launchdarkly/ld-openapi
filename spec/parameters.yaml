@@ -108,6 +108,8 @@ FeatureFlagPostRequest:
       includeInSnippet:
         type: boolean
         description: Whether or not this flag should be made available to the client-side JavaScript SDK.
+      defaults:
+        $ref: "#/definitions/Defaults"
     required:
       - name
       - key

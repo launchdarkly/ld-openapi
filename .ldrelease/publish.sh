@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-# Add artifacts to be picked up by Releaser and added to the ld-openapi GitHub release
+# Add spec artifacts to be picked up by Releaser and added to the ld-openapi GitHub release
 echo Generating artifacts...
 mkdir -p artifacts
 cp targets/openapi.json artifacts
 cp targets/openapi.yaml artifacts
 
+# Add client artifacts to be picked up by Releaser and added to the ld-openapi GitHub release
 cd targets
 tar cvfz api-clients-${LD_RELEASE_VERSION}.tgz api-client-*
 cd ..
