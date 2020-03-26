@@ -118,6 +118,20 @@ jobs:
         cd samples/ruby
         ruby main.rb
 
+  test-java:
+    docker:
+    - image: circleci/java
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+    - run: |
+          cd targets/api-client-java
+          mvn clean install
+          cd ../../samples/java
+          mvn clean install
+          mvn exec:java
+
 workflows:
   version: 2
   build:
@@ -137,6 +151,9 @@ workflows:
         requires:
         - build
     - test-python:
+        requires:
+        - build
+    - test-java:
         requires:
         - build
     - test-ruby:
