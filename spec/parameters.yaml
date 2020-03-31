@@ -239,6 +239,30 @@ ArchivedQuery:
   required: false
   description: When set to 1, archived flags will be included in the list of flags returned.  By default, archived flags are not included in the list of flags.
   type: boolean
+LimitQuery:
+  name: limit
+  in: query
+  required: false
+  description: The number of objects to return. Defaults to -1, which returns everything.
+  type: number
+OffsetQuery:
+  name: number
+  in: query
+  required: false
+  description: Where to start in the list. This is for use with pagination. For example, an offset of 10 would skip the first 10 items and then return the next limit items.
+  type: boolean
+FilterQuery:
+  name: filter
+  in: query
+  required: false
+  description: A comma-separated list of filters. Each filter is of the form field:value.
+  type: string
+SortQuery:
+  name: sort
+  in: query
+  required: false
+  description: A comma-separated list of fields to sort by. A field prefixed by a - will be sorted in descending order.
+  type: string
 FeatureFlagKey:
   name: featureFlagKey
   in: path
