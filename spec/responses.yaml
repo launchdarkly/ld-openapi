@@ -1,40 +1,56 @@
-  Standard201:
-    description: Resource created.
-  Standard204:
-    description: Action completed successfully.
-  Standard400:
-    description: Invalid request body.
-  Standard401:
-    description: Invalid access token.
-  Standard404:
-    description: Invalid resource specifier.
-  Standard409:
-    description: Status conflict.
-  Root200:
-    description: A list of links to available resources in the API.
-    schema:
-      $ref: '#/definitions/Links'
-  Webhook2xx:
-    description: Webhook response.
-    schema:
-      $ref: '#/definitions/Webhook'
-  UserSegment2xx:
-    description: User segment response.
-    schema:
-      $ref: '#/definitions/UserSegment'
-  Project2xx:
-    description: Successful Project response.
-    schema:
-      $ref: '#/definitions/Project'
-  Member2xx:
-    description: Member response.
-    schema:
-      $ref: '#/definitions/Member'
-  CustomRole2xx:
-    description: Custom role response.
-    schema:
-      $ref: '#/definitions/CustomRole'
-  Environment2xx:
-    description: Environment response.
-    schema:
-      $ref: '#/definitions/Environment'
+Standard201:
+  description: Resource created.
+Standard204:
+  description: Action completed successfully.
+Standard400:
+  description: Invalid request body.
+Standard401:
+  description: Invalid access token.
+Standard404:
+  description: Invalid resource specifier.
+Standard409:
+  description: Status conflict.
+Root200:
+  description: A list of links to available resources in the API.
+  schema:
+    $ref: "#/definitions/Links"
+Webhook2xx:
+  description: Webhook response.
+  schema:
+    $ref: "#/definitions/Webhook"
+UserSegment2xx:
+  description: User segment response.
+  schema:
+    $ref: "#/definitions/UserSegment"
+Project2xx:
+  description: Successful Project response.
+  schema:
+    $ref: "#/definitions/Project"
+Member2xx:
+  description: Member response.
+  schema:
+    $ref: "#/definitions/Member"
+CustomRole2xx:
+  description: Custom role response.
+  schema:
+    $ref: "#/definitions/CustomRole"
+BetaApi403:
+  description: This is a beta API, you must pass beta in the LD-API-Version header to use it.
+  schema:
+    $ref: "#/definitions/UsageError"
+StreamUsage404:
+  description: The stream source you requested could not be found
+  schema:
+    $ref: "#/definitions/StreamUsageError"
+EvaluationUsage404:
+  description: The environment or flag you requested could not be found
+  schema:
+    $ref: "#/definitions/EvaluationUsageError"
+Environment2xx:
+  description: Environment response.
+  schema:
+    $ref: "#/definitions/Environment"
+Destination2xx:
+  description: Destination response.
+  schema:
+    $ref: "#/definitions/Destination"

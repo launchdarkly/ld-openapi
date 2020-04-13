@@ -5,6 +5,8 @@ Flags:
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKeyQuery'
+      - $ref: '#/parameters/SummaryQuery'
+      - $ref: '#/parameters/ArchivedQuery'
       - $ref: '#/parameters/Tag'
     responses:
       '200':
@@ -98,11 +100,11 @@ FlagCopy:
     operationId: copyFeatureFlag
     parameters:
       - $ref: '#/parameters/ProjectKey'
-      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/FeatureFlagCopyBody'
     responses:
       '201':
-        description: Flag confguration copy response.
+        description: Flag configuration copy response.
         schema:
           $ref: '#/definitions/FeatureFlag'
       '400':
@@ -112,8 +114,8 @@ FlagCopy:
       '409':
         $ref: '#/responses/Standard409'
     tags:
-      - Feature flags    
-      
+      - Feature flags
+
 FlagStatuses:
   get:
     summary: Get a list of statuses for all feature flags. The status includes the last time the feature flag was requested, as well as the state of the flag.
@@ -147,4 +149,105 @@ FlagStatus:
         $ref: '#/responses/Standard401'
     tags:
       - Feature flags
-      
+<<<<<<< Updated upstream
+FlagStatusAcrossEnvironments:
+  get:
+    summary: Get the status for a particular feature flag across environments
+    operationId: getFeatureFlagStatusAcrossEnvironments
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        description: Status of the requested feature flag across environments
+        schema:
+          $ref: '#/definitions/FeatureFlagStatusAcrossEnvironments'
+      '401':
+        $ref: '#/responses/Standard401'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Feature flags
+=======
+
+UserTargetingExpirations:
+  get:
+    summary: Get expiring user targets for feature flag
+    operationId: getExpiringUserTargets
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        description: User targets of the requested feature flag.
+        schema:
+          $ref: '#/definitions/FeatureFlagUserTargetingExpiration'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - Feature flags
+  patch:
+    summary: Update, add, or delete expiring user targets on feature flag
+    operationId: patchExpiringUserTargets
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/PatchWithComment'
+    responses:
+      '200':
+        description: User targeting expirations on feature flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlag'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Feature flags
+UserTargetingExpirationForFlags:
+  get:
+    summary: Get all expiring dates on flags for a single user.
+    operationId: getExpiringUserTargetsForUser
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+    responses:
+      '200':
+        description: Expiring user targets for a single user on all flags
+        schema:
+          $ref: '#/definitions/UserTargetingExpirationForFlags'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - Feature flags
+  patch:
+    summary: Update, add, or delete expiring user targets for a single user on all flags
+    operationId: patchExpiringUserTargets
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+      - $ref: '#/parameters/PatchWithComment'
+    responses:
+      '200':
+        description: User Targeting expiration for single user on all flags response.
+        schema:
+          $ref: '#/definitions/FeatureFlag'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Feature flags
+>>>>>>> Stashed changes

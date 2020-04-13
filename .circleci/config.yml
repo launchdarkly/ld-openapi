@@ -13,6 +13,18 @@ jobs:
     - image: circleci/node:10-browsers  # -browsers image has java but is otherwise relatively small
     steps:
     - checkout
+    - run:
+        name: Install Swagger Codegen
+        command: |
+          wget https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/2.4.8/swagger-codegen-cli-2.4.8.jar -O swagger-codegen-cli.jar
+          printf '#!/bin/bash\nexec java -jar /usr/local/bin/swagger-codegen-cli.jar "$@"\n' > ./swagger-codegen
+          sudo mv ./swagger-codegen /usr/local/bin
+          sudo mv ./swagger-codegen-cli.jar /usr/local/bin
+          sudo chmod +x /usr/local/bin/swagger-codegen
+
+    - run:
+        name: Install pip
+        command: sudo apt install python3-pip
 
     - run:
         name: Loading previous client repos
@@ -51,70 +63,6 @@ jobs:
     - store_artifacts:
         path: /tmp/api-clients
 
-  publish:
-    docker:
-    - image: circleci/openjdk:10-node-browsers
-      environment:
-        GRADLE_USER_HOME: /home/circleci
-    steps:
-    - checkout
-    - attach_workspace:
-        at: targets
-
-    - run:
-        name: Install Python tools and AWS CLI
-        command: |
-          sudo apt update
-          sudo apt install awscli python-pip python-setuptools
-          sudo pip install wheel twine
-
-    - run:
-        name: Set up Ruby and RubyGems credentials
-        command: |
-          sudo apt-get install ruby
-          mkdir -p ~/.gem
-          echo -e "---\r\n:rubygems_api_key: $RUBYGEMS_API_KEY" > ~/.gem/credentials
-          chmod 0600 /home/circleci/.gem/credentials
-
-    - run:
-        name: Install GHR (Github Releaser)
-        command: |
-          curl -L https://github.com/tcnksm/ghr/releases/download/v0.10.2/ghr_v0.10.2_linux_amd64.tar.gz | tar xz
-          sudo mv ghr_v0.10.2_linux_amd64/ghr /usr/local/bin
-          sudo chmod a+x /usr/local/bin/ghr
-
-    - run:
-        name: Publishing GitHub Release
-        command: |
-          cd targets
-          for file in openapi.{json,yaml} api-clients-*.tgz; do
-            ghr -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME $CIRCLE_TAG $file
-          done
-
-    - run:
-        name: Pushing updated client repos
-        command: |
-          git config --global user.name $GH_USER
-          git config --global user.email $GH_EMAIL
-          make TAG=$CIRCLE_TAG push
-
-    - run:
-        name: Fetching credentials
-        command: |
-          aws s3 cp s3://launchdarkly-pastebin/ci/openapi/gradle.properties.enc .
-          aws s3 cp s3://launchdarkly-pastebin/ci/openapi/secring.gpg.enc .
-          openssl enc -d -in gradle.properties.enc -aes-256-cbc -k $ENCRYPTION_SECRET -md md5 > ~/gradle.properties
-          openssl enc -d -in secring.gpg.enc -aes-256-cbc -k $ENCRYPTION_SECRET -md md5 > ~/secring.gpg
-
-    - run:
-        name: Publish packages
-        command: |
-          if [ "$CIRCLE_REPOSITORY_URL" = "git@github.com:launchdarkly/ld-openapi.git" ]; then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-            echo -e "[pypi]\nusername=launchdarkly\npassword=$PYPI_PASSWORD" > ~/.pypirc
-            make PUBLISH_TARGETS="java javascript python" publish
-          fi
-
   test-go:
     docker:
     - image: circleci/golang
@@ -150,7 +98,7 @@ jobs:
         at: targets
     - run: |
         cd samples/python
-        sudo pip install -e ../../targets/api-client-python
+        sudo pip3 install -e ../../targets/api-client-python
         python main.py
 
   test-ruby:
@@ -169,6 +117,20 @@ jobs:
     - run: |
         cd samples/ruby
         ruby main.rb
+
+  test-java:
+    docker:
+    - image: circleci/java
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+    - run: |
+          cd targets/api-client-java
+          mvn clean install
+          cd ../../samples/java
+          mvn clean install
+          mvn exec:java
 
 workflows:
   version: 2
@@ -191,15 +153,9 @@ workflows:
     - test-python:
         requires:
         - build
+    - test-java:
+        requires:
+        - build
     - test-ruby:
         requires:
         - build
-    - publish:
-        requires:
-        - build
-        filters:
-          tags:
-            only: /^\d+\.\d+\.\d+.*$/
-          branches:
-            ignore: /.*/
-        context: org-global  # includes the s3 access key needed to get credentials

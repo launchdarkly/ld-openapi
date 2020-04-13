@@ -12,7 +12,7 @@ http://azimi.me/2015/07/16/split-swagger-into-smaller-files.html
 
 ## Compiling the spec
 
-The spec is joined from multiple files using a multi-file Swagger tool.  To compile the just spec run `make openapi_yaml`.
+The spec is joined from multiple files using a multi-file Swagger tool.  To compile just the spec run `make openapi_yaml`.
 
 Alternatively, you can test a multi-file Swagger spec using VSCode, or by following these instructions for the online editor: 
 
@@ -31,7 +31,7 @@ We use the spec to build some internals tools in go.  Tests for other specs are 
 
 Server/client code for the API can be automatically generated. To generate the code:
 
-
+  1. Ensure that you have `wget`, `yarn`, `jq`, and `pip3` installed. 
   1. Run the `generate` command:
 ```
 > make
@@ -48,10 +48,3 @@ those repos.
 ## Uploading packages
 
 The target `make publish` will publish changes to the language-specific package managers.
-
-## Automatic releases on CircleCI
-
-On CircleCI, builds tagged with `#.#.#[optional suffix]` (e.g. 2.0.1 or 2.0.3-test) will trigger the publishing job
-that will push new code and upload new packages.  For private development, we use a private version of this repository
-and we do not publish things like npm packages for the private repo.  This job will also create a release on GitHub
-for the current repo, containing the openapi specs and an archive of the generated code.

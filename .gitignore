@@ -34,7 +34,13 @@ node_modules
 
 # Built clients and servers
 targets/
+client-clones/
 
 # Auto generated files
 .DS_Store
 /swagger-codegen-cli-*.jar
+
+# IDE settings
+.classpath
+.project
+.settings/

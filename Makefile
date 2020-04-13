@@ -3,9 +3,9 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
-SWAGGER_VERSION=2.4.0
+SWAGGER_VERSION=2.4.8
 SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
-SWAGGER_DOWNLOAD_URL=http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
+SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
 
 API_TARGETS ?= \
 	bash \
@@ -36,6 +36,7 @@ DOC_TARGETS = \
 API_CLIENT_PREFIX = api-client
 
 TARGETS_PATH ?= ./targets
+CLIENT_CLONES_PATH ?= ./client-clones
 TEMPLATES_PATH ?= ./swagger-codegen-templates
 SAMPLES_PATH ?= ./samples
 
@@ -62,11 +63,12 @@ CODEGEN_PARAMS_java = \
 	-DscmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
 	-DscmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
 
-CODEGEN_PARAMS_javascript = -DprojectName=launchdarkly-api -DmoduleName=LaunchDarklyApi
+CODEGEN_PARAMS_javascript = -t $(TEMPLATES_PATH)/javascript -DprojectName=launchdarkly-api -DmoduleName=LaunchDarklyApi
 CODEGEN_PARAMS_php = -DpackagePath=LaunchDarklyApi -DcomposerVendorName=launchdarkly -DcomposerProjectName=api-client-php -DinvokerPackage=LaunchDarklyApi -DgitUserId=launchdarkly -DgitRepoId=api-client-php
 CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api -DpackageVersion=$(TAG)
 
 CODEGEN_PARAMS_ruby = \
+  -t $(TEMPLATES_PATH)/ruby \
   -DmoduleName=LaunchDarklyApi \
   -DgemName=launchdarkly_api \
   -DgemVersion=$(TAG) \
@@ -98,9 +100,11 @@ load_prior_targets:
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
 openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
+	pip3 install bravado
 	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
 	$(MULTI_FILE_SWAGGER) -o yaml openapi.yaml > $(TARGET_OPENAPI_YAML)
 	$(CODEGEN) validate -i $(TARGET_OPENAPI_YAML)
+	python3 scripts/bravado-validate.py
 
 $(TARGETS_PATH):
 	mkdir -p $@
@@ -147,19 +151,37 @@ push_test: push
 
 push_dry_run: GIT_PUSH_COMMAND=git push --dry-run
 push:
-	cd $(TARGETS_PATH); \
-	$(GIT_COMMAND) submodule foreach git add .; \
-	$(GIT_COMMAND) submodule foreach git commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
+	mkdir $(CLIENT_CLONES_PATH); \
+	cd $(CLIENT_CLONES_PATH); \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-		git -C ./api-client-$(RELEASE_TARGET) tag $(TAG); \
-		git -C ./api-client-$(RELEASE_TARGET) push origin $(TAG); \
-		git -C ./api-client-$(RELEASE_TARGET) push origin $(RELEASE_BRANCH); ) \
+		echo Publishing updates to the $(RELEASE_TARGET) client repository...; \
+		$(GIT_COMMAND) clone git@github.com:launchdarkly/api-client-$(RELEASE_TARGET).git; \
+		cp -v -r ../$(TARGETS_PATH)/api-client-$(RELEASE_TARGET) .; \
+		cd api-client-$(RELEASE_TARGET); \
+		$(GIT_COMMAND) add .; \
+		$(GIT_COMMAND) status; \
+		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
+		$(GIT_COMMAND) tag $(TAG); \
+		$(GIT_PUSH_COMMAND) origin $(TAG); \
+		$(GIT_PUSH_COMMAND) origin $(RELEASE_BRANCH); \
+		cd ..; \
+	) \
 	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
-		git -C ./gh-pages push; \
+		echo Publishing updates to GitHub pages...; \
+		$(GIT_COMMAND) clone git@github.com:launchdarkly/$(REPO).git; \
+		cd $(REPO); \
+		$(GIT_COMMAND) checkout gh-pages --; \
+		cp -v -r ../../$(TARGETS_PATH)/gh-pages/. .; \
+		$(GIT_COMMAND) add .; \
+		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
+		$(GIT_PUSH_COMMAND) origin gh-pages; \
+		cd ..; \
 	fi
+
 publish:
 	$(foreach TARGET, $(PUBLISH_TARGETS), \
-		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET); \
+	    echo Publishing client artifacts for $(TARGET)...; \
+		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET) $(VERSION); \
 	)
 
 $(SWAGGER_JAR):
@@ -167,5 +189,6 @@ $(SWAGGER_JAR):
 
 clean:
 	rm -rf $(TARGETS_PATH)
+	rm -rf $(CLIENT_CLONES_PATH)
 
 .PHONY: $(TARGETS) all clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test

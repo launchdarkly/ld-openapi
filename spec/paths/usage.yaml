@@ -1,0 +1,151 @@
+Usage:
+  get:
+    summary: "[BETA] Returns of the usage endpoints available."
+    operationId: getUsage
+    responses:
+      '200':
+        description: Usage endpoints
+        schema:
+          $ref: '#/definitions/Usage'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Usage
+Streams:
+  get:
+    summary: "[BETA] Returns a list of all streams."
+    operationId: getStreams
+    responses:
+      '200':
+        description: Stream usage endpoints
+        schema:
+          $ref: '#/definitions/Streams'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Usage
+Stream:
+  get:
+    summary: "[BETA] Get a stream endpoint and return timeseries data."
+    operationId: getStream
+    parameters:
+      - $ref: '#/parameters/StreamSource'
+    responses:
+      '200':
+        description: Responds with time series data on stream usage.
+        schema:
+          $ref: '#/definitions/Stream'
+      '403':
+        $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/StreamUsage404'
+    tags:
+      - Usage
+StreamBySDKVersion:
+  get:
+    summary: "[BETA] Get a stream timeseries data by source show sdk version metadata."
+    operationId: getStreamBySDK
+    parameters:
+      - $ref: '#/parameters/StreamSource'
+    responses:
+      '200':
+        description: Returns timeseries data and metadata on sdk version.
+        schema:
+          $ref: '#/definitions/StreamBySDK'
+      '403':
+          $ref: '#/responses/BetaApi403'
+      '404':
+          $ref: '#/responses/StreamUsage404'
+    tags:
+      - Usage
+StreamSDKVersions:
+  get:
+    summary: "[BETA] Get a stream timeseries data by source and show all sdk version associated."
+    operationId: getStreamSDKVersion
+    parameters:
+      - $ref: '#/parameters/StreamSource'
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/StreamSDKVersion'
+      '403':
+        $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/StreamUsage404'
+    tags:
+      - Usage
+MAU:
+  get:
+    summary: "[BETA] Get monthly active user data."
+    operationId: getMAU
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/MAU'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Usage
+MAUbyCategory:
+  get:
+    summary: "[BETA] Get monthly active user data by category."
+    operationId: getMAUByCategory
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/MAUbyCategory'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Usage
+Events:
+  get:
+    summary: "[BETA] Get events usage endpoints."
+    operationId: getEvents
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/Events'
+      '403':
+        $ref: '#/responses/BetaApi403'
+    tags:
+      - Usage
+Event:
+  get:
+    summary: "[BETA] Get events usage by event type."
+    operationId: getEvent
+    parameters:
+      - $ref: '#/parameters/EventType'
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/StreamSDKVersion'
+      '403':
+        $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/StreamUsage404'
+    tags:
+      - Usage
+Evaluations:
+  get:
+    summary: "[BETA] Get events usage by event id and the feature flag key."
+    operationId: getEvaluations
+    parameters:
+      - $ref: '#/parameters/EvaluationEnvId'
+      - $ref: '#/parameters/EvaluationFlagKey'
+    responses:
+      '200':
+        description: Returns timeseries data and all sdk versions.
+        schema:
+          $ref: '#/definitions/StreamSDKVersion'
+      '403':
+        $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/EvaluationUsage404'
+    tags:
+      - Usage
