@@ -149,7 +149,6 @@ FlagStatus:
         $ref: '#/responses/Standard401'
     tags:
       - Feature flags
-<<<<<<< Updated upstream
 FlagStatusAcrossEnvironments:
   get:
     summary: Get the status for a particular feature flag across environments
@@ -168,7 +167,6 @@ FlagStatusAcrossEnvironments:
         $ref: '#/responses/BetaApi403'
     tags:
       - Feature flags
-=======
 
 UserTargetingExpirations:
   get:
@@ -250,4 +248,3 @@ UserTargetingExpirationForFlags:
         $ref: '#/responses/Standard409'
     tags:
       - Feature flags
->>>>>>> Stashed changes

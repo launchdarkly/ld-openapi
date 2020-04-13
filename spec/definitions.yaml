@@ -366,7 +366,6 @@ FeatureFlagStatuses:
     items:
       type: array
       items:
-<<<<<<< Updated upstream
         $ref: "#/definitions/FeatureFlagStatus"
 FeatureFlagStatusForQueriedEnvironment:
   type: object
