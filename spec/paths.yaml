@@ -12,6 +12,14 @@
   $ref: ./paths/flags.yaml#/Flag
 /flags/{projectKey}/{featureFlagKey}/copy:
   $ref: ./paths/flags.yaml#/FlagCopy
+/flags/{projectKey}/{environmentKey}/expiring-user-targets/{featureFlagKey}:
+  $ref: ./paths/flags.yaml#/UserTargetingExpirationForFlags
+/{flags}/{projKey}/{envKey}/expiring-user-targets/{userKey}:
+  $ref: ./paths/flags.yaml#/UserTargetingExpirationForFlags
+/flags/{projectKey}/{environmentKey}/expiring-user-targets/users/{userKey}:
+  $ref: ./paths/flags.yaml#/UserTargetingExpirations
+/{users}/{projKey}/{envKey}/expiring-user-targets/{featureFlagKey}:
+  $ref: ./paths/flags.yaml#/UserTargetingExpirations
 /flag-statuses/{projectKey}/{environmentKey}:
   $ref: ./paths/flags.yaml#/FlagStatuses
 /flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}:
