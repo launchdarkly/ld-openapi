@@ -34,14 +34,27 @@ Members:
         $ref: '#/responses/Standard409'
     tags:
       - Team members
+Me:
+  get:
+    summary: Get a current member associated with the token
+    operationId: getMe
+    responses:
+      '200':
+        $ref: '#/responses/Member2xx'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - Team members
 Member:
   get:
     summary: Get a single team member by ID.
     operationId: getMember
     parameters:
       - $ref: '#/parameters/MemberId'
-    responses: 
-      '200': 
+    responses:
+      '200':
         $ref: '#/responses/Member2xx'
       '400':
         $ref: '#/responses/Standard400'
@@ -55,8 +68,8 @@ Member:
     parameters:
       - $ref: '#/parameters/MemberId'
       - $ref: '#/parameters/PatchRequest'
-    responses: 
-      '200': 
+    responses:
+      '200':
         $ref: '#/responses/Member2xx'
       '400':
         $ref: '#/responses/Standard400'
