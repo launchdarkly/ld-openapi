@@ -178,6 +178,8 @@ Member:
     lastName:
       type: string
       example: "Turing"
+    _verified:
+      type: boolean
     _pendingInvite:
       type: boolean
     isBeta:
