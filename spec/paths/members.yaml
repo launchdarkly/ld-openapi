@@ -36,7 +36,7 @@ Members:
       - Team members
 Me:
   get:
-    summary: Get a current member associated with the token
+    summary: Get the current team member associated with the token
     operationId: getMe
     responses:
       '200':
