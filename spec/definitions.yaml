@@ -178,6 +178,8 @@ Member:
       example: "Turing"
     _pendingInvite:
       type: boolean
+    _verified:
+      type: boolean
     isBeta:
       type: boolean
     customRoles:

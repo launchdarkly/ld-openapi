@@ -48,6 +48,8 @@
   $ref: ./paths/members.yaml#/Members
 /members/{memberId}:
   $ref: ./paths/members.yaml#/Member
+/members/me:
+  $ref: ./paths/members.yaml#/Me
 /destinations:
   $ref: ./paths/destinations.yaml#/Destinations
 /destinations/{projectKey}/{environmentKey}:
