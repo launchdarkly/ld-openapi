@@ -225,8 +225,11 @@ EnvironmentKeyQuery:
   name: env
   in: query
   required: false
-  description: By default, each feature will include configurations for each environment. You can filter environments with the env query parameter. For example, setting env=production will restrict the returned configurations to just your production environment.
-  type: string
+  description: By default, each feature will include configurations for each environment. You can filter environments with the env query parameter. For example, setting env=["production"] will restrict the returned configurations to just your production environment.
+  type: array
+  items:
+    type: string
+  collectionFormat: multi
 SummaryQuery:
   name: summary
   in: query
