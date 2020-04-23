@@ -1439,6 +1439,26 @@
         ]
       }
     },
+    "/members/me": {
+      "get": {
+        "summary": "Get a current member associated with the token",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Member2xx"
+          },
+          "400": {
+            "$ref": "#/responses/Standard400"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          }
+        },
+        "tags": [
+          "Team members"
+        ]
+      }
+    },
     "/destinations": {
       "get": {
         "summary": "Returns a list of all data export destinations.",
@@ -2116,6 +2136,9 @@
           "example": "Turing"
         },
         "_pendingInvite": {
+          "type": "boolean"
+        },
+        "_verified": {
           "type": "boolean"
         },
         "isBeta": {
