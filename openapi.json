@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "2.0.33"
+    "version": "3.0.0"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -302,6 +302,18 @@
           },
           {
             "$ref": "#/parameters/ArchivedQuery"
+          },
+          {
+            "$ref": "#/parameters/LimitQuery"
+          },
+          {
+            "$ref": "#/parameters/OffsetQuery"
+          },
+          {
+            "$ref": "#/parameters/FilterQuery"
+          },
+          {
+            "$ref": "#/parameters/SortQuery"
           },
           {
             "$ref": "#/parameters/Tag"
@@ -1314,6 +1326,20 @@
       "get": {
         "summary": "Returns a list of all members in the account.",
         "operationId": "getMembers",
+        "parameters": [
+          {
+            "$ref": "#/parameters/LimitQuery"
+          },
+          {
+            "$ref": "#/parameters/OffsetQuery"
+          },
+          {
+            "$ref": "#/parameters/FilterQuery"
+          },
+          {
+            "$ref": "#/parameters/SortQuery"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Members response.",
@@ -1352,6 +1378,26 @@
           },
           "409": {
             "$ref": "#/responses/Standard409"
+          }
+        },
+        "tags": [
+          "Team members"
+        ]
+      }
+    },
+    "/members/me": {
+      "get": {
+        "summary": "Get the current team member associated with the token",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Member2xx"
+          },
+          "400": {
+            "$ref": "#/responses/Standard400"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
           }
         },
         "tags": [
@@ -2088,6 +2134,9 @@
           "items": {
             "$ref": "#/definitions/FeatureFlag"
           }
+        },
+        "totalCount": {
+          "type": "number"
         }
       }
     },
@@ -2115,6 +2164,9 @@
           "type": "string",
           "example": "Turing"
         },
+        "_verified": {
+          "type": "boolean"
+        },
         "_pendingInvite": {
           "type": "boolean"
         },
@@ -2140,6 +2192,9 @@
           "items": {
             "$ref": "#/definitions/Member"
           }
+        },
+        "totalCount": {
+          "type": "number"
         }
       }
     },
@@ -3998,8 +4053,12 @@
       "name": "env",
       "in": "query",
       "required": false,
-      "description": "By default, each feature will include configurations for each environment. You can filter environments with the env query parameter. For example, setting env=production will restrict the returned configurations to just your production environment.",
-      "type": "string"
+      "description": "By default, each feature will include configurations for each environment. You can filter environments with the env query parameter. For example, setting env=[\"production\"] will restrict the returned configurations to just your production environment.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "collectionFormat": "multi"
     },
     "SummaryQuery": {
       "name": "summary",
@@ -4014,6 +4073,34 @@
       "required": false,
       "description": "When set to 1, archived flags will be included in the list of flags returned.  By default, archived flags are not included in the list of flags.",
       "type": "boolean"
+    },
+    "LimitQuery": {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "description": "The number of objects to return. Defaults to -1, which returns everything.",
+      "type": "number"
+    },
+    "OffsetQuery": {
+      "name": "number",
+      "in": "query",
+      "required": false,
+      "description": "Where to start in the list. This is for use with pagination. For example, an offset of 10 would skip the first 10 items and then return the next limit items.",
+      "type": "boolean"
+    },
+    "FilterQuery": {
+      "name": "filter",
+      "in": "query",
+      "required": false,
+      "description": "A comma-separated list of filters. Each filter is of the form field:value.",
+      "type": "string"
+    },
+    "SortQuery": {
+      "name": "sort",
+      "in": "query",
+      "required": false,
+      "description": "A comma-separated list of fields to sort by. A field prefixed by a - will be sorted in descending order.",
+      "type": "string"
     },
     "FeatureFlagKey": {
       "name": "featureFlagKey",
