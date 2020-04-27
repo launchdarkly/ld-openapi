@@ -46,6 +46,8 @@
   $ref: ./paths/roles.yaml#/CustomRole
 /members:
   $ref: ./paths/members.yaml#/Members
+/members/me:
+  $ref: ./paths/members.yaml#/Me
 /members/{memberId}:
   $ref: ./paths/members.yaml#/Member
 /destinations:
