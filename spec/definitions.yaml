@@ -294,6 +294,8 @@ WeightedVariation:
 Clause:
   type: object
   properties:
+    _id:
+      type: string
     attribute:
       type: string
       example: "groups"
