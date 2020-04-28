@@ -171,3 +171,43 @@ FlagStatusAcrossEnvironments:
         $ref: '#/responses/BetaApi403'
     tags:
       - Feature flags
+UserTargetingExpirationForFlag:
+  get:
+    summary: Get expiring user targets for feature flag
+    operationId: getExpiringUserTargets
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        description: User targets of the requested feature flag.
+        schema:
+          $ref: '#/definitions/UserTargetingExpirationForFlags'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - Feature flags
+  patch:
+    summary: Update, add, or delete expiring user targets on feature flag
+    operationId: patchExpiringUserTargets
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/PatchWithComment'
+    responses:
+      '200':
+        description: User targeting expirations on feature flag response.
+        schema:
+          $ref: '#/definitions/UserTargetingExpirationForFlags'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Feature flags

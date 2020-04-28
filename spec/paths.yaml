@@ -18,6 +18,8 @@
   $ref: ./paths/flags.yaml#/FlagStatus
 /flag-status/{projectKey}/{featureFlagKey}:
   $ref: ./paths/flags.yaml#/FlagStatusAcrossEnvironments
+/flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}:
+  $ref: ./paths/flags.yaml#/UserTargetingExpirationForFlag
 /segments/{projectKey}/{environmentKey}:
   $ref: ./paths/segments.yaml#/UserSegments
 /segments/{projectKey}/{environmentKey}/{userSegmentKey}:
@@ -32,6 +34,8 @@
   $ref: ./paths/users.yaml#/UserFlagSettings
 /users/{projectKey}/{environmentKey}/{userKey}/flags/{featureFlagKey}:
   $ref: ./paths/users.yaml#/UserFlagSetting
+/users/{projectKey}/{userKey}/expiring-user-targets/{environmentKey}:
+  $ref: ./paths/users.yaml#/UserTargetingExpirationOnFlagsForUser
 /auditlog:
   $ref: ./paths/audit.yaml#/AuditLogEntries
 /auditlog/{resourceId}:

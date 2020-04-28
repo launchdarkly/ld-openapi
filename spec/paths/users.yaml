@@ -131,4 +131,43 @@ UserFlagSetting:
         $ref: '#/responses/Standard404'
     tags:
       - User settings
-      
+UserTargetingExpirationOnFlagsForUser:
+  get:
+    summary: Get expiring dates on flags for user
+    operationId: getExpiringUserTargetsForUser
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+    responses:
+      '200':
+        description: User targets of the requested feature flag.
+        schema:
+          $ref: '#/definitions/UserTargetingExpirationOnFlagsForUser'
+      '401':
+        $ref: '#/responses/Standard401'
+    tags:
+      - User settings
+  patch:
+    summary: Update, add, or delete expiring user targets for a single user on all flags
+    operationId: patchExpiringUserTargetsForFlags
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserKey'
+      - $ref: '#/parameters/PatchWithComment'
+    responses:
+      '200':
+        description: User Targeting expiration for single user on all flags response.
+        schema:
+          $ref: '#/definitions/UserTargetingExpirationOnFlagsForUser'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - User settings
