@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 3.0.0
+  version: 3.1.0
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -357,6 +357,46 @@ paths:
           $ref: '#/responses/BetaApi403'
       tags:
         - Feature flags
+  '/flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}':
+    get:
+      summary: Get expiring user targets for feature flag
+      operationId: getExpiringUserTargets
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/FeatureFlagKey'
+      responses:
+        '200':
+          description: User targets of the requested feature flag.
+          schema:
+            $ref: '#/definitions/UserTargetingExpirationForFlags'
+        '401':
+          $ref: '#/responses/Standard401'
+      tags:
+        - Feature flags
+    patch:
+      summary: 'Update, add, or delete expiring user targets on feature flag'
+      operationId: patchExpiringUserTargets
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/FeatureFlagKey'
+        - $ref: '#/parameters/PatchWithComment'
+      responses:
+        '200':
+          description: User targeting expirations on feature flag response.
+          schema:
+            $ref: '#/definitions/UserTargetingExpirationForFlags'
+        '400':
+          $ref: '#/responses/Standard400'
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+        '409':
+          $ref: '#/responses/Standard409'
+      tags:
+        - Feature flags
   '/segments/{projectKey}/{environmentKey}':
     get:
       summary: Get a list of all user segments in the given project.
@@ -587,6 +627,48 @@ paths:
           $ref: '#/responses/Standard401'
         '404':
           $ref: '#/responses/Standard404'
+      tags:
+        - User settings
+  '/users/{projectKey}/{userKey}/expiring-user-targets/{environmentKey}':
+    get:
+      summary: Get expiring dates on flags for user
+      operationId: getExpiringUserTargetsForUser
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/UserKey'
+      responses:
+        '200':
+          description: User targets of the requested feature flag.
+          schema:
+            $ref: '#/definitions/UserTargetingExpirationOnFlagsForUser'
+        '401':
+          $ref: '#/responses/Standard401'
+      tags:
+        - User settings
+    patch:
+      summary: >-
+        Update, add, or delete expiring user targets for a single user on all
+        flags
+      operationId: patchExpiringUserTargetsForFlags
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/UserKey'
+        - $ref: '#/parameters/PatchWithComment'
+      responses:
+        '200':
+          description: User Targeting expiration for single user on all flags response.
+          schema:
+            $ref: '#/definitions/UserTargetingExpirationOnFlagsForUser'
+        '400':
+          $ref: '#/responses/Standard400'
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+        '409':
+          $ref: '#/responses/Standard409'
       tags:
         - User settings
   /auditlog:
@@ -1445,6 +1527,8 @@ definitions:
   Clause:
     type: object
     properties:
+      _id:
+        type: string
       attribute:
         type: string
         example: groups
@@ -1579,6 +1663,57 @@ definitions:
         type: object
         additionalProperties:
           $ref: '#/definitions/FeatureFlagStatusForQueriedEnvironment'
+  UserTargetingExpirationForFlags:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/UserTargetingExpirationForFlag'
+  UserTargetingExpirationOnFlagsForUser:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/UserTargetingExpirationForFlag'
+  UserTargetingExpirationForFlag:
+    type: object
+    properties:
+      expirationDate:
+        type: integer
+        description: Date scheduled for expiration
+      variationId:
+        type: string
+        description: the ID of the variation that the user is targeted on a flag
+      userKey:
+        type: string
+        description: Unique identifier for the user
+      _id:
+        type: string
+      _resourceId:
+        $ref: '#/definitions/UserTargetingExpirationResourceIdForFlag'
+      _links:
+        $ref: '#/definitions/Links'
+      _version:
+        type: integer
+  UserTargetingExpirationResourceIdForFlag:
+    type: object
+    properties:
+      kind:
+        type: string
+      projectKey:
+        type: string
+      environmentKey:
+        type: string
+      flagKey:
+        type: string
+      key:
+        type: string
   UserSegment:
     type: object
     required:
