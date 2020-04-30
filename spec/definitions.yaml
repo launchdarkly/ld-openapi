@@ -294,6 +294,8 @@ WeightedVariation:
 Clause:
   type: object
   properties:
+    _id:
+      type: string
     attribute:
       type: string
       example: "groups"
@@ -406,6 +408,57 @@ FeatureFlagStatusAcrossEnvironments:
       type: object
       additionalProperties:
         $ref: "#/definitions/FeatureFlagStatusForQueriedEnvironment"
+UserTargetingExpirationForFlags:
+  type: object
+  properties:
+    _links:
+      $ref: "#/definitions/Links"
+    items:
+      type: array
+      items:
+        $ref: "#/definitions/UserTargetingExpirationForFlag"
+UserTargetingExpirationOnFlagsForUser:
+  type: object
+  properties:
+    _links:
+      $ref: "#/definitions/Links"
+    items:
+      type: array
+      items:
+        $ref: "#/definitions/UserTargetingExpirationForFlag"
+UserTargetingExpirationForFlag:
+  type: object
+  properties:
+    expirationDate:
+      type: integer
+      description: Date scheduled for expiration
+    variationId:
+      type: string
+      description: the ID of the variation that the user is targeted on a flag
+    userKey:
+      type: string
+      description: Unique identifier for the user
+    _id:
+      type: string
+    _resourceId:
+      $ref: '#/definitions/UserTargetingExpirationResourceIdForFlag'
+    _links:
+      $ref: '#/definitions/Links'
+    _version:
+      type: integer
+UserTargetingExpirationResourceIdForFlag:
+  type: object
+  properties:
+    kind:
+      type: string
+    projectKey:
+      type: string
+    environmentKey:
+      type: string
+    flagKey:
+      type: string
+    key:
+      type: string
 UserSegment:
   type: object
   required:
