@@ -482,6 +482,15 @@ PatchOnly:
     type: array
     items:
       $ref: "#/definitions/PatchOperation"
+SemanticPatchWithComment:
+  name: SemanticPatchWithComment
+  in: body
+  required: true
+  description: Requires a Semantic Patch representation of the desired changes to the resource. 'https://apidocs.launchdarkly.com/reference#updates-via-semantic-patches'. The addition of comments is also supported.
+  schema:
+    type: object
+    items:
+      $ref: "#/definitions/SemanticPatchOperation"
 StreamSource:
   name: source
   in: path

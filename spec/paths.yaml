@@ -24,6 +24,8 @@
   $ref: ./paths/segments.yaml#/UserSegments
 /segments/{projectKey}/{environmentKey}/{userSegmentKey}:
   $ref: ./paths/segments.yaml#/UserSegment
+/segments/{projectKey}/{userSegmentKey}/expiring-user-targets/{environmentKey}:
+  $ref: ./paths/segments.yaml#/UserTargetingExpirationForSegment
 /users/{projectKey}/{environmentKey}:
   $ref: ./paths/users.yaml#/Users
 /user-search/{projectKey}/{environmentKey}:

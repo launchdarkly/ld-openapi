@@ -87,3 +87,45 @@ UserSegment:
         $ref: '#/responses/Standard404'
     tags:
       - User segments
+UserTargetingExpirationForSegment:
+  get:
+    summary:  Get expiring user targets for user segment
+    operationId: getExpiringUserTargetsOnSegment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserSegmentKey'
+    responses:
+      '200':
+        description: User targeting expirations on user segment response.
+        schema:
+          $ref: '#/definitions/UserTargetingExpirationForSegment'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - User segments
+  patch:
+    summary: Update, add, or delete expiring user targets on user segment
+    operationId: patchExpiringUserTargetsOnSegment
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/UserSegmentKey'
+      - $ref: '#/parameters/SemanticPatchWithComment'
+    responses:
+      '200':
+        description: User targeting expirations on user segment response.
+        schema:
+          $ref: '#/definitions/UserTargetingExpirationForSegment'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - User segments
