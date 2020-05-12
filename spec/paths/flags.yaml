@@ -195,7 +195,7 @@ UserTargetingExpirationForFlag:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/PatchWithComment'
+      - $ref: '#/parameters/SemanticPatchWithComment'
     responses:
       '200':
         description: User targeting expirations on feature flag response.

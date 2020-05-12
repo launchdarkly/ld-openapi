@@ -446,6 +446,26 @@ UserTargetingExpirationForFlag:
       $ref: '#/definitions/Links'
     _version:
       type: integer
+UserTargetingExpirationForSegment:
+  type: object
+  properties:
+    expirationDate:
+      type: integer
+      description: Date scheduled for expiration
+    targetType:
+      type: string
+      description: either the included or excluded variation that the user is targeted on a segment
+    userKey:
+      type: string
+      description: Unique identifier for the user
+    _id:
+      type: string
+    _resourceId:
+      $ref: '#/definitions/UserTargetingExpirationResourceIdForFlag'
+    _links:
+      $ref: '#/definitions/Links'
+    _version:
+      type: integer
 UserTargetingExpirationResourceIdForFlag:
   type: object
   properties:
@@ -1021,6 +1041,22 @@ PatchOperation:
     - op
     - path
     - value
+SemanticPatchOperation:
+  type: object
+  properties:
+    comment:
+      type: string
+      example: "This is a comment string"
+    instructions:
+      type: array
+      items:
+        properties:
+          kind:
+            type: string
+            example: 'removeUserTargets'
+            description: The name of the modification you would like to perform on a resource.
+  required:
+    - instructions
 CustomProperty:
   type: object
   description: A name and value describing a custom property.

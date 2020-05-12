@@ -155,7 +155,7 @@ UserTargetingExpirationOnFlagsForUser:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/UserKey'
-      - $ref: '#/parameters/PatchWithComment'
+      - $ref: '#/parameters/SemanticPatchWithComment'
     responses:
       '200':
         description: User Targeting expiration for single user on all flags response.
