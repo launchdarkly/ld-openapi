@@ -249,11 +249,11 @@ LimitQuery:
   description: The number of objects to return. Defaults to -1, which returns everything.
   type: number
 OffsetQuery:
-  name: number
+  name: offset
   in: query
   required: false
   description: Where to start in the list. This is for use with pagination. For example, an offset of 10 would skip the first 10 items and then return the next limit items.
-  type: boolean
+  type: number
 FilterQuery:
   name: filter
   in: query
