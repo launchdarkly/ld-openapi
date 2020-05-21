@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "3.1.0"
+    "version": "3.2.0"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -639,7 +639,7 @@
             "$ref": "#/parameters/FeatureFlagKey"
           },
           {
-            "$ref": "#/parameters/PatchWithComment"
+            "$ref": "#/parameters/SemanticPatchWithComment"
           }
         ],
         "responses": {
@@ -821,6 +821,81 @@
           },
           "404": {
             "$ref": "#/responses/Standard404"
+          }
+        },
+        "tags": [
+          "User segments"
+        ]
+      }
+    },
+    "/segments/{projectKey}/{userSegmentKey}/expiring-user-targets/{environmentKey}": {
+      "get": {
+        "summary": "Get expiring user targets for user segment",
+        "operationId": "getExpiringUserTargetsOnSegment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/UserSegmentKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User targeting expirations on user segment response.",
+            "schema": {
+              "$ref": "#/definitions/UserTargetingExpirationForSegment"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "404": {
+            "$ref": "#/responses/Standard404"
+          }
+        },
+        "tags": [
+          "User segments"
+        ]
+      },
+      "patch": {
+        "summary": "Update, add, or delete expiring user targets on user segment",
+        "operationId": "patchExpiringUserTargetsOnSegment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ProjectKey"
+          },
+          {
+            "$ref": "#/parameters/EnvironmentKey"
+          },
+          {
+            "$ref": "#/parameters/UserSegmentKey"
+          },
+          {
+            "$ref": "#/parameters/SemanticPatchWithComment"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User targeting expirations on user segment response.",
+            "schema": {
+              "$ref": "#/definitions/UserTargetingExpirationForSegment"
+            }
+          },
+          "400": {
+            "$ref": "#/responses/Standard400"
+          },
+          "401": {
+            "$ref": "#/responses/Standard401"
+          },
+          "404": {
+            "$ref": "#/responses/Standard404"
+          },
+          "409": {
+            "$ref": "#/responses/Standard409"
           }
         },
         "tags": [
@@ -1121,7 +1196,7 @@
             "$ref": "#/parameters/UserKey"
           },
           {
-            "$ref": "#/parameters/PatchWithComment"
+            "$ref": "#/parameters/SemanticPatchWithComment"
           }
         ],
         "responses": {
@@ -2687,6 +2762,35 @@
         }
       }
     },
+    "UserTargetingExpirationForSegment": {
+      "type": "object",
+      "properties": {
+        "expirationDate": {
+          "type": "integer",
+          "description": "Date scheduled for expiration"
+        },
+        "targetType": {
+          "type": "string",
+          "description": "either the included or excluded variation that the user is targeted on a segment"
+        },
+        "userKey": {
+          "type": "string",
+          "description": "Unique identifier for the user"
+        },
+        "_id": {
+          "type": "string"
+        },
+        "_resourceId": {
+          "$ref": "#/definitions/UserTargetingExpirationResourceIdForFlag"
+        },
+        "_links": {
+          "$ref": "#/definitions/Links"
+        },
+        "_version": {
+          "type": "integer"
+        }
+      }
+    },
     "UserTargetingExpirationResourceIdForFlag": {
       "type": "object",
       "properties": {
@@ -3503,6 +3607,30 @@
         "value"
       ]
     },
+    "SemanticPatchOperation": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string",
+          "example": "This is a comment string"
+        },
+        "instructions": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "example": "removeUserTargets",
+                "description": "The name of the modification you would like to perform on a resource."
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "instructions"
+      ]
+    },
     "CustomProperty": {
       "type": "object",
       "description": "A name and value describing a custom property.",
@@ -4306,11 +4434,11 @@
       "type": "number"
     },
     "OffsetQuery": {
-      "name": "number",
+      "name": "offset",
       "in": "query",
       "required": false,
       "description": "Where to start in the list. This is for use with pagination. For example, an offset of 10 would skip the first 10 items and then return the next limit items.",
-      "type": "boolean"
+      "type": "number"
     },
     "FilterQuery": {
       "name": "filter",
@@ -4593,6 +4721,18 @@
         "type": "array",
         "items": {
           "$ref": "#/definitions/PatchOperation"
+        }
+      }
+    },
+    "SemanticPatchWithComment": {
+      "name": "SemanticPatchWithComment",
+      "in": "body",
+      "required": true,
+      "description": "Requires a Semantic Patch representation of the desired changes to the resource. 'https://apidocs.launchdarkly.com/reference#updates-via-semantic-patches'. The addition of comments is also supported.",
+      "schema": {
+        "type": "object",
+        "items": {
+          "$ref": "#/definitions/SemanticPatchOperation"
         }
       }
     },
