@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Remove broken libc6-dev (ch77386)
+sudo apt-get purge libc6-dev
+sudo apt-get autoremove
+sudo apt-get clean
+sudo apt-get install -f
+
 # Install Python tools and AWS CLI
 sudo apt update
 sudo apt install awscli python3-pip python3-setuptools
