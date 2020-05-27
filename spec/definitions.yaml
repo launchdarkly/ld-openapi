@@ -314,6 +314,9 @@ Variation:
   required:
     - value
   properties:
+    _id:
+      type: string
+      example: "24b32dd3-0ba6-46ee-86af-230eebf3c7cb"
     name:
       type: string
       example: "True"
@@ -441,9 +444,9 @@ UserTargetingExpirationForFlag:
     _id:
       type: string
     _resourceId:
-      $ref: '#/definitions/UserTargetingExpirationResourceIdForFlag'
+      $ref: "#/definitions/UserTargetingExpirationResourceIdForFlag"
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _version:
       type: integer
 UserTargetingExpirationForSegment:
@@ -461,9 +464,9 @@ UserTargetingExpirationForSegment:
     _id:
       type: string
     _resourceId:
-      $ref: '#/definitions/UserTargetingExpirationResourceIdForFlag'
+      $ref: "#/definitions/UserTargetingExpirationResourceIdForFlag"
     _links:
-      $ref: '#/definitions/Links'
+      $ref: "#/definitions/Links"
     _version:
       type: integer
 UserTargetingExpirationResourceIdForFlag:
@@ -1053,7 +1056,7 @@ SemanticPatchOperation:
         properties:
           kind:
             type: string
-            example: 'removeUserTargets'
+            example: "removeUserTargets"
             description: The name of the modification you would like to perform on a resource.
   required:
     - instructions
