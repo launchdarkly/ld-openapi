@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "3.2.0"
+    "version": "3.3.0"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -2585,6 +2585,10 @@
         "value"
       ],
       "properties": {
+        "_id": {
+          "type": "string",
+          "example": "24b32dd3-0ba6-46ee-86af-230eebf3c7cb"
+        },
         "name": {
           "type": "string",
           "example": "True"
