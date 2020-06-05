@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "3.3.0"
+    "version": "3.3.1"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -2741,8 +2741,10 @@
       "type": "object",
       "properties": {
         "expirationDate": {
-          "type": "integer",
-          "description": "Date scheduled for expiration"
+          "type": "number",
+          "format": "int64",
+          "description": "Unix epoch time in milliseconds specifying the expiration date",
+          "example": 1735689600000
         },
         "variationId": {
           "type": "string",
@@ -2770,8 +2772,10 @@
       "type": "object",
       "properties": {
         "expirationDate": {
-          "type": "integer",
-          "description": "Date scheduled for expiration"
+          "type": "number",
+          "format": "int64",
+          "description": "Unix epoch time in milliseconds specifying the expiration date",
+          "example": 1735689600000
         },
         "targetType": {
           "type": "string",
