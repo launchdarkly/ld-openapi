@@ -84,7 +84,7 @@ FeatureFlag:
       description: Whether the feature flag is a boolean flag or multivariate.
       example: boolean
     creationDate:
-      type: number
+      type: integer
       format: int64
       description: A unix epoch time in milliseconds specifying the creation time of this flag.
       example: 1443652232590
@@ -139,7 +139,7 @@ FeatureFlag:
       additionalProperties:
         $ref: "#/definitions/FeatureFlagConfig"
     archivedDate:
-      type: number
+      type: integer
       format: int64
       description: A unix epoch time in milliseconds specifying the archived time of this flag.
       example: 1443652232590
@@ -433,7 +433,7 @@ UserTargetingExpirationForFlag:
   type: object
   properties:
     expirationDate:
-      type: number
+      type: integer
       format: int64
       description: Unix epoch time in milliseconds specifying the expiration date
       example: 1735689600000
@@ -455,7 +455,7 @@ UserTargetingExpirationForSegment:
   type: object
   properties:
     expirationDate:
-      type: number
+      type: integer
       format: int64
       description: Unix epoch time in milliseconds specifying the expiration date
       example: 1735689600000
@@ -512,7 +512,7 @@ UserSegment:
       example: ["dev", "ops"]
       description: An array of tags for this user segment.
     creationDate:
-      type: number
+      type: integer
       format: int64
       description: A unix epoch time in milliseconds specifying the creation time of this flag.
       example: 1443652232590
@@ -805,7 +805,6 @@ UserRecord:
   properties:
     lastPing:
       type: string
-      format: int64
       example: "2015-03-03T02:37:22.492Z"
     environmentId:
       type: string
@@ -1163,12 +1162,12 @@ StreamUsageSeries:
   type: object
   properties:
     "0":
-      type: number
+      type: integer
       format: int64
       description: A key corresponding to a time series data point.
       example: 0
     "time":
-      type: number
+      type: integer
       format: int64
       description: A unix epoch time in milliseconds specifying the creation time of this flag.
       example: 1551740400000
