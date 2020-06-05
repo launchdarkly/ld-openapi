@@ -433,8 +433,10 @@ UserTargetingExpirationForFlag:
   type: object
   properties:
     expirationDate:
-      type: integer
-      description: Date scheduled for expiration
+      type: number
+      format: int64
+      description: Unix epoch time in milliseconds specifying the expiration date
+      example: 1735689600000
     variationId:
       type: string
       description: the ID of the variation that the user is targeted on a flag
@@ -453,8 +455,10 @@ UserTargetingExpirationForSegment:
   type: object
   properties:
     expirationDate:
-      type: integer
-      description: Date scheduled for expiration
+      type: number
+      format: int64
+      description: Unix epoch time in milliseconds specifying the expiration date
+      example: 1735689600000
     targetType:
       type: string
       description: either the included or excluded variation that the user is targeted on a segment
