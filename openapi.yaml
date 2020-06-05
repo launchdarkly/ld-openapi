@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 3.3.1
+  version: 3.3.2
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -1345,7 +1345,7 @@ definitions:
         description: Whether the feature flag is a boolean flag or multivariate.
         example: boolean
       creationDate:
-        type: number
+        type: integer
         format: int64
         description: >-
           A unix epoch time in milliseconds specifying the creation time of this
@@ -1410,7 +1410,7 @@ definitions:
         additionalProperties:
           $ref: '#/definitions/FeatureFlagConfig'
       archivedDate:
-        type: number
+        type: integer
         format: int64
         description: >-
           A unix epoch time in milliseconds specifying the archived time of this
@@ -1730,7 +1730,7 @@ definitions:
     type: object
     properties:
       expirationDate:
-        type: number
+        type: integer
         format: int64
         description: Unix epoch time in milliseconds specifying the expiration date
         example: 1735689600000
@@ -1752,7 +1752,7 @@ definitions:
     type: object
     properties:
       expirationDate:
-        type: number
+        type: integer
         format: int64
         description: Unix epoch time in milliseconds specifying the expiration date
         example: 1735689600000
@@ -1813,7 +1813,7 @@ definitions:
           - ops
         description: An array of tags for this user segment.
       creationDate:
-        type: number
+        type: integer
         format: int64
         description: >-
           A unix epoch time in milliseconds specifying the creation time of this
@@ -2132,7 +2132,6 @@ definitions:
     properties:
       lastPing:
         type: string
-        format: int64
         example: '2015-03-03T02:37:22.492Z'
       environmentId:
         type: string
@@ -2512,12 +2511,12 @@ definitions:
     type: object
     properties:
       '0':
-        type: number
+        type: integer
         format: int64
         description: A key corresponding to a time series data point.
         example: 0
       time:
-        type: number
+        type: integer
         format: int64
         description: >-
           A unix epoch time in milliseconds specifying the creation time of this
@@ -3119,7 +3118,7 @@ parameters:
     required: false
     description: >-
       A timestamp filter, expressed as a Unix epoch time in milliseconds. All
-      entries returned will have occured after this timestamp.
+      entries returned will have occurred after this timestamp.
     format: int64
     type: integer
   PatchRequest:
@@ -3160,8 +3159,8 @@ parameters:
     required: false
     description: >-
       Text to search for. You can search for the full or partial name of the
-      resource involved or fullpartial email address of the member who made the
-      change.
+      resource involved or full or partial email address of the member who made
+      the change.
     type: string
   AuditLimit:
     name: limit
