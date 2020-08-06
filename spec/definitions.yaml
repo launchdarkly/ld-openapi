@@ -1040,9 +1040,10 @@ PatchOperation:
       example: replace
     path:
       type: string
-      example: "/on"
+      example: "/name"
     value:
       type: object
+      example: "My resource name"
   required:
     - op
     - path
