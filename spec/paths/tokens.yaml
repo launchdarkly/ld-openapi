@@ -11,6 +11,8 @@ Tokens:
           $ref: "#/definitions/Tokens"
       "401":
         $ref: "#/responses/Standard401"
+    tags:
+      - Access tokens
   post:
     summary: Create a new token.
     operationId: postToken
@@ -91,3 +93,5 @@ Reset:
         $ref: "#/responses/Standard400"
       "401":
         $ref: "#/responses/Standard401"
+    tags:
+      - Access tokens
