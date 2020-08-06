@@ -82,5 +82,11 @@
   $ref: ./paths/cmetrics.yaml#/Event
 /usage/evaluations/{envId}/{flagKey}:
   $ref: ./paths/cmetrics.yaml#/Evaluations
+/tokens:
+  $ref: ./paths/tokens.yaml#/Tokens
+/tokens/{tokenId}:
+  $ref: ./paths/tokens.yaml#/Token
+/tokens/{tokenId}/reset:
+  $ref: ./paths/tokens.yaml#/Reset
 /:
   $ref: ./paths/root.yaml#/Root

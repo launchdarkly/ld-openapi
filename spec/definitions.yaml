@@ -1333,6 +1333,15 @@ FlagListItem:
       $ref: "#/definitions/Links"
     _site:
       $ref: "#/definitions/Site"
+Tokens:
+  type: object
+  properties:
+    _links:
+      $ref: "#/definitions/Links"
+    items:
+      type: array
+      items:
+        $ref: "#/definitions/Token"
 Token:
   type: object
   properties:

@@ -4,6 +4,13 @@ Tokens:
     operationId: getTokens
     parameters:
       - $ref: "#/parameters/TokenShowAllQuery"
+    responses:
+      "200":
+        description: Tokens response.
+        schema:
+          $ref: "#/definitions/Tokens"
+      "401":
+        $ref: "#/responses/Standard401"
   post:
     summary: Create a new token.
     operationId: postToken
@@ -75,6 +82,7 @@ Reset:
     summary: Reset an access token's secret key with an optional expiry time for the old key.
     operationId: resetToken
     parameters:
+      - $ref: "#/parameters/TokenId"
       - $ref: "#/parameters/TokenExpiry"
     responses:
       "200":
