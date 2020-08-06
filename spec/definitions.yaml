@@ -1333,3 +1333,58 @@ FlagListItem:
       $ref: "#/definitions/Links"
     _site:
       $ref: "#/definitions/Site"
+Token:
+  type: object
+  properties:
+    _links:
+      $ref: "#/definitions/Links"
+    _id:
+      $ref: "#/definitions/Id"
+    ownerId:
+      $ref: "#/definitions/Id"
+    memberId:
+      $ref: "#/definitions/Id"
+    _member:
+      $ref: "#/definitions/Member"
+    creationDate:
+      type: integer
+      format: int64
+      description: A unix epoch time in milliseconds specifying the creation time of this access token.
+      example: 1443652232590
+    lastModified:
+      type: integer
+      format: int64
+      example: 1469326565348
+      description: A unix epoch time in milliseconds specifying the last time this access token was modified.
+    lastUsed:
+      type: integer
+      format: int64
+      example: 1469326565348
+      description: A unix epoch time in milliseconds specifying the last time this access token was used authorize access to the LaunchDarkly REST API.
+    token:
+      type: string
+      example: "3243"
+      description: The last 4 digits of the unique secret key for this access token. If creating or resetting the token, this will be the full token secret.
+    name:
+      type: string
+      description: A human-friendly name for the access token
+      example: "My access token"
+    role:
+      type: string
+      description: The name of a built-in role for the token
+      example: "writer"
+    customRoleIds:
+      type: array
+      items:
+        type: string
+      description: A list of custom role IDs to use as access limits for the access token
+    inlineRole:
+      type: array
+      items:
+        $ref: "#/definitions/Statement"
+    serviceToken:
+      type: boolean
+      description: "Whether the token will be a service token https://docs.launchdarkly.com/home/account-security/api-access-tokens#service-tokens"
+    defaultApiVersion:
+      type: integer
+      description: The default API version for this token
