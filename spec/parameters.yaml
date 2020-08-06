@@ -551,10 +551,6 @@ TokensPostRequest:
       defaultApiVersion:
         type: integer
         description: The default API version for this token
-    required:
-      - name
-      - key
-      - variations
 TokenId:
   name: tokenId
   in: path
@@ -573,4 +569,4 @@ TokenExpiry:
   required: false
   type: integer
   format: int64
-  expiration: An expiration time for the old token key, expressed as a Unix epoch time in milliseconds. By default, the token will expire immediately.
+  description: An expiration time for the old token key, expressed as a Unix epoch time in milliseconds. By default, the token will expire immediately.
