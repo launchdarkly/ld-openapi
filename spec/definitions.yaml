@@ -1370,7 +1370,7 @@ Token:
       type: integer
       format: int64
       example: 1469326565348
-      description: A unix epoch time in milliseconds specifying the last time this access token was used authorize access to the LaunchDarkly REST API.
+      description: A unix epoch time in milliseconds specifying the last time this access token was used to access to the LaunchDarkly REST API.
     token:
       type: string
       example: "3243"
