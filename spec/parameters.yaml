@@ -530,6 +530,7 @@ TokensPostRequest:
       name:
         type: string
         description: A human-friendly name for the access token
+        required: true
         example: "My access token"
       role:
         type: string
@@ -544,7 +545,7 @@ TokensPostRequest:
       inlineRole:
         type: array
         items:
-          $ref: "#/definitions/Statement"
+          $ref: "#/definitions/Policy"
       serviceToken:
         type: boolean
         description: "Whether the token will be a service token https://docs.launchdarkly.com/home/account-security/api-access-tokens#service-tokens"
