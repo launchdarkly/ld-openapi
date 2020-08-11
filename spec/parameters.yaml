@@ -530,7 +530,6 @@ TokensPostRequest:
       name:
         type: string
         description: A human-friendly name for the access token
-        required: true
         example: "My access token"
       role:
         type: string
@@ -552,6 +551,8 @@ TokensPostRequest:
       defaultApiVersion:
         type: integer
         description: The default API version for this token
+    required:
+      - name
 TokenId:
   name: tokenId
   in: path
