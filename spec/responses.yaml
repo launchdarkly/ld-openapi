@@ -54,3 +54,7 @@ Destination2xx:
   description: Destination response.
   schema:
     $ref: "#/definitions/Destination"
+Token2xx:
+  description: Token response.
+  schema:
+    $ref: "#/definitions/Token"

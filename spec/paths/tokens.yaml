@@ -1,0 +1,97 @@
+Tokens:
+  get:
+    summary: Returns a list of tokens in the account.
+    operationId: getTokens
+    parameters:
+      - $ref: "#/parameters/TokenShowAllQuery"
+    responses:
+      "200":
+        description: Tokens response.
+        schema:
+          $ref: "#/definitions/Tokens"
+      "401":
+        $ref: "#/responses/Standard401"
+    tags:
+      - Access tokens
+  post:
+    summary: Create a new token.
+    operationId: postToken
+    parameters:
+      - $ref: "#/parameters/TokensPostRequest"
+    responses:
+      "201":
+        description: Token response.
+        schema:
+          $ref: "#/definitions/Token"
+      "400":
+        $ref: "#/responses/Standard400"
+      "401":
+        $ref: "#/responses/Standard401"
+      "409":
+        $ref: "#/responses/Standard409"
+    tags:
+      - Access tokens
+Token:
+  get:
+    summary: Get a single access token by ID.
+    operationId: getToken
+    parameters:
+      - $ref: "#/parameters/TokenId"
+    responses:
+      "200":
+        $ref: "#/responses/Token2xx"
+      "400":
+        $ref: "#/responses/Standard400"
+      "401":
+        $ref: "#/responses/Standard401"
+    tags:
+      - Access tokens
+  patch:
+    summary: Modify an access tokenby ID.
+    operationId: patchToken
+    parameters:
+      - $ref: "#/parameters/TokenId"
+      - $ref: "#/parameters/PatchRequest"
+    responses:
+      "200":
+        $ref: "#/responses/Token2xx"
+      "400":
+        $ref: "#/responses/Standard400"
+      "401":
+        $ref: "#/responses/Standard401"
+      "404":
+        $ref: "#/responses/Standard404"
+      "409":
+        $ref: "#/responses/Standard409"
+    tags:
+      - Access tokens
+  delete:
+    summary: Delete an access token by ID.
+    operationId: deleteToken
+    parameters:
+      - $ref: "#/parameters/TokenId"
+    responses:
+      "204":
+        $ref: "#/responses/Standard204"
+      "401":
+        $ref: "#/responses/Standard401"
+      "404":
+        $ref: "#/responses/Standard404"
+    tags:
+      - Access tokens
+Reset:
+  post:
+    summary: Reset an access token's secret key with an optional expiry time for the old key.
+    operationId: resetToken
+    parameters:
+      - $ref: "#/parameters/TokenId"
+      - $ref: "#/parameters/TokenExpiry"
+    responses:
+      "200":
+        $ref: "#/responses/Token2xx"
+      "400":
+        $ref: "#/responses/Standard400"
+      "401":
+        $ref: "#/responses/Standard401"
+    tags:
+      - Access tokens
