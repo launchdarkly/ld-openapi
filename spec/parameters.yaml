@@ -108,6 +108,8 @@ FeatureFlagPostRequest:
       includeInSnippet:
         type: boolean
         description: Whether or not this flag should be made available to the client-side JavaScript SDK.
+      clientSideAvailability:
+        $ref: "#/definitions/ClientSideAvailability"
       defaults:
         $ref: "#/definitions/Defaults"
     required:
@@ -199,6 +201,8 @@ ProjectPostRequest:
         items:
           $ref: "#/definitions/EnvironmentPost"
         minLength: 1
+      defaultClientSideAvailability:
+        $ref: "#/definitions/ClientSideAvailability"
     required:
       - name
       - key
