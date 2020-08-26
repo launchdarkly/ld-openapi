@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "3.4.0"
+    "version": "3.5.0"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -2499,6 +2499,9 @@
           "description": "Whether or not this flag is archived.",
           "example": false
         },
+        "clientSideAvailability": {
+          "$ref": "#/definitions/ClientSideAvailability"
+        },
         "defaults": {
           "$ref": "#/definitions/Defaults"
         }
@@ -2790,6 +2793,19 @@
         },
         "variation": {
           "type": "integer"
+        }
+      }
+    },
+    "ClientSideAvailability": {
+      "type": "object",
+      "properties": {
+        "usingEnvironmentId": {
+          "type": "boolean",
+          "description": "When set to true, this flag will be available to SDKs using the client-side id."
+        },
+        "usingMobileKey": {
+          "type": "boolean",
+          "description": "When set to true, this flag will be available to SDKS using a mobile key."
         }
       }
     },
@@ -3121,6 +3137,9 @@
             "type": "string"
           },
           "description": "An array of tags for this project."
+        },
+        "defaultClientSideAvailability": {
+          "$ref": "#/definitions/ClientSideAvailability"
         }
       }
     },
@@ -4504,6 +4523,9 @@
             "type": "boolean",
             "description": "Whether or not this flag should be made available to the client-side JavaScript SDK."
           },
+          "clientSideAvailability": {
+            "$ref": "#/definitions/ClientSideAvailability"
+          },
           "defaults": {
             "$ref": "#/definitions/Defaults"
           }
@@ -4634,6 +4656,9 @@
               "$ref": "#/definitions/EnvironmentPost"
             },
             "minLength": 1
+          },
+          "defaultClientSideAvailability": {
+            "$ref": "#/definitions/ClientSideAvailability"
           }
         },
         "required": [
