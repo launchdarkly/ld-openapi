@@ -147,6 +147,8 @@ FeatureFlag:
       type: boolean
       description: Whether or not this flag is archived.
       example: false
+    clientSideAvailability:
+      $ref: "#/definitions/ClientSideAvailability"
     defaults:
       $ref: "#/definitions/Defaults"
 FeatureFlags:
@@ -345,6 +347,15 @@ Prerequisite:
       type: string
     variation:
       type: integer
+ClientSideAvailability:
+  type: object
+  properties:
+    usingEnvironmentId:
+      type: boolean
+      description: When set to true, this flag will be available to SDKs using the client-side id.
+    usingMobileKey:
+      type: boolean
+      description: When set to true, this flag will be available to SDKS using a mobile key.
 FeatureFlagStatus:
   type: object
   properties:
@@ -585,6 +596,8 @@ Project:
       items:
         type: string
       description: An array of tags for this project.
+    defaultClientSideAvailability:
+      $ref: "#/definitions/ClientSideAvailability"
 Projects:
   type: object
   properties:
