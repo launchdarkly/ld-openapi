@@ -116,6 +116,19 @@ FeatureFlagPostRequest:
       - name
       - key
       - variations
+ScheduledFeatureFlagChangesPostRequest:
+  name: scheduledFeatureFlagChangesBody
+  in: body
+  required: true
+  description: Create scheduled changes on a feature flag.
+  schema:
+    type: object
+    properties:
+      executionDate:
+        type: integer
+        description: "A unix epoch time in milliseconds specifying the date the scheduled changes will be applied"
+      instructions:
+        $ref: "#/definitions/SemanticPatchInstruction"
 DestinationPostRequest:
   name: destinationBody
   in: body
