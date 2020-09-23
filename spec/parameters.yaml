@@ -178,6 +178,10 @@ UserSegmentPostRequest:
         type: string
         description: A description for the user segment.
         example: "Users in this segment will have access to beta features."
+      unbounded:
+        type: boolean
+        example: false
+        description: Controls whether this segment can support unlimited numbers of users. Requires the beta API and additional setup. Include/exclude lists in this payload are not used in unbounded segments.
       tags:
         type: array
         items:
@@ -187,6 +191,46 @@ UserSegmentPostRequest:
     required:
       - name
       - key
+UnboundedSegmentTargetsPostRequest:
+  name: unboundedSegmentTargetsBody
+  in: body
+  required: true
+  description: Add or remove user targets to the included or excluded lists on an unbounded segment
+  schema:
+    type: object
+    properties:
+      included:
+        type: object
+        description: Changes to make to the list of included user targets
+        properties:
+          add:
+            type: array
+            example: ["user@launchdarkly.com"]
+            items:
+              type: string
+            description: Users to add to the segment's included list
+          remove:
+            type: array
+            example: []
+            items:
+              type: string
+            description: Users to remove from the segment's included list
+      excluded:
+        type: object
+        description: Changes to make to the list of excluded user targets
+        properties:
+          add:
+            type: array
+            example: []
+            items:
+              type: string
+            description: Users to add to the segment's excluded list
+          remove:
+            type: array
+            example: ["user@launchdarkly.com"]
+            items:
+              type: string
+            description: Users to remove from the segment's excluded list
 ProjectPostRequest:
   name: projectBody
   in: body

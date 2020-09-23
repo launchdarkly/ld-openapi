@@ -587,6 +587,10 @@ UserSegment:
       items:
         $ref: "#/definitions/UserSegmentRule"
       description: An array of rules that can cause a user to be included in this segment.
+    unbounded:
+      type: boolean
+      example: false
+      description: Controls whether this segment can support unlimited numbers of users. Requires the beta API and additional setup. Include/exclude lists in this payload are not used in unbounded segments.
     version:
       type: integer
     _links:

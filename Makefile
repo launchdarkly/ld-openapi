@@ -129,6 +129,9 @@ $(API_TARGETS): openapi_yaml
 	fi
 	rm $(BUILD_DIR)/README-ORIGINAL.md
 
+openapi_yaml_docker:
+	docker build . -t ld-openapi && docker run -ti -v `pwd`:/workspace ld-openapi:latest make openapi_yaml
+
 $(DOC_TARGETS): openapi_yaml
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
