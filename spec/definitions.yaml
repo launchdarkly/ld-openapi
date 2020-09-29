@@ -620,6 +620,21 @@ UserSegments:
       type: array
       items:
         $ref: "#/definitions/UserSegment"
+UnboundedSegmentTargetChanges:
+  type: object
+  properties:
+    add:
+      type: array
+      example: ["user@launchdarkly.com"]
+      items:
+        type: string
+      description: Users to add to this list of targets
+    remove:
+      type: array
+      example: []
+      items:
+        type: string
+      description: Users to remove from this list of targets
 Project:
   type: object
   properties:

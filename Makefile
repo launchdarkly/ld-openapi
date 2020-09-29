@@ -129,8 +129,13 @@ $(API_TARGETS): openapi_yaml
 	fi
 	rm $(BUILD_DIR)/README-ORIGINAL.md
 
+# Generates openapi.yaml using Docker
 openapi_yaml_docker:
 	docker build . -t ld-openapi && docker run -ti -v `pwd`:/workspace ld-openapi:latest make openapi_yaml
+
+# Generates all API targets using Docker
+targets_docker:
+	docker build . -t ld-openapi && docker run -ti -v `pwd`:/workspace ld-openapi:latest make
 
 $(DOC_TARGETS): openapi_yaml
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$@)
