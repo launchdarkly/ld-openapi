@@ -347,6 +347,51 @@ Prerequisite:
       type: string
     variation:
       type: integer
+FeatureFlagScheduledChanges:
+  type: object
+  properties:
+    _links:
+      $ref: "#/definitions/Links"
+    items:
+      type: array
+      items:
+        $ref: "#/definitions/FeatureFlagScheduledChange"
+FeatureFlagScheduledChange:
+  type: object
+  properties:
+    executionDate:
+      type: integer
+      description: "A unix epoch time in milliseconds specifying the date the scheduled changes will be applied"
+    _version:
+      type: integer
+    _id:
+      type: string
+    instructions:
+      $ref: "#/definitions/SemanticPatchInstruction"
+FeatureFlagScheduledChangesConflicts:
+  type: object
+  properties:
+    instructions:
+      type: array
+      items:
+        properties:
+          kind:
+            type: string
+            example: "removeUserTargets"
+            description: The name of the modification you would like to perform on a resource.
+          conflicts:
+            type: array
+            items:
+              $ref: "#/definitions/ScheduledChangesFeatureFlagConflict"
+ScheduledChangesFeatureFlagConflict:
+  type: object
+  properties:
+    _id:
+      type: string
+      description: "Feature flag scheduled change id this change will conflict with"
+    reason:
+      type: string
+      description: "Feature flag scheduled change conflict reason"
 ClientSideAvailability:
   type: object
   properties:
@@ -1068,15 +1113,17 @@ SemanticPatchOperation:
       type: string
       example: "This is a comment string"
     instructions:
-      type: array
-      items:
-        properties:
-          kind:
-            type: string
-            example: "removeUserTargets"
-            description: The name of the modification you would like to perform on a resource.
+      $ref: "#/definitions/SemanticPatchInstruction"
   required:
     - instructions
+SemanticPatchInstruction:
+    type: array
+    items:
+      properties:
+        kind:
+          type: string
+          example: "removeUserTargets"
+          description: The name of the modification you would like to perform on a resource.
 CustomProperty:
   type: object
   description: A name and value describing a custom property.

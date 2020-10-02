@@ -211,3 +211,100 @@ UserTargetingExpirationForFlag:
         $ref: '#/responses/Standard409'
     tags:
       - Feature flags
+ScheduledFlagChanges:
+  get:
+    summary: Get all scheduled workflows for a feature flag by key.
+    operationId: getFeatureFlagScheduledChanges
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/EnvironmentKeyQuery'
+    responses:
+      '200':
+        description: Flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlagScheduledChanges'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+  patch:
+    summary: Perform a partial update to a feature.
+    operationId: patchFeatureFlagScheduledChange
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/SemanticPatchWithComment'
+    responses:
+      '200':
+        description: Scheduled changes for feature flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlag'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Feature flags
+  post:
+    summary: Creates a new scheduled change for a feature flag.
+    operationId: postFeatureFlagScheduledChanges
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagScheduledChangesPostRequest'
+      - $ref: '#/parameters/EnvironmentKeyQuery'
+    responses:
+      '201':
+        description: Flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlag'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Feature flags
+    delete:
+      summary: Delete a scheduled change on a feature flag in an environment.
+      operationId: deleteFeatureFlagScheduledChanges
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/FeatureFlagKey'
+        - $ref: '#/parameters/EnvironmentKeyQuery'
+      responses:
+        '204':
+          $ref: '#/responses/Standard204'
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Feature flags
+ScheduledFlagChangesConflicts:
+  post:
+    summary: Lists conflicts between the given instructions and any existing scheduled changes for the feature flag.
+    operationId: getFeatureFlagScheduledChangesConflicts
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/EnvironmentKeyQuery'
+      - $ref: '#/parameters/ScheduledFeatureFlagChangesPostRequest'
+    responses:
+      '200':
+        description: Flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlagScheduledChangesConflicts'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
