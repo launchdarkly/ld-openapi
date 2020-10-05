@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 3.5.0
+  version: 3.6.0
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -526,6 +526,24 @@ paths:
           $ref: '#/responses/Standard404'
         '409':
           $ref: '#/responses/Standard409'
+      tags:
+        - User segments
+  '/segments/{projectKey}/{environmentKey}/{userSegmentKey}/unbounded-users':
+    post:
+      summary: Update targets included or excluded in an unbounded segment
+      operationId: updatedUnboundedSegmentTargets
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/UserSegmentKey'
+        - $ref: '#/parameters/UnboundedSegmentTargetsPostRequest'
+      responses:
+        '204':
+          $ref: '#/responses/Standard204'
+        '400':
+          $ref: '#/responses/Standard400'
+        '401':
+          $ref: '#/responses/Standard401'
       tags:
         - User segments
   '/users/{projectKey}/{environmentKey}':
@@ -1291,7 +1309,7 @@ paths:
       tags:
         - Access tokens
     patch:
-      summary: Modify an access tokenby ID.
+      summary: Modify an access token by ID.
       operationId: patchToken
       parameters:
         - $ref: '#/parameters/TokenId'
@@ -1341,6 +1359,95 @@ paths:
           $ref: '#/responses/Standard401'
       tags:
         - Access tokens
+  /account/relay-auto-configs:
+    get:
+      summary: Returns a list of relay proxy configurations in the account.
+      operationId: getRelayProxyConfigs
+      responses:
+        '200':
+          description: Relay proxy configs response.
+          schema:
+            $ref: '#/definitions/RelayProxyConfigs'
+      tags:
+        - Relay proxy configurations
+    post:
+      summary: Create a new relay proxy config.
+      operationId: postRelayAutoConfig
+      parameters:
+        - $ref: '#/parameters/RelayProxyConfigPostRequest'
+      responses:
+        '201':
+          description: Relay proxy config response.
+          schema:
+            $ref: '#/definitions/RelayProxyConfig'
+        '400':
+          $ref: '#/responses/Standard400'
+        '403':
+          $ref: '#/responses/Standard403'
+      tags:
+        - Relay proxy configurations
+  '/account/relay-auto-configs/{id}':
+    get:
+      summary: Get a single relay proxy configuration by ID.
+      operationId: getRelayProxyConfig
+      parameters:
+        - $ref: '#/parameters/RelayProxyConfigId'
+      responses:
+        '200':
+          $ref: '#/responses/RelayProxyConfig2xx'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Relay proxy configurations
+    patch:
+      summary: Modify a relay proxy configuration by ID.
+      operationId: patchRelayProxyConfig
+      parameters:
+        - $ref: '#/parameters/RelayProxyConfigId'
+        - $ref: '#/parameters/PatchRequest'
+      responses:
+        '200':
+          $ref: '#/responses/RelayProxyConfig2xx'
+        '400':
+          $ref: '#/responses/Standard400'
+        '404':
+          $ref: '#/responses/Standard404'
+        '409':
+          $ref: '#/responses/Standard409'
+      tags:
+        - Relay proxy configurations
+    delete:
+      summary: Delete a relay proxy configuration by ID.
+      operationId: deleteRelayProxyConfig
+      parameters:
+        - $ref: '#/parameters/RelayProxyConfigId'
+      responses:
+        '204':
+          $ref: '#/responses/Standard204'
+        '400':
+          $ref: '#/responses/Standard400'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Relay proxy configurations
+  '/account/relay-auto-configs/{id}/reset':
+    post:
+      summary: >-
+        Reset a relay proxy configuration's secret key with an optional expiry
+        time for the old key.
+      operationId: resetRelayProxyConfig
+      parameters:
+        - $ref: '#/parameters/RelayProxyConfigId'
+        - $ref: '#/parameters/RelayProxyConfigsExpiry'
+      responses:
+        '200':
+          $ref: '#/responses/RelayProxyConfig2xx'
+        '400':
+          $ref: '#/responses/Standard400'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Relay proxy configurations
   /:
     get:
       description: >-
@@ -1723,6 +1830,55 @@ definitions:
         type: string
       variation:
         type: integer
+  FeatureFlagScheduledChanges:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureFlagScheduledChange'
+  FeatureFlagScheduledChange:
+    type: object
+    properties:
+      executionDate:
+        type: integer
+        description: >-
+          A unix epoch time in milliseconds specifying the date the scheduled
+          changes will be applied
+      _version:
+        type: integer
+      _id:
+        type: string
+      instructions:
+        $ref: '#/definitions/SemanticPatchInstruction'
+  FeatureFlagScheduledChangesConflicts:
+    type: object
+    properties:
+      instructions:
+        type: array
+        items:
+          properties:
+            kind:
+              type: string
+              example: removeUserTargets
+              description: >-
+                The name of the modification you would like to perform on a
+                resource.
+            conflicts:
+              type: array
+              items:
+                $ref: '#/definitions/ScheduledChangesFeatureFlagConflict'
+  ScheduledChangesFeatureFlagConflict:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: Feature flag scheduled change id this change will conflict with
+      reason:
+        type: string
+        description: Feature flag scheduled change conflict reason
   ClientSideAvailability:
     type: object
     properties:
@@ -1952,6 +2108,13 @@ definitions:
         description: >-
           An array of rules that can cause a user to be included in this
           segment.
+      unbounded:
+        type: boolean
+        example: false
+        description: >-
+          Controls whether this segment can support unlimited numbers of users.
+          Requires the beta API and additional setup. Include/exclude lists in
+          this payload are not used in unbounded segments.
       version:
         type: integer
       _links:
@@ -1981,6 +2144,22 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/UserSegment'
+  UnboundedSegmentTargetChanges:
+    type: object
+    properties:
+      add:
+        type: array
+        example:
+          - user@launchdarkly.com
+        items:
+          type: string
+        description: Users to add to this list of targets
+      remove:
+        type: array
+        example: []
+        items:
+          type: string
+        description: Users to remove from this list of targets
   Project:
     type: object
     properties:
@@ -2516,17 +2695,19 @@ definitions:
         type: string
         example: This is a comment string
       instructions:
-        type: array
-        items:
-          properties:
-            kind:
-              type: string
-              example: removeUserTargets
-              description: >-
-                The name of the modification you would like to perform on a
-                resource.
+        $ref: '#/definitions/SemanticPatchInstruction'
     required:
       - instructions
+  SemanticPatchInstruction:
+    type: array
+    items:
+      properties:
+        kind:
+          type: string
+          example: removeUserTargets
+          description: >-
+            The name of the modification you would like to perform on a
+            resource.
   CustomProperty:
     type: object
     description: A name and value describing a custom property.
@@ -2866,6 +3047,62 @@ definitions:
       defaultApiVersion:
         type: integer
         description: The default API version for this token
+  RelayProxyConfigs:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/RelayProxyConfig'
+  RelayProxyConfig:
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/Id'
+      _creator:
+        $ref: '#/definitions/Member'
+      name:
+        type: string
+        description: A human-friendly name for the relay proxy configuration
+        example: My relay proxy config
+      policy:
+        type: array
+        items:
+          $ref: '#/definitions/Policy'
+      fullKey:
+        type: string
+        example: rel-8a3a773d-b75e-48eb-a850-492cda9266eo
+        description: >-
+          Full secret key. Only included if creating or resetting the relay
+          proxy configuration
+      displayKey:
+        type: string
+        example: 66eo
+        description: >-
+          The last 4 digits of the unique secret key for this relay proxy
+          configuration
+      creationDate:
+        type: integer
+        format: int64
+        description: >-
+          A unix epoch time in milliseconds specifying the creation time of this
+          relay proxy configuration
+        example: 1443652232590
+      lastModified:
+        type: integer
+        format: int64
+        example: 1469326565348
+        description: >-
+          A unix epoch time in milliseconds specifying the last time this relay
+          proxy configuration was modified
+    required:
+      - _id
+      - _creator
+      - name
+      - policy
+      - displayKey
+      - creationDate
+      - lastModified
 responses:
   Standard201:
     description: Resource created.
@@ -2875,6 +3112,8 @@ responses:
     description: Invalid request body.
   Standard401:
     description: Invalid access token.
+  Standard403:
+    description: Access to the requested resource was denied.
   Standard404:
     description: Invalid resource specifier.
   Standard409:
@@ -2929,6 +3168,10 @@ responses:
     description: Token response.
     schema:
       $ref: '#/definitions/Token'
+  RelayProxyConfig2xx:
+    description: Relay proxy config response.
+    schema:
+      $ref: '#/definitions/RelayProxyConfig'
 parameters:
   ResourceId:
     name: resourceId
@@ -3056,6 +3299,21 @@ parameters:
         - name
         - key
         - variations
+  ScheduledFeatureFlagChangesPostRequest:
+    name: scheduledFeatureFlagChangesBody
+    in: body
+    required: true
+    description: Create scheduled changes on a feature flag.
+    schema:
+      type: object
+      properties:
+        executionDate:
+          type: integer
+          description: >-
+            A unix epoch time in milliseconds specifying the date the scheduled
+            changes will be applied
+        instructions:
+          $ref: '#/definitions/SemanticPatchInstruction'
   DestinationPostRequest:
     name: destinationBody
     in: body
@@ -3115,6 +3373,13 @@ parameters:
           type: string
           description: A description for the user segment.
           example: Users in this segment will have access to beta features.
+        unbounded:
+          type: boolean
+          example: false
+          description: >-
+            Controls whether this segment can support unlimited numbers of
+            users. Requires the beta API and additional setup. Include/exclude
+            lists in this payload are not used in unbounded segments.
         tags:
           type: array
           items:
@@ -3124,6 +3389,20 @@ parameters:
       required:
         - name
         - key
+  UnboundedSegmentTargetsPostRequest:
+    name: unboundedSegmentTargetsBody
+    in: body
+    required: true
+    description: >-
+      Add or remove user targets to the included or excluded lists on an
+      unbounded segment
+    schema:
+      type: object
+      properties:
+        included:
+          $ref: '#/definitions/UnboundedSegmentTargetChanges'
+        excluded:
+          $ref: '#/definitions/UnboundedSegmentTargetChanges'
   ProjectPostRequest:
     name: projectBody
     in: body
@@ -3579,4 +3858,36 @@ parameters:
     description: >-
       An expiration time for the old token key, expressed as a Unix epoch time
       in milliseconds. By default, the token will expire immediately.
+  RelayProxyConfigPostRequest:
+    name: relayProxyConfigBody
+    in: body
+    required: true
+    description: Create a new relay proxy configuration
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A human-friendly name for the relay proxy configuration
+          example: My relay proxy config
+        policy:
+          type: array
+          items:
+            $ref: '#/definitions/Policy'
+  RelayProxyConfigId:
+    name: id
+    in: path
+    required: true
+    description: The relay proxy configuration ID
+    type: string
+  RelayProxyConfigsExpiry:
+    name: expiry
+    in: query
+    required: false
+    type: integer
+    format: int64
+    description: >-
+      An expiration time for the old relay proxy configuration key, expressed as
+      a Unix epoch time in milliseconds. By default, the relay proxy
+      configuration will expire immediately
 
