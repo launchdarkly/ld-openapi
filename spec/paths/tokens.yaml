@@ -47,7 +47,7 @@ Token:
     tags:
       - Access tokens
   patch:
-    summary: Modify an access tokenby ID.
+    summary: Modify an access token by ID.
     operationId: patchToken
     parameters:
       - $ref: "#/parameters/TokenId"

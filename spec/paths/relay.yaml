@@ -1,0 +1,87 @@
+RelayProxyConfigs:
+  get:
+    summary: Returns a list of relay proxy configurations in the account.
+    operationId: getRelayProxyConfigs
+    responses:
+      "200":
+        description: Relay proxy configs response.
+        schema:
+          $ref: "#/definitions/RelayProxyConfigs"
+    tags:
+      - Relay proxy configurations
+  post:
+    summary: Create a new relay proxy config.
+    operationId: postRelayAutoConfig
+    parameters:
+      - $ref: "#/parameters/RelayProxyConfigPostRequest"
+    responses:
+      "201":
+        description: Relay proxy config response.
+        schema:
+          $ref: "#/definitions/RelayProxyConfig"
+      "400":
+        $ref: "#/responses/Standard400"
+      "403":
+        $ref: "#/responses/Standard403"
+    tags:
+      - Relay proxy configurations
+RelayProxyConfig:
+  get:
+    summary: Get a single relay proxy configuration by ID.
+    operationId: getRelayProxyConfig
+    parameters:
+      - $ref: "#/parameters/RelayProxyConfigId"
+    responses:
+      "200":
+        $ref: "#/responses/RelayProxyConfig2xx"
+      "404":
+        $ref: "#/responses/Standard404"
+    tags:
+      - Relay proxy configurations
+  patch:
+    summary: Modify a relay proxy configuration by ID.
+    operationId: patchRelayProxyConfig
+    parameters:
+      - $ref: "#/parameters/RelayProxyConfigId"
+      - $ref: "#/parameters/PatchRequest"
+    responses:
+      "200":
+        $ref: "#/responses/RelayProxyConfig2xx"
+      "400":
+        $ref: "#/responses/Standard400"
+      "404":
+        $ref: "#/responses/Standard404"
+      "409":
+        $ref: "#/responses/Standard409"
+    tags:
+      - Relay proxy configurations
+  delete:
+    summary: Delete a relay proxy configuration by ID.
+    operationId: deleteRelayProxyConfig
+    parameters:
+      - $ref: "#/parameters/RelayProxyConfigId"
+    responses:
+      "204":
+        $ref: "#/responses/Standard204"
+      "400":
+        $ref: "#/responses/Standard400"
+      "404":
+        $ref: "#/responses/Standard404"
+    tags:
+      - Relay proxy configurations
+Reset:
+  post:
+    summary: Reset a relay proxy configuration's secret key with an optional expiry time for the old key.
+    operationId: resetRelayProxyConfig
+    parameters:
+      - $ref: "#/parameters/RelayProxyConfigId"
+      - $ref: "#/parameters/RelayProxyConfigsExpiry"
+    responses:
+      "200":
+        $ref: "#/responses/RelayProxyConfig2xx"
+      "400":
+        $ref: "#/responses/Standard400"
+      "404":
+        $ref: "#/responses/Standard404"
+    tags:
+      - Relay proxy configurations

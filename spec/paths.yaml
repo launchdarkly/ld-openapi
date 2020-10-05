@@ -90,5 +90,11 @@
   $ref: ./paths/tokens.yaml#/Token
 /tokens/{tokenId}/reset:
   $ref: ./paths/tokens.yaml#/Reset
+/account/relay-auto-configs:
+  $ref: ./paths/relay.yaml#/RelayProxyConfigs
+/account/relay-auto-configs/{id}:
+  $ref: ./paths/relay.yaml#/RelayProxyConfig
+/account/relay-auto-configs/{id}/reset:
+  $ref: ./paths/relay.yaml#/Reset
 /:
   $ref: ./paths/root.yaml#/Root

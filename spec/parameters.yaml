@@ -603,3 +603,32 @@ TokenExpiry:
   type: integer
   format: int64
   description: An expiration time for the old token key, expressed as a Unix epoch time in milliseconds. By default, the token will expire immediately.
+RelayProxyConfigPostRequest:
+  name: relayProxyConfigBody
+  in: body
+  required: true
+  description: Create a new relay proxy configuration
+  schema:
+    type: object
+    properties:
+      name:
+        type: string
+        description: A human-friendly name for the relay proxy configuration
+        example: "My relay proxy config"
+      policy:
+        type: array
+        items:
+          $ref: "#/definitions/Policy"
+RelayProxyConfigId:
+  name: id
+  in: path
+  required: true
+  description: The relay proxy configuration ID
+  type: string
+RelayProxyConfigsExpiry:
+  name: expiry
+  in: query
+  required: false
+  type: integer
+  format: int64
+  description: An expiration time for the old relay proxy configuration key, expressed as a Unix epoch time in milliseconds. By default, the relay proxy configuration will expire immediately
