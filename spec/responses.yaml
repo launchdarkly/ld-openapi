@@ -6,6 +6,8 @@ Standard400:
   description: Invalid request body.
 Standard401:
   description: Invalid access token.
+Standard403:
+  description: Access to the requested resource was denied.
 Standard404:
   description: Invalid resource specifier.
 Standard409:
@@ -58,3 +60,7 @@ Token2xx:
   description: Token response.
   schema:
     $ref: "#/definitions/Token"
+RelayProxyConfig2xx:
+  description: Relay proxy config response.
+  schema:
+    $ref: "#/definitions/RelayProxyConfig"

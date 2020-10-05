@@ -178,6 +178,10 @@ UserSegmentPostRequest:
         type: string
         description: A description for the user segment.
         example: "Users in this segment will have access to beta features."
+      unbounded:
+        type: boolean
+        example: false
+        description: Controls whether this segment can support unlimited numbers of users. Requires the beta API and additional setup. Include/exclude lists in this payload are not used in unbounded segments.
       tags:
         type: array
         items:
@@ -187,6 +191,18 @@ UserSegmentPostRequest:
     required:
       - name
       - key
+UnboundedSegmentTargetsPostRequest:
+  name: unboundedSegmentTargetsBody
+  in: body
+  required: true
+  description: Add or remove user targets to the included or excluded lists on an unbounded segment
+  schema:
+    type: object
+    properties:
+      included:
+        $ref: "#/definitions/UnboundedSegmentTargetChanges"
+      excluded:
+        $ref: "#/definitions/UnboundedSegmentTargetChanges"
 ProjectPostRequest:
   name: projectBody
   in: body
@@ -587,3 +603,32 @@ TokenExpiry:
   type: integer
   format: int64
   description: An expiration time for the old token key, expressed as a Unix epoch time in milliseconds. By default, the token will expire immediately.
+RelayProxyConfigPostRequest:
+  name: relayProxyConfigBody
+  in: body
+  required: true
+  description: Create a new relay proxy configuration
+  schema:
+    type: object
+    properties:
+      name:
+        type: string
+        description: A human-friendly name for the relay proxy configuration
+        example: "My relay proxy config"
+      policy:
+        type: array
+        items:
+          $ref: "#/definitions/Policy"
+RelayProxyConfigId:
+  name: id
+  in: path
+  required: true
+  description: The relay proxy configuration ID
+  type: string
+RelayProxyConfigsExpiry:
+  name: expiry
+  in: query
+  required: false
+  type: integer
+  format: int64
+  description: An expiration time for the old relay proxy configuration key, expressed as a Unix epoch time in milliseconds. By default, the relay proxy configuration will expire immediately

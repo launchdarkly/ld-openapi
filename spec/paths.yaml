@@ -26,6 +26,8 @@
   $ref: ./paths/segments.yaml#/UserSegment
 /segments/{projectKey}/{userSegmentKey}/expiring-user-targets/{environmentKey}:
   $ref: ./paths/segments.yaml#/UserTargetingExpirationForSegment
+/segments/{projectKey}/{environmentKey}/{userSegmentKey}/unbounded-users:
+  $ref: ./paths/segments.yaml#/UnboundedSegmentTargets
 /users/{projectKey}/{environmentKey}:
   $ref: ./paths/users.yaml#/Users
 /user-search/{projectKey}/{environmentKey}:
@@ -88,5 +90,11 @@
   $ref: ./paths/tokens.yaml#/Token
 /tokens/{tokenId}/reset:
   $ref: ./paths/tokens.yaml#/Reset
+/account/relay-auto-configs:
+  $ref: ./paths/relay.yaml#/RelayProxyConfigs
+/account/relay-auto-configs/{id}:
+  $ref: ./paths/relay.yaml#/RelayProxyConfig
+/account/relay-auto-configs/{id}/reset:
+  $ref: ./paths/relay.yaml#/Reset
 /:
   $ref: ./paths/root.yaml#/Root
