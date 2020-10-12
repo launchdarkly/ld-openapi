@@ -263,6 +263,13 @@ EnvironmentKeyQuery:
   items:
     type: string
   collectionFormat: multi
+EnvironmentKeyExpiry:
+  name: expiry
+  in: query
+  required: false
+  type: integer
+  format: int64
+  description: An expiration time for the old environment SDK or mobile key, expressed as a Unix epoch time in milliseconds. By default, the key will expire immediately
 SummaryQuery:
   name: summary
   in: query

@@ -6,6 +6,10 @@
   $ref: ./paths/environments.yaml#/Environments
 /projects/{projectKey}/environments/{environmentKey}:
   $ref: ./paths/environments.yaml#/Environment
+/projects/{projectKey}/environments/{environmentKey}/apiKey:
+  $ref: ./paths/environments.yaml#/ResetSDKKey
+/projects/{projectKey}/environments/{environmentKey}/mobileKey:
+  $ref: ./paths/environments.yaml#/ResetMobileKey
 /flags/{projectKey}:
   $ref: ./paths/flags.yaml#/Flags
 /flags/{projectKey}/{featureFlagKey}:
