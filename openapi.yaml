@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 3.6.0
+  version: 3.7.0
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -177,6 +177,44 @@ paths:
           $ref: '#/responses/Standard401'
         '404':
           $ref: '#/responses/Standard404'
+      tags:
+        - Environments
+  '/projects/{projectKey}/environments/{environmentKey}/apiKey':
+    post:
+      summary: >-
+        Reset an environment's SDK key with an optional expiry time for the old
+        key.
+      operationId: resetEnvironmentSDKKey
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/EnvironmentKeyExpiry'
+      responses:
+        '200':
+          $ref: '#/responses/Environment2xx'
+        '404':
+          $ref: '#/responses/Standard404'
+        '409':
+          $ref: '#/responses/Standard409'
+      tags:
+        - Environments
+  '/projects/{projectKey}/environments/{environmentKey}/mobileKey':
+    post:
+      summary: >-
+        Reset an environment's mobile key with an optional expiry time for the
+        old key.
+      operationId: resetEnvironmentMobileKey
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/EnvironmentKeyExpiry'
+      responses:
+        '200':
+          $ref: '#/responses/Environment2xx'
+        '404':
+          $ref: '#/responses/Standard404'
+        '409':
+          $ref: '#/responses/Standard409'
       tags:
         - Environments
   '/flags/{projectKey}':
@@ -3473,6 +3511,16 @@ parameters:
     items:
       type: string
     collectionFormat: multi
+  EnvironmentKeyExpiry:
+    name: expiry
+    in: query
+    required: false
+    type: integer
+    format: int64
+    description: >-
+      An expiration time for the old environment SDK or mobile key, expressed as
+      a Unix epoch time in milliseconds. By default, the key will expire
+      immediately
   SummaryQuery:
     name: summary
     in: query
