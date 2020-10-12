@@ -67,4 +67,37 @@ Environment:
         $ref: '#/responses/Standard404'
     tags:
       - Environments
-      
+ResetSDKKey:
+  post:
+    summary: Reset an environment's SDK key with an optional expiry time for the old key.
+    operationId: resetEnvironmentSDKKey
+    parameters:
+      - $ref: "#/parameters/ProjectKey"
+      - $ref: "#/parameters/EnvironmentKey"
+      - $ref: "#/parameters/EnvironmentKeyExpiry"
+    responses:
+      "200":
+        $ref: "#/responses/Environment2xx"
+      "404":
+        $ref: "#/responses/Standard404"
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Environments
+ResetMobileKey:
+  post:
+    summary: Reset an environment's mobile key with an optional expiry time for the old key.
+    operationId: resetEnvironmentMobileKey
+    parameters:
+      - $ref: "#/parameters/ProjectKey"
+      - $ref: "#/parameters/EnvironmentKey"
+      - $ref: "#/parameters/EnvironmentKeyExpiry"
+    responses:
+      "200":
+        $ref: "#/responses/Environment2xx"
+      "404":
+        $ref: "#/responses/Standard404"
+      "409":
+        $ref: '#/responses/Standard409'
+    tags:
+      - Environments
