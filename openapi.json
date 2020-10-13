@@ -13,7 +13,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "3.7.0"
+    "version": "3.7.1"
   },
   "host": "app.launchdarkly.com",
   "basePath": "/api/v2",
@@ -298,7 +298,7 @@
             "$ref": "#/parameters/EnvironmentKey"
           },
           {
-            "$ref": "#/parameters/EnvironmentKeyExpiry"
+            "$ref": "#/parameters/EnvironmentSDKKeyExpiry"
           }
         ],
         "responses": {
@@ -319,7 +319,7 @@
     },
     "/projects/{projectKey}/environments/{environmentKey}/mobileKey": {
       "post": {
-        "summary": "Reset an environment's mobile key with an optional expiry time for the old key.",
+        "summary": "Reset an environment's mobile key. The optional expiry for the old key is deprecated for this endpoint, so the old key will always expire immediately.",
         "operationId": "resetEnvironmentMobileKey",
         "parameters": [
           {
@@ -329,7 +329,7 @@
             "$ref": "#/parameters/EnvironmentKey"
           },
           {
-            "$ref": "#/parameters/EnvironmentKeyExpiry"
+            "$ref": "#/parameters/EnvironmentMobileKeyExpiry"
           }
         ],
         "responses": {
@@ -5154,13 +5154,21 @@
       },
       "collectionFormat": "multi"
     },
-    "EnvironmentKeyExpiry": {
+    "EnvironmentSDKKeyExpiry": {
       "name": "expiry",
       "in": "query",
       "required": false,
       "type": "integer",
       "format": "int64",
-      "description": "An expiration time for the old environment SDK or mobile key, expressed as a Unix epoch time in milliseconds. By default, the key will expire immediately"
+      "description": "An expiration time for the old environment SDK key, expressed as a Unix epoch time in milliseconds. By default, the key will expire immediately."
+    },
+    "EnvironmentMobileKeyExpiry": {
+      "name": "expiry",
+      "in": "query",
+      "required": false,
+      "type": "integer",
+      "format": "int64",
+      "description": "The expiry parameter is deprecated for this endpoint, so the old mobile key will always expire immediately. This parameter will be removed in an upcoming major API client version."
     },
     "SummaryQuery": {
       "name": "summary",
