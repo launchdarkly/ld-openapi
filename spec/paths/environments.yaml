@@ -74,7 +74,7 @@ ResetSDKKey:
     parameters:
       - $ref: "#/parameters/ProjectKey"
       - $ref: "#/parameters/EnvironmentKey"
-      - $ref: "#/parameters/EnvironmentKeyExpiry"
+      - $ref: "#/parameters/EnvironmentSDKKeyExpiry"
     responses:
       "200":
         $ref: "#/responses/Environment2xx"
@@ -86,12 +86,12 @@ ResetSDKKey:
       - Environments
 ResetMobileKey:
   post:
-    summary: Reset an environment's mobile key with an optional expiry time for the old key.
+    summary: Reset an environment's mobile key. The optional expiry for the old key is deprecated for this endpoint, so the old key will always expire immediately.
     operationId: resetEnvironmentMobileKey
     parameters:
       - $ref: "#/parameters/ProjectKey"
       - $ref: "#/parameters/EnvironmentKey"
-      - $ref: "#/parameters/EnvironmentKeyExpiry"
+      - $ref: "#/parameters/EnvironmentMobileKeyExpiry"
     responses:
       "200":
         $ref: "#/responses/Environment2xx"
