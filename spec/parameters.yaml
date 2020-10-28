@@ -646,3 +646,48 @@ RelayProxyConfigsExpiry:
   type: integer
   format: int64
   description: An expiration time for the old relay proxy configuration key, expressed as a Unix epoch time in milliseconds. By default, the relay proxy configuration will expire immediately
+IntegrationKey:
+  name: integrationKey
+  in: path
+  required: true
+  description: The key used to specify the integration kind.
+  type: string
+IntegrationId:
+  name: integrationId
+  in: path
+  required: true
+  description: The integration ID.
+  type: string
+IntegrationPostRequest:
+  name: subscriptionBody
+  in: body
+  required: true
+  description: Create a new integration subscription.
+  schema:
+    type: object
+    properties:
+      name:
+        type: string
+        description: A human-readable name for your subscription configuration.
+        example: Example Datadog Integration
+      statements:
+        type: array
+        items:
+          $ref: "#/definitions/Statement"
+      config:
+        type: object
+        description: Integration-specific configuration fields.
+        example: { "apiKey": "582**************************116", "hostURL": "https://api.datadoghq.com" }
+      on:
+        type: boolean
+        example: true
+        description: Whether the integration subscription is active or not.
+      tags:
+        type: array
+        items:
+          type: string
+        example: []
+        description: Tags for the integration subscription.
+    required:
+      - name
+      - config
