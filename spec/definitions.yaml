@@ -1525,3 +1525,94 @@ RelayProxyConfig:
     - displayKey
     - creationDate
     - lastModified
+HierarchicalLinks:
+  type: object
+  properties:
+    "parent":
+      $ref: "#/definitions/Link"
+    "self":
+      $ref: "#/definitions/Link"
+IntegrationSubscription:
+  type: object
+  properties:
+    _links:
+      $ref: "#/definitions/HierarchicalLinks"
+    _id:
+      $ref: "#/definitions/Id"
+    kind:
+      type: string
+      description: The type of integration associated with this configuration.
+      example: "datadog"
+    name:
+      type: string
+      description: The user-defined name associated with this configuration.
+      example: "V2"
+    config:
+      type: object
+      description: A key-value mapping of configuration fields.
+      example:
+        {
+          "apiKey": "582**************************116",
+          "hostURL": "https://api.datadoghq.com",
+        }
+    statements:
+      type: array
+      items:
+        $ref: "#/definitions/Statement"
+    on:
+      type: boolean
+      description: Whether or not the integration is currently active.
+      example: true
+    tags:
+      type: array
+      items:
+        type: string
+      description: An array of tags for this integration configuration. 
+    _status:
+      type: object
+      properties:
+        successCount:
+          type: integer
+          example: 6
+        lastSuccess:
+          type: integer
+          format: int64
+          description: A unix epoch time in milliseconds specifying the last time this integration was successfully used.
+          example: 1443652232590
+        errorCount:
+          type: integer
+          example: 2
+Integration:
+  type: object
+  properties:
+    _links:
+      type: object
+      properties:
+        "self":
+          $ref: "#/definitions/Link"
+    items:
+      type: array
+      items:
+        $ref: "#/definitions/IntegrationSubscription"
+Integrations:
+  type: object
+  properties:
+    _links:
+      type: object
+      description: A mapping of integration types to their respective API endpoints.
+      example:
+        {
+          "appdynamics": {
+            "href":"/api/v2/integrations/appdynamics",
+            "type":"application/json"
+          },
+          "splunk": {
+            "href":"/api/v2/integrations/splunk",
+            "type":"application/json"
+          }
+        }
+    items:
+      type: array
+      items:
+        type: object
+        $ref: "#/definitions/IntegrationSubscription"

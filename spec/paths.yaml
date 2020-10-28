@@ -102,3 +102,9 @@
   $ref: ./paths/relay.yaml#/Reset
 /:
   $ref: ./paths/root.yaml#/Root
+/integrations:
+  $ref: ./paths/integrations.yaml#/IntegrationsRoot
+/integrations/{integrationKey}:
+  $ref: ./paths/integrations.yaml#/Integrations
+/integrations/{integrationKey}/{integrationId}:
+  $ref: ./paths/integrations.yaml#/Integration
