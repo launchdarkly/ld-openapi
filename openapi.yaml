@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 3.7.1
+  version: 3.8.0
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -1500,6 +1500,110 @@ paths:
           $ref: '#/responses/Standard401'
       tags:
         - Root
+  /integrations:
+    get:
+      summary: >-
+        Get a list of all configured audit log event integrations associated
+        with this account.
+      operationId: getIntegrations
+      responses:
+        '200':
+          description: Integrations response.
+          schema:
+            $ref: '#/definitions/Integrations'
+        '403':
+          $ref: '#/responses/BetaApi403'
+      tags:
+        - Integrations
+  '/integrations/{integrationKey}':
+    get:
+      summary: Get a list of all configured integrations of a given kind.
+      operationId: getIntegrationSubscriptions
+      parameters:
+        - $ref: '#/parameters/IntegrationKey'
+      responses:
+        '200':
+          description: Integrations response.
+          schema:
+            $ref: '#/definitions/Integration'
+        '403':
+          $ref: '#/responses/BetaApi403'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Integrations
+    post:
+      summary: Create a new integration subscription of a given kind.
+      operationId: postIntegrationSubscription
+      parameters:
+        - $ref: '#/parameters/IntegrationKey'
+        - $ref: '#/parameters/IntegrationPostRequest'
+      responses:
+        '201':
+          description: Integrations response.
+          schema:
+            $ref: '#/definitions/IntegrationSubscription'
+        '400':
+          $ref: '#/responses/Standard400'
+        '401':
+          $ref: '#/responses/Standard401'
+        '409':
+          $ref: '#/responses/Standard409'
+      tags:
+        - Integrations
+  '/integrations/{integrationKey}/{integrationId}':
+    get:
+      summary: Get a single integration subscription by ID.
+      operationId: getIntegrationSubscription
+      parameters:
+        - $ref: '#/parameters/IntegrationKey'
+        - $ref: '#/parameters/IntegrationId'
+      responses:
+        '200':
+          description: Integrations response.
+          schema:
+            $ref: '#/definitions/IntegrationSubscription'
+        '403':
+          $ref: '#/responses/BetaApi403'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Integrations
+    patch:
+      summary: Modify an integration subscription by ID.
+      operationId: patchIntegrationSubscription
+      parameters:
+        - $ref: '#/parameters/IntegrationKey'
+        - $ref: '#/parameters/IntegrationId'
+        - $ref: '#/parameters/PatchRequest'
+      responses:
+        '200':
+          description: Integrations response.
+          schema:
+            $ref: '#/definitions/IntegrationSubscription'
+        '400':
+          $ref: '#/responses/Standard400'
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Integrations
+    delete:
+      summary: Delete an integration subscription by ID.
+      operationId: deleteIntegrationSubscription
+      parameters:
+        - $ref: '#/parameters/IntegrationKey'
+        - $ref: '#/parameters/IntegrationId'
+      responses:
+        '204':
+          $ref: '#/responses/Standard204'
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Integrations
 definitions:
   Link:
     type: object
@@ -3142,6 +3246,93 @@ definitions:
       - displayKey
       - creationDate
       - lastModified
+  HierarchicalLinks:
+    type: object
+    properties:
+      parent:
+        $ref: '#/definitions/Link'
+      self:
+        $ref: '#/definitions/Link'
+  IntegrationSubscription:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/HierarchicalLinks'
+      _id:
+        $ref: '#/definitions/Id'
+      kind:
+        type: string
+        description: The type of integration associated with this configuration.
+        example: datadog
+      name:
+        type: string
+        description: The user-defined name associated with this configuration.
+        example: V2
+      config:
+        type: object
+        description: A key-value mapping of configuration fields.
+        example:
+          apiKey: 582**************************116
+          hostURL: 'https://api.datadoghq.com'
+      statements:
+        type: array
+        items:
+          $ref: '#/definitions/Statement'
+      'on':
+        type: boolean
+        description: Whether or not the integration is currently active.
+        example: true
+      tags:
+        type: array
+        items:
+          type: string
+        description: An array of tags for this integration configuration.
+      _status:
+        type: object
+        properties:
+          successCount:
+            type: integer
+            example: 6
+          lastSuccess:
+            type: integer
+            format: int64
+            description: >-
+              A unix epoch time in milliseconds specifying the last time this
+              integration was successfully used.
+            example: 1443652232590
+          errorCount:
+            type: integer
+            example: 2
+  Integration:
+    type: object
+    properties:
+      _links:
+        type: object
+        properties:
+          self:
+            $ref: '#/definitions/Link'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/IntegrationSubscription'
+  Integrations:
+    type: object
+    properties:
+      _links:
+        type: object
+        description: A mapping of integration types to their respective API endpoints.
+        example:
+          appdynamics:
+            href: /api/v2/integrations/appdynamics
+            type: application/json
+          splunk:
+            href: /api/v2/integrations/splunk
+            type: application/json
+      items:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/IntegrationSubscription'
 responses:
   Standard201:
     description: Resource created.
@@ -3948,4 +4139,51 @@ parameters:
       An expiration time for the old relay proxy configuration key, expressed as
       a Unix epoch time in milliseconds. By default, the relay proxy
       configuration will expire immediately
+  IntegrationKey:
+    name: integrationKey
+    in: path
+    required: true
+    description: The key used to specify the integration kind.
+    type: string
+  IntegrationId:
+    name: integrationId
+    in: path
+    required: true
+    description: The integration ID.
+    type: string
+  IntegrationPostRequest:
+    name: subscriptionBody
+    in: body
+    required: true
+    description: Create a new integration subscription.
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A human-readable name for your subscription configuration.
+          example: Example Datadog Integration
+        statements:
+          type: array
+          items:
+            $ref: '#/definitions/Statement'
+        config:
+          type: object
+          description: Integration-specific configuration fields.
+          example:
+            apiKey: 582**************************116
+            hostURL: 'https://api.datadoghq.com'
+        'on':
+          type: boolean
+          example: true
+          description: Whether the integration subscription is active or not.
+        tags:
+          type: array
+          items:
+            type: string
+          example: []
+          description: Tags for the integration subscription.
+      required:
+        - name
+        - config
 
