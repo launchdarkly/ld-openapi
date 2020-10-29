@@ -659,7 +659,7 @@ IntegrationId:
   description: The integration ID.
   type: string
 IntegrationPostRequest:
-  name: integrationSubscriptionBody
+  name: subscriptionBody
   in: body
   required: true
   description: Create a new integration subscription.
