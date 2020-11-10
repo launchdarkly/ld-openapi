@@ -646,6 +646,67 @@ RelayProxyConfigsExpiry:
   type: integer
   format: int64
   description: An expiration time for the old relay proxy configuration key, expressed as a Unix epoch time in milliseconds. By default, the relay proxy configuration will expire immediately
+FeatureFlagChangeRequestId:
+  name: featureFlagChangeRequestId
+  in: path
+  required: true
+  description: The feature flag change request ID
+  type: string
+FeatureFlagChangeRequestPostRequest:
+  name: featureFlagChangeRequestConfigBody
+  in: body
+  description: Create a new feature flag change request
+  schema:
+    type: object
+    properties:
+      description:
+        type: string
+        description: A name that describes the changes you would like to apply to a feature flag configuration
+      instructions:
+        $ref: "#/definitions/SemanticPatchInstruction"
+      notifyMemberIds:
+        type: array
+        items:
+          type: string
+        example: ["memberId", "memberId2"]
+      comment:
+        type: string
+        description: comment will be included in audit log item for change.
+    required:
+      - description
+      - instructions
+      - notifyMemberIds
+FeatureFlagChangeRequestReviewPostRequest:
+  name: featureFlagChangeRequestReviewConfigBody
+  in: body
+  required: true
+  description: Review a feature flag change request
+  schema:
+    type: object
+    properties:
+      kind:
+        type: string
+        description: Either approve or decline change request
+        enum: [approve, decline]
+        example: "approve"
+      comment:
+        type: string
+        description: comment will be included in audit log item for change.
+        example: "This is a comment string"
+    required:
+      - kind
+FeatureFlagChangeRequestApplyPostRequest:
+  name: featureFlagChangeRequestApplyConfigBody
+  in: body
+  required: true
+  description: Apply a new feature flag change request
+  schema:
+    type: object
+    properties:
+      comment:
+        type: string
+        description: comment will be included in audit log item for change.
+        example: "Applying approved changes"
 IntegrationKey:
   name: integrationKey
   in: path
