@@ -39,6 +39,7 @@ client-clones/
 # Auto generated files
 .DS_Store
 /swagger-codegen-cli-*.jar
+scripts/release/java/.gradle/*
 
 # IDE settings
 .classpath

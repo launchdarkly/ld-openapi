@@ -172,6 +172,10 @@ push:
 		$(GIT_COMMAND) tag $(TAG); \
 		$(GIT_PUSH_COMMAND) origin $(TAG); \
 		$(GIT_PUSH_COMMAND) origin $(RELEASE_BRANCH); \
+		if [ $(RELEASE_TARGET) == "go" ]; then \
+		  $(GIT_COMMAND) tag v$(TAG); \
+		  $(GIT_PUSH_COMMAND) origin v$(TAG); \
+		fi; \
 		cd ..; \
 	) \
 	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
