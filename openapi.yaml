@@ -436,6 +436,105 @@ paths:
           $ref: '#/responses/Standard409'
       tags:
         - Feature flags
+  '/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests':
+    get:
+      operationId: getFeatureFlagChangeRequests
+      summary: Get all change requests for a feature flag
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/FeatureFlagKey'
+        - $ref: '#/parameters/EnvironmentKey'
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FeatureFlagChangeRequests'
+          description: Feature flag change requests response
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Feature flags
+    post:
+      operationId: postFeatureFlagChangeRequest
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/FeatureFlagKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/FeatureFlagChangeRequestPostRequest'
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FeatureFlagChangeRequest'
+          description: Feature flag change request response
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Feature flags
+  '/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}':
+    get:
+      operationId: getFeatureFlagChangeRequest
+      summary: Get a single change request for a feature flag
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/FeatureFlagKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/FeatureFlagChangeRequestId'
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FeatureFlagChangeRequests'
+          description: Feature flag change request response
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Feature flags
+  '/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}/apply':
+    post:
+      operationId: postApplyFeatureFlagChangeRequest
+      summary: Apply change request for a feature flag
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/FeatureFlagKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/FeatureFlagChangeRequestId'
+        - $ref: '#/parameters/FeatureFlagChangeRequestApplyPostRequest'
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FeatureFlagChangeRequests'
+          description: Feature flag change request applied response
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Feature flags
+  '/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}/review':
+    post:
+      operationId: postReviewFeatureFlagChangeRequest
+      summary: Review change request for a feature flag
+      parameters:
+        - $ref: '#/parameters/ProjectKey'
+        - $ref: '#/parameters/FeatureFlagKey'
+        - $ref: '#/parameters/EnvironmentKey'
+        - $ref: '#/parameters/FeatureFlagChangeRequestId'
+        - $ref: '#/parameters/FeatureFlagChangeRequestReviewPostRequest'
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FeatureFlagChangeRequests'
+          description: Feature flag change request reviewed response
+        '401':
+          $ref: '#/responses/Standard401'
+        '404':
+          $ref: '#/responses/Standard404'
+      tags:
+        - Feature flags
   '/segments/{projectKey}/{environmentKey}':
     get:
       summary: Get a list of all user segments in the given project.
@@ -2022,6 +2121,106 @@ definitions:
       reason:
         type: string
         description: Feature flag scheduled change conflict reason
+  FeatureFlagChangeRequests:
+    type: object
+    properties:
+      _links:
+        $ref: '#/definitions/Links'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureFlagChangeRequest'
+  FeatureFlagChangeRequest:
+    type: object
+    properties:
+      _id:
+        $ref: '#/definitions/Id'
+      _version:
+        type: integer
+      creationDate:
+        type: integer
+        description: >-
+          A unix epoch time in milliseconds specifying the date the change
+          request was requested
+      requestorId:
+        type: string
+        description: The id of the member that requested the change
+      reviewStatus:
+        $ref: '#/definitions/FeatureFlagChangeRequestReviewStatus'
+      status:
+        type: string
+        description: >
+          | Name     | Description |
+
+          | --------:| ----------- |
+
+          | pending  | the feature flag change request has not been applied yet
+          |
+
+          | completed| the feature flag change request has been applied
+          successfully |
+
+          | failed   | the feature flag change request has been applied but the
+          changes were not applied successfully |
+        enum:
+          - pending
+          - completed
+          - failed
+      appliedByMemberID:
+        type: string
+        description: The id of the member that applied the change request
+      appliedDate:
+        type: integer
+        description: >-
+          A unix epoch time in milliseconds specifying the date the change
+          request was applied
+      currentReviewsByMemberId:
+        $ref: '#/definitions/FeatureFlagChangeRequestReview'
+      allReviews:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureFlagChangeRequestReview'
+      notifyMemberIds:
+        type: array
+        items:
+          type: string
+        example:
+          - memberId
+          - memberId2
+      instructions:
+        $ref: '#/definitions/SemanticPatchInstruction'
+  FeatureFlagChangeRequestReview:
+    type: object
+    properties:
+      creationDate:
+        type: integer
+        description: >-
+          A unix epoch time in milliseconds specifying the date the change
+          request was reviewed
+      kind:
+        $ref: '#/definitions/FeatureFlagChangeRequestReviewStatus'
+      memberId:
+        $ref: '#/definitions/Id'
+      _id:
+        $ref: '#/definitions/Id'
+  FeatureFlagChangeRequestReviewStatus:
+    type: string
+    description: >
+      | Name     | Description |
+
+      | --------:| ----------- |
+
+      | pending  | the feature flag change request has not been reviewed yet |
+
+      | approved | the feature flag change request has been approved and can now
+      be applied |
+
+      | declined | the feature flag change request has been declined and cannot
+      be applied |
+    enum:
+      - pending
+      - approved
+      - declined
   ClientSideAvailability:
     type: object
     properties:
@@ -4139,6 +4338,73 @@ parameters:
       An expiration time for the old relay proxy configuration key, expressed as
       a Unix epoch time in milliseconds. By default, the relay proxy
       configuration will expire immediately
+  FeatureFlagChangeRequestId:
+    name: featureFlagChangeRequestId
+    in: path
+    required: true
+    description: The feature flag change request ID
+    type: string
+  FeatureFlagChangeRequestPostRequest:
+    name: featureFlagChangeRequestConfigBody
+    in: body
+    description: Create a new feature flag change request
+    schema:
+      type: object
+      properties:
+        description:
+          type: string
+          description: >-
+            A name that describes the changes you would like to apply to a
+            feature flag configuration
+        instructions:
+          $ref: '#/definitions/SemanticPatchInstruction'
+        notifyMemberIds:
+          type: array
+          items:
+            type: string
+          example:
+            - memberId
+            - memberId2
+        comment:
+          type: string
+          description: comment will be included in audit log item for change.
+      required:
+        - description
+        - instructions
+        - notifyMemberIds
+  FeatureFlagChangeRequestReviewPostRequest:
+    name: featureFlagChangeRequestReviewConfigBody
+    in: body
+    required: true
+    description: Review a feature flag change request
+    schema:
+      type: object
+      properties:
+        kind:
+          type: string
+          description: Either approve or decline change request
+          enum:
+            - approve
+            - decline
+          example: approve
+        comment:
+          type: string
+          description: comment will be included in audit log item for change.
+          example: This is a comment string
+      required:
+        - kind
+  FeatureFlagChangeRequestApplyPostRequest:
+    name: featureFlagChangeRequestApplyConfigBody
+    in: body
+    required: true
+    description: Apply a new feature flag change request
+    schema:
+      type: object
+      properties:
+        comment:
+          type: string
+          description: comment will be included in audit log item for change.
+          example: Applying approved changes
   IntegrationKey:
     name: integrationKey
     in: path
