@@ -270,6 +270,8 @@ Rule:
       type: array
       items:
         $ref: "#/definitions/Clause"
+    description:
+      type: string
 Fallthrough:
   type: object
   properties:
@@ -1646,7 +1648,7 @@ IntegrationSubscription:
       type: array
       items:
         type: string
-      description: An array of tags for this integration configuration. 
+      description: An array of tags for this integration configuration.
     _status:
       type: object
       properties:
