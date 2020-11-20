@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 3.8.0
+  version: 3.9.0
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -1993,6 +1993,8 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Clause'
+      description:
+        type: string
   Fallthrough:
     type: object
     properties:
