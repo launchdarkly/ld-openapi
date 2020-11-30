@@ -21,6 +21,7 @@ circleci:
     image: circleci/openjdk:10-node-browsers
     env:
       GRADLE_USER_HOME: /home/circleci
+    context: org-global
 
 documentation:
   githubPages: true

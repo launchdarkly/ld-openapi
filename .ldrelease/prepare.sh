@@ -1,27 +1,32 @@
 #!/usr/bin/env bash
 
 # Remove broken libc6-dev (ch77386)
+echo "Fixing broken libc6..."
 sudo apt-get purge libc6-dev
 sudo apt-get autoremove
 sudo apt-get clean
 sudo apt-get install -f
 
 # Install Python tools and AWS CLI
+echo "Configuring Python and AWS CLI..."
 sudo apt update
 sudo apt install awscli python3-pip python3-setuptools
 sudo pip3 install wheel twine
 
 # Set up Ruby and RubyGems credentials
+echo "Configuring ruby..."
 sudo apt-get install ruby
 mkdir -p ~/.gem
 echo -e "---\r\n:rubygems_api_key: $RUBYGEMS_API_KEY" > ~/.gem/credentials
 chmod 0600 /home/circleci/.gem/credentials
 
 # Set up git client
+echo "Configuring git..."
 git config --global user.name $GH_USER
 git config --global user.email $GH_EMAIL
 
 # Fetch credentials
+echo "Configuring gradle..."
 aws s3 cp s3://launchdarkly-pastebin/ci/openapi/gradle.properties.enc .
 aws s3 cp s3://launchdarkly-pastebin/ci/openapi/secring.gpg.enc .
 openssl enc -d -in gradle.properties.enc -aes-256-cbc -k $ENCRYPTION_SECRET -md md5 > ~/gradle.properties
