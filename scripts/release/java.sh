@@ -11,5 +11,6 @@ cp -r ${path} $tmpdir
 cp ${path}/../../scripts/release/java/publish.gradle ${tmpdir}/$(basename ${path})
 
 cd ${tmpdir}/$(basename ${path})
+chmod u+x ./gradlew
 ./gradlew --info -b publish.gradle publish closeAndReleaseRepository
 ./gradlew --info -b publish.gradle publishGhPages
