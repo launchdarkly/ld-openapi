@@ -245,6 +245,10 @@ FeatureFlagConfig:
       type: boolean
       example: true
       description: Set to true to send detailed event information when targeting is enabled but no individual targeting rule is matched.
+    _site:
+      $ref: "#/definitions/Site"
+    _environmentName:
+      type: string
 Target:
   type: object
   properties:
