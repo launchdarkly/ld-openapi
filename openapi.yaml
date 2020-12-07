@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 3.9.2
+  version: 3.10.0
 host: app.launchdarkly.com
 basePath: /api/v2
 schemes:
@@ -1968,6 +1968,10 @@ definitions:
         description: >-
           Set to true to send detailed event information when targeting is
           enabled but no individual targeting rule is matched.
+      _site:
+        $ref: '#/definitions/Site'
+      _environmentName:
+        type: string
   Target:
     type: object
     properties:
