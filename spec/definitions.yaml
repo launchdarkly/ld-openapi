@@ -888,7 +888,7 @@ Environment:
       description: Determines if this environment requires confirmation for flag and segment changes.
     approvalSettings:
       type: object
-      description: Only appears if the approvals feature is enabled.
+      description: Approval settings for an environment. Only appears if the approvals feature is enabled.
       properties:
         serviceKind:
           type: string
