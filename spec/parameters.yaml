@@ -686,8 +686,8 @@ FeatureFlagChangeRequestReviewPostRequest:
     properties:
       kind:
         type: string
-        description: Either approve or decline change request
-        enum: [approve, decline]
+        description: One of approve, decline, or comment.
+        enum: [approve, decline, comment]
         example: "approve"
       comment:
         type: string

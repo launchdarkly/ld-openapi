@@ -440,8 +440,6 @@ FeatureFlagChangeRequest:
     appliedDate:
       type: integer
       description: A unix epoch time in milliseconds specifying the date the change request was applied
-    currentReviewsByMemberId:
-      $ref: "#/definitions/FeatureFlagChangeRequestReview"
     allReviews:
       type: array
       items:
@@ -888,6 +886,30 @@ Environment:
       type: boolean
       example: false
       description: Determines if this environment requires confirmation for flag and segment changes.
+    approvalSettings:
+      type: object
+      description: Approval settings for an environment. Only appears if the approvals feature is enabled.
+      properties:
+        serviceKind:
+          type: string
+          description: The approvals system used.
+          enum:
+          - launchdarkly
+          - service-now
+        required:
+          type: boolean
+          description: Whether any changes to flags in this environment will require approval.
+        canReviewOwnRequest:
+          type: boolean
+          description: Whether requesters can approve or decline their own request. They may always comment.
+        minNumApprovals:
+          type: integer
+          format: int64
+          description: The number of approvals required before a change request can be applied.
+          example: 2
+        canApplyDeclinedChanges:
+          type: boolean
+          description: Whether changes can be applied as long as minNumApprovals is met, regardless of if any reviewers have declined a request.
 EnvironmentPost:
   type: object
   properties:
