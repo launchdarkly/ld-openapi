@@ -26,13 +26,13 @@
   $ref: ./paths/flags.yaml#/UserTargetingExpirationForFlag
 
 # paths for flag config approval request
-/projects/{projectKey}/environments/{environmentKey}/flags/{featureFlagKey}/approval-requests:
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests:
   $ref: ./paths/flags.yaml#/FeatureFlagChangeRequests
-/projects/{projectKey}/environments/{environmentKey}/flags/{featureFlagKey}/approval-requests/{featureFlagChangeRequestId}:
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}:
   $ref: ./paths/flags.yaml#/FeatureFlagChangeRequest
-/projects/{projectKey}/environments/{environmentKey}/flags/{featureFlagKey}/approval-requests/{featureFlagChangeRequestId}/apply:
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}/apply:
   $ref: ./paths/flags.yaml#/ApplyFeatureFlagChangeRequest
-/projects/{projectKey}/environments/{environmentKey}/flags/{featureFlagKey}/approval-requests/{featureFlagChangeRequestId}/review:
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}/review:
   $ref: ./paths/flags.yaml#/ReviewFeatureFlagChangeRequest
 
 /segments/{projectKey}/{environmentKey}:
