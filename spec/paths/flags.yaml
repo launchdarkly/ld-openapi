@@ -306,41 +306,6 @@ ScheduledFlagChangesConflicts:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-FlagChangeRequest:
-  get:
-    operationId: getFeatureFlagChangeRequest
-    summary: Get a single feature flag change request by key
-    parameters:
-      - $ref: '#/parameters/ProjectKey'
-      - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagChangeRequestId'
-    responses:
-      '200':
-        schema:
-          $ref: '#/definitions/FeatureFlagChangeRequest'
-      '401':
-        $ref: '#/responses/Standard401'
-      '404':
-        $ref: '#/responses/Standard404'
-    tags:
-      - Feature flags
-  delete:
-      operationId: deleteFeatureFlagChangeRequest
-      parameters:
-        - $ref: '#/parameters/ProjectKey'
-        - $ref: '#/parameters/FeatureFlagKey'
-        - $ref: '#/parameters/EnvironmentKey'
-        - $ref: '#/parameters/FeatureFlagChangeRequestId'
-      responses:
-        '204':
-          $ref: '#/responses/Standard204'
-        '401':
-          $ref: '#/responses/Standard401'
-        '404':
-          $ref: '#/responses/Standard404'
-      tags:
-        - Feature flags
 FeatureFlagChangeRequests:
   get:
     operationId: getFeatureFlagChangeRequests
@@ -354,24 +319,6 @@ FeatureFlagChangeRequests:
         schema:
           $ref: '#/definitions/FeatureFlagChangeRequests'
         description: Feature flag change requests response
-      '401':
-        $ref: '#/responses/Standard401'
-      '404':
-        $ref: '#/responses/Standard404'
-    tags:
-      - Feature flags
-  post:
-    operationId: postFeatureFlagChangeRequest
-    parameters:
-      - $ref: '#/parameters/ProjectKey'
-      - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagChangeRequestPostRequest'
-    responses:
-      '200':
-        schema:
-          $ref: '#/definitions/FeatureFlagChangeRequest'
-        description: Feature flag change request response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -392,6 +339,44 @@ FeatureFlagChangeRequest:
         schema:
           $ref: '#/definitions/FeatureFlagChangeRequests'
         description: Feature flag change request response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+  post:
+    operationId: postFeatureFlagChangeRequest
+    summary: Create a change request for a feature flag
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagChangeRequestId'
+      - $ref: '#/parameters/FeatureFlagChangeRequestPostRequest'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/FeatureFlagChangeRequest'
+        description: Feature flag change request response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+  delete:
+    operationId: deleteFeatureFlagChangeRequest
+    summary: Delete a change request for a feature flag
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/FeatureFlagChangeRequestId'
+      - $ref: '#/parameters/FeatureFlagChangeRequestPostRequest'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
       '401':
         $ref: '#/responses/Standard401'
       '404':
