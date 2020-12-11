@@ -24,7 +24,9 @@
   $ref: ./paths/flags.yaml#/FlagStatusAcrossEnvironments
 /flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}:
   $ref: ./paths/flags.yaml#/UserTargetingExpirationForFlag
-/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests:
+
+# paths for flag config approval request
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests:
   $ref: ./paths/flags.yaml#/FeatureFlagChangeRequests
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}:
   $ref: ./paths/flags.yaml#/FeatureFlagChangeRequest
@@ -32,6 +34,7 @@
   $ref: ./paths/flags.yaml#/ApplyFeatureFlagChangeRequest
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}/review:
   $ref: ./paths/flags.yaml#/ReviewFeatureFlagChangeRequest
+
 /segments/{projectKey}/{environmentKey}:
   $ref: ./paths/segments.yaml#/UserSegments
 /segments/{projectKey}/{environmentKey}/{userSegmentKey}:
