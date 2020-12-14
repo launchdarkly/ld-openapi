@@ -328,7 +328,7 @@ FeatureFlagApprovalRequests:
 FeatureFlagApprovalRequest:
   get:
     operationId: getFeatureFlagApprovalRequest
-    summary: Get a single change request for a feature flag
+    summary: Get a single approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -338,7 +338,7 @@ FeatureFlagApprovalRequest:
       '200':
         schema:
           $ref: '#/definitions/FeatureFlagApprovalRequests'
-        description: Feature flag change request response
+        description: Feature flag approval request response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -347,7 +347,7 @@ FeatureFlagApprovalRequest:
       - Feature flags
   post:
     operationId: postFeatureFlagApprovalRequest
-    summary: Create a change request for a feature flag
+    summary: Create a approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -358,7 +358,7 @@ FeatureFlagApprovalRequest:
       '200':
         schema:
           $ref: '#/definitions/FeatureFlagApprovalRequest'
-        description: Feature flag change request response
+        description: Feature flag approval request response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -367,7 +367,7 @@ FeatureFlagApprovalRequest:
       - Feature flags
   delete:
     operationId: deleteFeatureFlagApprovalRequest
-    summary: Delete a change request for a feature flag
+    summary: Delete a approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKey'
@@ -386,7 +386,7 @@ FeatureFlagApprovalRequest:
 ApplyFeatureFlagApprovalRequest:
   post:
     operationId: postApplyFeatureFlagApprovalRequest
-    summary: Apply change request for a feature flag
+    summary: Apply approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -397,7 +397,7 @@ ApplyFeatureFlagApprovalRequest:
       '200':
         schema:
           $ref: '#/definitions/FeatureFlagApprovalRequests'
-        description: Feature flag change request applied response
+        description: Feature flag approval request applied response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -407,7 +407,7 @@ ApplyFeatureFlagApprovalRequest:
 ReviewFeatureFlagApprovalRequest:
   post:
     operationId: postReviewFeatureFlagApprovalRequest
-    summary: Review change request for a feature flag
+    summary: Review approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -418,7 +418,7 @@ ReviewFeatureFlagApprovalRequest:
       '200':
         schema:
           $ref: '#/definitions/FeatureFlagApprovalRequests'
-        description: Feature flag change request reviewed response
+        description: Feature flag approval request reviewed response
       '401':
         $ref: '#/responses/Standard401'
       '404':

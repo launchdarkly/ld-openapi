@@ -650,12 +650,12 @@ FeatureFlagApprovalRequestId:
   name: featureFlagApprovalRequestId
   in: path
   required: true
-  description: The feature flag change request ID
+  description: The feature flag approval request ID
   type: string
 FeatureFlagApprovalRequestPostRequest:
   name: featureFlagApprovalRequestConfigBody
   in: body
-  description: Create a new feature flag change request
+  description: Create a new feature flag approval request
   schema:
     type: object
     properties:
@@ -680,7 +680,7 @@ FeatureFlagApprovalRequestReviewPostRequest:
   name: featureFlagApprovalRequestReviewConfigBody
   in: body
   required: true
-  description: Review a feature flag change request
+  description: Review a feature flag approval request
   schema:
     type: object
     properties:
@@ -699,7 +699,7 @@ FeatureFlagApprovalRequestApplyPostRequest:
   name: featureFlagApprovalRequestApplyConfigBody
   in: body
   required: true
-  description: Apply a new feature flag change request
+  description: Apply a new feature flag approval request
   schema:
     type: object
     properties:
