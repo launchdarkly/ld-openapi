@@ -27,13 +27,13 @@
 
 # paths for flag config approval request
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests:
-  $ref: ./paths/flags.yaml#/FeatureFlagChangeRequests
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}:
-  $ref: ./paths/flags.yaml#/FeatureFlagChangeRequest
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}/apply:
-  $ref: ./paths/flags.yaml#/ApplyFeatureFlagChangeRequest
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagChangeRequestId}/review:
-  $ref: ./paths/flags.yaml#/ReviewFeatureFlagChangeRequest
+  $ref: ./paths/flags.yaml#/FeatureFlagApprovalRequests
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}:
+  $ref: ./paths/flags.yaml#/FeatureFlagApprovalRequest
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}/apply:
+  $ref: ./paths/flags.yaml#/ApplyFeatureFlagApprovalRequest
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}/review:
+  $ref: ./paths/flags.yaml#/ReviewFeatureFlagApprovalRequest
 
 /segments/{projectKey}/{environmentKey}:
   $ref: ./paths/segments.yaml#/UserSegments

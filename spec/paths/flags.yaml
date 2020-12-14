@@ -306,9 +306,9 @@ ScheduledFlagChangesConflicts:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-FeatureFlagChangeRequests:
+FeatureFlagApprovalRequests:
   get:
-    operationId: getFeatureFlagChangeRequests
+    operationId: getFeatureFlagApprovalRequests
     summary: Get all change requests for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -317,7 +317,7 @@ FeatureFlagChangeRequests:
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagChangeRequests'
+          $ref: '#/definitions/FeatureFlagApprovalRequests'
         description: Feature flag change requests response
       '401':
         $ref: '#/responses/Standard401'
@@ -325,19 +325,19 @@ FeatureFlagChangeRequests:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-FeatureFlagChangeRequest:
+FeatureFlagApprovalRequest:
   get:
-    operationId: getFeatureFlagChangeRequest
+    operationId: getFeatureFlagApprovalRequest
     summary: Get a single change request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
       - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagChangeRequestId'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagChangeRequests'
+          $ref: '#/definitions/FeatureFlagApprovalRequests'
         description: Feature flag change request response
       '401':
         $ref: '#/responses/Standard401'
@@ -346,18 +346,18 @@ FeatureFlagChangeRequest:
     tags:
       - Feature flags
   post:
-    operationId: postFeatureFlagChangeRequest
+    operationId: postFeatureFlagApprovalRequest
     summary: Create a change request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
       - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagChangeRequestId'
-      - $ref: '#/parameters/FeatureFlagChangeRequestPostRequest'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestPostRequest'
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagChangeRequest'
+          $ref: '#/definitions/FeatureFlagApprovalRequest'
         description: Feature flag change request response
       '401':
         $ref: '#/responses/Standard401'
@@ -366,14 +366,14 @@ FeatureFlagChangeRequest:
     tags:
       - Feature flags
   delete:
-    operationId: deleteFeatureFlagChangeRequest
+    operationId: deleteFeatureFlagApprovalRequest
     summary: Delete a change request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/FeatureFlagChangeRequestId'
-      - $ref: '#/parameters/FeatureFlagChangeRequestPostRequest'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestPostRequest'
     responses:
       '204':
         $ref: '#/responses/Standard204'
@@ -383,20 +383,20 @@ FeatureFlagChangeRequest:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-ApplyFeatureFlagChangeRequest:
+ApplyFeatureFlagApprovalRequest:
   post:
-    operationId: postApplyFeatureFlagChangeRequest
+    operationId: postApplyFeatureFlagApprovalRequest
     summary: Apply change request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
       - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagChangeRequestId'
-      - $ref: '#/parameters/FeatureFlagChangeRequestApplyPostRequest'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestApplyPostRequest'
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagChangeRequests'
+          $ref: '#/definitions/FeatureFlagApprovalRequests'
         description: Feature flag change request applied response
       '401':
         $ref: '#/responses/Standard401'
@@ -404,20 +404,20 @@ ApplyFeatureFlagChangeRequest:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-ReviewFeatureFlagChangeRequest:
+ReviewFeatureFlagApprovalRequest:
   post:
-    operationId: postReviewFeatureFlagChangeRequest
+    operationId: postReviewFeatureFlagApprovalRequest
     summary: Review change request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
       - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagChangeRequestId'
-      - $ref: '#/parameters/FeatureFlagChangeRequestReviewPostRequest'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
+      - $ref: '#/parameters/FeatureFlagApprovalRequestReviewPostRequest'
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagChangeRequests'
+          $ref: '#/definitions/FeatureFlagApprovalRequests'
         description: Feature flag change request reviewed response
       '401':
         $ref: '#/responses/Standard401'

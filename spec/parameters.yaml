@@ -646,14 +646,14 @@ RelayProxyConfigsExpiry:
   type: integer
   format: int64
   description: An expiration time for the old relay proxy configuration key, expressed as a Unix epoch time in milliseconds. By default, the relay proxy configuration will expire immediately
-FeatureFlagChangeRequestId:
-  name: featureFlagChangeRequestId
+FeatureFlagApprovalRequestId:
+  name: featureFlagApprovalRequestId
   in: path
   required: true
   description: The feature flag change request ID
   type: string
-FeatureFlagChangeRequestPostRequest:
-  name: featureFlagChangeRequestConfigBody
+FeatureFlagApprovalRequestPostRequest:
+  name: featureFlagApprovalRequestConfigBody
   in: body
   description: Create a new feature flag change request
   schema:
@@ -676,8 +676,8 @@ FeatureFlagChangeRequestPostRequest:
       - description
       - instructions
       - notifyMemberIds
-FeatureFlagChangeRequestReviewPostRequest:
-  name: featureFlagChangeRequestReviewConfigBody
+FeatureFlagApprovalRequestReviewPostRequest:
+  name: featureFlagApprovalRequestReviewConfigBody
   in: body
   required: true
   description: Review a feature flag change request
@@ -695,8 +695,8 @@ FeatureFlagChangeRequestReviewPostRequest:
         example: "This is a comment string"
     required:
       - kind
-FeatureFlagChangeRequestApplyPostRequest:
-  name: featureFlagChangeRequestApplyConfigBody
+FeatureFlagApprovalRequestApplyPostRequest:
+  name: featureFlagApprovalRequestApplyConfigBody
   in: body
   required: true
   description: Apply a new feature flag change request

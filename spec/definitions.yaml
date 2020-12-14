@@ -398,7 +398,7 @@ ScheduledChangesFeatureFlagConflict:
     reason:
       type: string
       description: "Feature flag scheduled change conflict reason"
-FeatureFlagChangeRequests:
+FeatureFlagApprovalRequests:
   type: object
   properties:
     _links:
@@ -406,8 +406,8 @@ FeatureFlagChangeRequests:
     items:
       type: array
       items:
-        $ref: "#/definitions/FeatureFlagChangeRequest"
-FeatureFlagChangeRequest:
+        $ref: "#/definitions/FeatureFlagApprovalRequest"
+FeatureFlagApprovalRequest:
   type: object
   properties:
     _id:
@@ -421,7 +421,7 @@ FeatureFlagChangeRequest:
       type: string
       description: The id of the member that requested the change
     reviewStatus:
-      $ref: "#/definitions/FeatureFlagChangeRequestReviewStatus"
+      $ref: "#/definitions/FeatureFlagApprovalRequestReviewStatus"
     status:
       type: string
       description: |
@@ -443,7 +443,7 @@ FeatureFlagChangeRequest:
     allReviews:
       type: array
       items:
-        $ref: "#/definitions/FeatureFlagChangeRequestReview"
+        $ref: "#/definitions/FeatureFlagApprovalRequestReview"
     notifyMemberIds:
       type: array
       items:
@@ -451,19 +451,19 @@ FeatureFlagChangeRequest:
       example: ["memberId", "memberId2"]
     instructions:
       $ref: "#/definitions/SemanticPatchInstruction"
-FeatureFlagChangeRequestReview:
+FeatureFlagApprovalRequestReview:
   type: object
   properties:
     creationDate:
       type: integer
       description: A unix epoch time in milliseconds specifying the date the change request was reviewed
     kind:
-      $ref: "#/definitions/FeatureFlagChangeRequestReviewStatus"
+      $ref: "#/definitions/FeatureFlagApprovalRequestReviewStatus"
     memberId:
       $ref: "#/definitions/Id"
     _id:
       $ref: "#/definitions/Id"
-FeatureFlagChangeRequestReviewStatus:
+FeatureFlagApprovalRequestReviewStatus:
   type: string
   description: |
     | Name     | Description |
