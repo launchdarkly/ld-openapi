@@ -27,13 +27,23 @@
 
 # paths for flag config approval request
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests:
-  $ref: ./paths/flags.yaml#/FeatureFlagApprovalRequests
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}:
-  $ref: ./paths/flags.yaml#/FeatureFlagApprovalRequest
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}/apply:
-  $ref: ./paths/flags.yaml#/ApplyFeatureFlagApprovalRequest
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}/review:
-  $ref: ./paths/flags.yaml#/ReviewFeatureFlagApprovalRequest
+  $ref: ./paths/flags.yaml#/ApprovalRequests
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{approvalRequestId}:
+  $ref: ./paths/flags.yaml#/ApprovalRequest
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{approvalRequestId}/apply:
+  $ref: ./paths/flags.yaml#/ApplyApprovalRequest
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{approvalRequestId}/review:
+  $ref: ./paths/flags.yaml#/ReviewApprovalRequest
+
+# paths for global flag approval request
+/projects/{projectKey}/flags/{featureFlagKey}/approval-requests:
+  $ref: ./paths/flags.yaml#/GlobalFlagApprovalRequests
+/projects/{projectKey}/flags/{featureFlagKey}/approval-requests/{approvalRequestId}:
+  $ref: ./paths/flags.yaml#/GlobalFlagApprovalRequest
+/projects/{projectKey}/flags/{featureFlagKey}/approval-requests/{approvalRequestId}/apply:
+  $ref: ./paths/flags.yaml#/ApplyGlobalFlagApprovalRequest
+/projects/{projectKey}/flags/{featureFlagKey}/approval-requests/{approvalRequestId}/review:
+  $ref: ./paths/flags.yaml#/ReviewGlobalFlagApprovalRequest
 
 /segments/{projectKey}/{environmentKey}:
   $ref: ./paths/segments.yaml#/UserSegments

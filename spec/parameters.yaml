@@ -646,16 +646,16 @@ RelayProxyConfigsExpiry:
   type: integer
   format: int64
   description: An expiration time for the old relay proxy configuration key, expressed as a Unix epoch time in milliseconds. By default, the relay proxy configuration will expire immediately
-FeatureFlagApprovalRequestId:
-  name: featureFlagApprovalRequestId
+ApprovalRequestId:
+  name: approvalRequestId
   in: path
   required: true
-  description: The feature flag approval request ID
+  description: The approval request ID
   type: string
-FeatureFlagApprovalRequestPostRequest:
-  name: featureFlagApprovalRequestConfigBody
+ApprovalRequestPostRequest:
+  name: approvalRequestConfigBody
   in: body
-  description: Create a new feature flag approval request
+  description: Create a new approval request
   schema:
     type: object
     properties:
@@ -676,11 +676,11 @@ FeatureFlagApprovalRequestPostRequest:
       - description
       - instructions
       - notifyMemberIds
-FeatureFlagApprovalRequestReviewPostRequest:
-  name: featureFlagApprovalRequestReviewConfigBody
+ApprovalRequestReviewPostRequest:
+  name: approvalRequestReviewConfigBody
   in: body
   required: true
-  description: Review a feature flag approval request
+  description: Review an approval request
   schema:
     type: object
     properties:
@@ -695,11 +695,11 @@ FeatureFlagApprovalRequestReviewPostRequest:
         example: "This is a comment string"
     required:
       - kind
-FeatureFlagApprovalRequestApplyPostRequest:
-  name: featureFlagApprovalRequestApplyConfigBody
+ApprovalRequestApplyPostRequest:
+  name: approvalRequestApplyConfigBody
   in: body
   required: true
-  description: Apply a new feature flag approval request
+  description: Apply an approval request
   schema:
     type: object
     properties:
