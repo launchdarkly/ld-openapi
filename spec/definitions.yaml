@@ -917,7 +917,7 @@ Environment:
         minNumApprovals:
           type: integer
           format: int64
-          description: The number of approvals required before a approval request can be applied.
+          description: The number of approvals required before an approval request can be applied.
           example: 2
         canApplyDeclinedChanges:
           type: boolean

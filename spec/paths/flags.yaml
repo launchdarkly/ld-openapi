@@ -309,7 +309,7 @@ ScheduledFlagChangesConflicts:
 FeatureFlagApprovalRequests:
   get:
     operationId: getFeatureFlagApprovalRequests
-    summary: Get all change requests for a feature flag
+    summary: Get all approval requests for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -318,7 +318,7 @@ FeatureFlagApprovalRequests:
       '200':
         schema:
           $ref: '#/definitions/FeatureFlagApprovalRequests'
-        description: Feature flag change requests response
+        description: Feature flag approval requests response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -347,7 +347,7 @@ FeatureFlagApprovalRequest:
       - Feature flags
   post:
     operationId: postFeatureFlagApprovalRequest
-    summary: Create a approval request for a feature flag
+    summary: Create an approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -367,7 +367,7 @@ FeatureFlagApprovalRequest:
       - Feature flags
   delete:
     operationId: deleteFeatureFlagApprovalRequest
-    summary: Delete a approval request for a feature flag
+    summary: Delete an approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKey'
