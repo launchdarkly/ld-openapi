@@ -330,7 +330,7 @@ FlagConfigScheduledChangesConflicts:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-ApprovalRequests:
+FlagConfigApprovalRequests:
   get:
     operationId: getApprovalRequests
     summary: Get all approval requests for a feature flag config
@@ -349,7 +349,7 @@ ApprovalRequests:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-ApprovalRequest:
+FlagConfigApprovalRequest:
   get:
     operationId: getApprovalRequest
     summary: Get a single approval request for a feature flag config
@@ -407,7 +407,7 @@ ApprovalRequest:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-ApplyApprovalRequest:
+FlagConfigApplyApprovalRequest:
   post:
     operationId: postApplyApprovalRequest
     summary: Apply approval request for a feature flag config
@@ -428,7 +428,7 @@ ApplyApprovalRequest:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-ReviewApprovalRequest:
+FlagConfigReviewApprovalRequest:
   post:
     operationId: postReviewApprovalRequest
     summary: Review approval request for a feature flag config
@@ -450,9 +450,9 @@ ReviewApprovalRequest:
     tags:
       - Feature flags
 # approval requests for global flag changes
-GlobalFlagApprovalRequests:
+FeatureFlagApprovalRequests:
   get:
-    operationId: getGlobalFlagApprovalRequests
+    operationId: getFeatureFlagApprovalRequests
     summary: Get all approval requests for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -468,9 +468,9 @@ GlobalFlagApprovalRequests:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-GlobalFlagApprovalRequest:
+FeatureFlagApprovalRequest:
   get:
-    operationId: getGlobalFlagApprovalRequest
+    operationId: getFeatureFlagApprovalRequest
     summary: Get a single approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -488,7 +488,7 @@ GlobalFlagApprovalRequest:
     tags:
       - Feature flags
   post:
-    operationId: postGlobalFlagApprovalRequest
+    operationId: postFeatureFlagApprovalRequest
     summary: Create an approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -507,7 +507,7 @@ GlobalFlagApprovalRequest:
     tags:
       - Feature flags
   delete:
-    operationId: deleteGlobalFlagApprovalRequest
+    operationId: deleteFeatureFlagApprovalRequest
     summary: Delete a approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -523,9 +523,9 @@ GlobalFlagApprovalRequest:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-ApplyGlobalFlagApprovalRequest:
+ApplyFeatureFlagApprovalRequest:
   post:
-    operationId: postApplyGlobalFlagApprovalRequest
+    operationId: postApplyFeatureFlagApprovalRequest
     summary: Apply approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
@@ -543,9 +543,9 @@ ApplyGlobalFlagApprovalRequest:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-ReviewGlobalFlagApprovalRequest:
+ReviewFeatureFlagApprovalRequest:
   post:
-    operationId: postReviewGlobalFlagApprovalRequest
+    operationId: postReviewFeatureFlagApprovalRequest
     summary: Review approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
