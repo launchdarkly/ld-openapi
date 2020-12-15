@@ -34,6 +34,14 @@
   $ref: ./paths/flags.yaml#/FlagConfigScheduledChange
 
 
+# paths for global flag scheduled changes
+/projects/{projectKey}/flags/{featureFlagKey}/scheduled-changes:
+  $ref: ./paths/flags.yaml#/FeatureFlagScheduledChanges
+/projects/{projectKey}/flags/{featureFlagKey}/scheduled-changes-conflicts:
+  $ref: ./paths/flags.yaml#/FeatureFlagScheduledChangesConflicts
+/projects/{projectKey}/flags/{featureFlagKey}/scheduled-changes/{scheduledChangeId}:
+  $ref: ./paths/flags.yaml#/FeatureFlagScheduledChange
+
 # paths for flag config approval request
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests:
   $ref: ./paths/flags.yaml#/FlagConfigApprovalRequests

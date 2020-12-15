@@ -214,7 +214,7 @@ UserTargetingExpirationForFlag:
 FlagConfigScheduledChanges:
   get:
     summary: Get all scheduled workflows for a feature flag by key.
-    operationId: getFeatureFlagScheduledChanges
+    operationId: getFlagConfigScheduledChanges
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -232,7 +232,7 @@ FlagConfigScheduledChanges:
       - Feature flags
   post:
     summary: Creates a new scheduled change for a feature flag.
-    operationId: postFeatureFlagScheduledChanges
+    operationId: postFlagConfigScheduledChanges
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FlagConfigScheduledChangesPostBody'
@@ -253,8 +253,8 @@ FlagConfigScheduledChanges:
       - Feature flags
 FlagConfigScheduledChange:
   get:
-    summary: Get a scheduled-change on a feature flag by id.
-    operationId: getFeatureFlagScheduledChange
+    summary: Get a scheduled change on a feature flag by id.
+    operationId: getFlagConfigScheduledChange
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -273,7 +273,7 @@ FlagConfigScheduledChange:
       - Feature flags
   patch:
     summary: Updates an existing scheduled-change on a feature flag in an environment.
-    operationId: patchFeatureFlagScheduledChange
+    operationId: patchFlagConfigScheduledChange
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -295,7 +295,7 @@ FlagConfigScheduledChange:
       - Feature flags
   delete:
     summary: Delete a scheduled change on a feature flag in an environment.
-    operationId: deleteFeatureFlagScheduledChanges
+    operationId: deleteFlagConfigScheduledChanges
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -313,7 +313,7 @@ FlagConfigScheduledChange:
 FlagConfigScheduledChangesConflicts:
   post:
     summary: Lists conflicts between the given instructions and any existing scheduled changes for the feature flag. The actual HTTP verb should be REPORT, not POST.
-    operationId: getFeatureFlagScheduledChangesConflicts
+    operationId: getFlagConfigScheduledChangesConflicts
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -330,6 +330,122 @@ FlagConfigScheduledChangesConflicts:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
+
+# Global scheduled changes routes
+FeatureFlagScheduledChanges:
+  get:
+    summary: Get all scheduled workflows for a feature flag by key.
+    operationId: getFeatureFlagScheduledChanges
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/FeatureFlagScheduledChanges'
+        description: A list of scheduled changes for feature flag response.
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+  post:
+    summary: Creates a new scheduled change for a feature flag.
+    operationId: postFeatureFlagScheduledChanges
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FlagConfigScheduledChangesPostBody'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '201':
+        description: A scheduled change for feature flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlagScheduledChange'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Feature flags
+FeatureFlagScheduledChange:
+  get:
+    summary: Get a scheduled change on a feature flag by id.
+    operationId: getFeatureFlagScheduledChange
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/ScheduledChangeId'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/FeatureFlagScheduledChange'
+        description: A scheduled change for feature flag response.
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+  patch:
+    summary: Updates an existing scheduled-change on a feature flag.
+    operationId: patchFeatureFlagScheduledChange
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/FlagConfigScheduledChangesPatchBody'
+      - $ref: '#/parameters/ScheduledChangeId'
+    responses:
+      '201':
+        description: A Scheduled change for feature flag response.
+        schema:
+          $ref: '#/definitions/FeatureFlagScheduledChange'
+      '400':
+        $ref: '#/responses/Standard400'
+      '401':
+        $ref: '#/responses/Standard401'
+      '409':
+        $ref: '#/responses/Standard409'
+    tags:
+      - Feature flags
+  delete:
+    summary: Delete a scheduled change on a feature flag.
+    operationId: deleteFeatureFlagScheduledChanges
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/ScheduledChangeId'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+FeatureFlagScheduledChangesConflicts:
+  post:
+    summary: Lists conflicts between the given instructions and any existing scheduled changes for the feature flag. The actual HTTP verb should be REPORT, not POST.
+    operationId: getFeatureFlagScheduledChangesConflicts
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/FlagConfigScheduledChangesConflictsBody'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/FeatureFlagScheduledChangesConflicts'
+        description: Scheduled changes conflict response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+
 FlagConfigApprovalRequests:
   get:
     operationId: getApprovalRequests
