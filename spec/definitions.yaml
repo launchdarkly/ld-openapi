@@ -190,18 +190,6 @@ Member:
       type: array
       items:
         $ref: "#/definitions/Id"
-    lastSeen:
-      type: integer
-      format: int64
-      example: 1469326565348
-      description: A unix epoch time in milliseconds specifying the last time this member was active in LaunchDarkly.
-    _lastSeenMetadata:
-      type: object
-      properties:
-        tokenId:
-          type: string
-          example: 5fd2a1ee05600316d5cb3e96
-          description: If the last time this member accessed LaunchDarkly was using the REST API, this value will be set to the ID of the personal access token used.
 Members:
   type: object
   properties:
