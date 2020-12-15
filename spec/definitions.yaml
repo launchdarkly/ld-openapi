@@ -398,7 +398,7 @@ ScheduledChangesFeatureFlagConflict:
     reason:
       type: string
       description: "Feature flag scheduled change conflict reason"
-FeatureFlagApprovalRequests:
+ApprovalRequests:
   type: object
   properties:
     _links:
@@ -406,8 +406,8 @@ FeatureFlagApprovalRequests:
     items:
       type: array
       items:
-        $ref: "#/definitions/FeatureFlagApprovalRequest"
-FeatureFlagApprovalRequest:
+        $ref: "#/definitions/ApprovalRequest"
+ApprovalRequest:
   type: object
   properties:
     _id:
@@ -421,15 +421,15 @@ FeatureFlagApprovalRequest:
       type: string
       description: The id of the member that requested the change
     reviewStatus:
-      $ref: "#/definitions/FeatureFlagApprovalRequestReviewStatus"
+      $ref: "#/definitions/ApprovalRequestReviewStatus"
     status:
       type: string
       description: |
         | Name     | Description |
         | --------:| ----------- |
-        | pending  | the feature flag approval request has not been applied yet |
-        | completed| the feature flag approval request has been applied successfully |
-        | failed   | the feature flag approval request has been applied but the changes were not applied successfully |
+        | pending  | the approval request has not been applied yet |
+        | completed| the approval request has been applied successfully |
+        | failed   | the approval request has been applied but the changes were not applied successfully |
       enum:
         - pending
         - completed
@@ -443,7 +443,7 @@ FeatureFlagApprovalRequest:
     allReviews:
       type: array
       items:
-        $ref: "#/definitions/FeatureFlagApprovalRequestReview"
+        $ref: "#/definitions/ApprovalRequestReview"
     notifyMemberIds:
       type: array
       items:
@@ -451,26 +451,26 @@ FeatureFlagApprovalRequest:
       example: ["memberId", "memberId2"]
     instructions:
       $ref: "#/definitions/SemanticPatchInstruction"
-FeatureFlagApprovalRequestReview:
+ApprovalRequestReview:
   type: object
   properties:
     creationDate:
       type: integer
       description: A unix epoch time in milliseconds specifying the date the approval request was reviewed
     kind:
-      $ref: "#/definitions/FeatureFlagApprovalRequestReviewStatus"
+      $ref: "#/definitions/ApprovalRequestReviewStatus"
     memberId:
       $ref: "#/definitions/Id"
     _id:
       $ref: "#/definitions/Id"
-FeatureFlagApprovalRequestReviewStatus:
+ApprovalRequestReviewStatus:
   type: string
   description: |
     | Name     | Description |
     | --------:| ----------- |
-    | pending  | the feature flag approval request has not been reviewed yet |
-    | approved | the feature flag approval request has been approved and can now be applied |
-    | declined | the feature flag approval request has been declined and cannot be applied |
+    | pending  | the approval request has not been reviewed yet |
+    | approved | the approval request has been approved and can now be applied |
+    | declined | the approval request has been declined and cannot be applied |
   enum:
     - pending
     - approved

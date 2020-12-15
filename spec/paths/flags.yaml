@@ -330,10 +330,10 @@ FlagConfigScheduledChangesConflicts:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
-FeatureFlagApprovalRequests:
+FlagConfigApprovalRequests:
   get:
-    operationId: getFeatureFlagApprovalRequests
-    summary: Get all approval requests for a feature flag
+    operationId: getApprovalRequests
+    summary: Get all approval requests for a feature flag config
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
@@ -341,8 +341,127 @@ FeatureFlagApprovalRequests:
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagApprovalRequests'
-        description: Feature flag approval requests response
+          $ref: '#/definitions/ApprovalRequests'
+        description: Approval requests response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+FlagConfigApprovalRequest:
+  get:
+    operationId: getApprovalRequest
+    summary: Get a single approval request for a feature flag config
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/ApprovalRequestId'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/ApprovalRequests'
+        description: Approval request response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+  post:
+    operationId: postApprovalRequest
+    summary: Create an approval request for a feature flag config
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/ApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestPostRequest'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/ApprovalRequest'
+        description: Approval request response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+  delete:
+    operationId: deleteApprovalRequest
+    summary: Delete an approval request for a feature flag config
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/ApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestPostRequest'
+    responses:
+      '204':
+        $ref: '#/responses/Standard204'
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+FlagConfigApplyApprovalRequest:
+  post:
+    operationId: postApplyApprovalRequest
+    summary: Apply approval request for a feature flag config
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/ApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestApplyPostRequest'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/ApprovalRequests'
+        description: Approval request applied response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+FlagConfigReviewApprovalRequest:
+  post:
+    operationId: postReviewApprovalRequest
+    summary: Review approval request for a feature flag config
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/ApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestReviewPostRequest'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/ApprovalRequests'
+        description: Approval request reviewed response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+# approval requests for global flag changes
+FeatureFlagApprovalRequests:
+  get:
+    operationId: getFeatureFlagApprovalRequests
+    summary: Get all approval requests for a feature flag
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        schema:
+          $ref: '#/definitions/ApprovalRequests'
+        description: Approval requests response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -356,13 +475,12 @@ FeatureFlagApprovalRequest:
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestId'
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagApprovalRequests'
-        description: Feature flag approval request response
+          $ref: '#/definitions/ApprovalRequests'
+        description: Approval request response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -375,14 +493,13 @@ FeatureFlagApprovalRequest:
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestPostRequest'
+      - $ref: '#/parameters/ApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestPostRequest'
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagApprovalRequest'
-        description: Feature flag approval request response
+          $ref: '#/definitions/ApprovalRequest'
+        description: Approval request response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -391,13 +508,12 @@ FeatureFlagApprovalRequest:
       - Feature flags
   delete:
     operationId: deleteFeatureFlagApprovalRequest
-    summary: Delete an approval request for a feature flag
+    summary: Delete a approval request for a feature flag
     parameters:
       - $ref: '#/parameters/ProjectKey'
-      - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestPostRequest'
+      - $ref: '#/parameters/ApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestPostRequest'
     responses:
       '204':
         $ref: '#/responses/Standard204'
@@ -414,14 +530,13 @@ ApplyFeatureFlagApprovalRequest:
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestApplyPostRequest'
+      - $ref: '#/parameters/ApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestApplyPostRequest'
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagApprovalRequests'
-        description: Feature flag approval request applied response
+          $ref: '#/definitions/ApprovalRequests'
+        description: Approval request applied response
       '401':
         $ref: '#/responses/Standard401'
       '404':
@@ -435,14 +550,13 @@ ReviewFeatureFlagApprovalRequest:
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/FeatureFlagKey'
-      - $ref: '#/parameters/EnvironmentKey'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestId'
-      - $ref: '#/parameters/FeatureFlagApprovalRequestReviewPostRequest'
+      - $ref: '#/parameters/ApprovalRequestId'
+      - $ref: '#/parameters/ApprovalRequestReviewPostRequest'
     responses:
       '200':
         schema:
-          $ref: '#/definitions/FeatureFlagApprovalRequests'
-        description: Feature flag approval request reviewed response
+          $ref: '#/definitions/ApprovalRequests'
+        description: Approval request reviewed response
       '401':
         $ref: '#/responses/Standard401'
       '404':
