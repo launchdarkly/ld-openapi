@@ -120,7 +120,7 @@ ScheduledChangeId:
   name: scheduledChangeId
   in: path
   required: true
-  description: The id of the scheduled-change
+  description: The id of the scheduled change
   type: string
 FlagConfigScheduledChangesConflictsBody:
   name: flagConfigScheduledChangesConflictsBody
@@ -145,7 +145,7 @@ FlagConfigScheduledChangesPostBody:
     properties:
       comment:
         type: string
-        description: "Used to describe the update to the scheduled changes."
+        description: "Used to describe the scheduled changes."
       executionDate:
         type: integer
         description: "A unix epoch time in milliseconds specifying the date the scheduled changes will be applied"
@@ -161,7 +161,7 @@ FlagConfigScheduledChangesPatchBody:
     properties:
       comment:
         type: string
-        description: "Used to describe the update to the scheduled changes."
+        description: "Used to describe the scheduled changes."
       instructions:
         $ref: "#/definitions/SemanticPatchInstruction"
 DestinationPostRequest:

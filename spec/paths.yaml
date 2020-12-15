@@ -25,7 +25,7 @@
 /flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}:
   $ref: ./paths/flags.yaml#/UserTargetingExpirationForFlag
 
-# paths for flag config scheduled-changes
+# paths for flag config scheduled changes
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes:
   $ref: ./paths/flags.yaml#/FlagConfigScheduledChanges
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes-conflicts:
