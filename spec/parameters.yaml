@@ -116,17 +116,52 @@ FeatureFlagPostRequest:
       - name
       - key
       - variations
-ScheduledFeatureFlagChangesPostRequest:
-  name: scheduledFeatureFlagChangesBody
+ScheduledChangeId:
+  name: scheduledChangeId
+  in: path
+  required: true
+  description: The id of the scheduled change
+  type: string
+FlagConfigScheduledChangesConflictsBody:
+  name: flagConfigScheduledChangesConflictsBody
   in: body
   required: true
-  description: Create scheduled changes on a feature flag.
+  description: Used to determine if a semantic patch will result in conflicts with scheduled changes on a feature flag.
   schema:
     type: object
     properties:
       executionDate:
         type: integer
         description: "A unix epoch time in milliseconds specifying the date the scheduled changes will be applied"
+      instructions:
+        $ref: "#/definitions/SemanticPatchInstruction"
+FlagConfigScheduledChangesPostBody:
+  name: flagConfigScheduledChangesPostBody
+  in: body
+  required: true
+  description: Create scheduled changes on a feature flag.
+  schema:
+    type: object
+    properties:
+      comment:
+        type: string
+        description: "Used to describe the scheduled changes."
+      executionDate:
+        type: integer
+        description: "A unix epoch time in milliseconds specifying the date the scheduled changes will be applied"
+      instructions:
+        $ref: "#/definitions/SemanticPatchInstruction"
+FlagConfigScheduledChangesPatchBody:
+  name: flagConfigScheduledChangesPatchBody
+  in: body
+  required: true
+  description: Update scheduled changes on a feature flag.
+  schema:
+    type: object
+    properties:
+      comment:
+        type: string
+        description: "Used to describe the scheduled changes."
       instructions:
         $ref: "#/definitions/SemanticPatchInstruction"
 DestinationPostRequest:
@@ -646,16 +681,16 @@ RelayProxyConfigsExpiry:
   type: integer
   format: int64
   description: An expiration time for the old relay proxy configuration key, expressed as a Unix epoch time in milliseconds. By default, the relay proxy configuration will expire immediately
-FeatureFlagApprovalRequestId:
-  name: featureFlagApprovalRequestId
+ApprovalRequestId:
+  name: approvalRequestId
   in: path
   required: true
-  description: The feature flag approval request ID
+  description: The approval request ID
   type: string
-FeatureFlagApprovalRequestPostRequest:
-  name: featureFlagApprovalRequestConfigBody
+ApprovalRequestPostRequest:
+  name: approvalRequestConfigBody
   in: body
-  description: Create a new feature flag approval request
+  description: Create a new approval request
   schema:
     type: object
     properties:
@@ -676,11 +711,11 @@ FeatureFlagApprovalRequestPostRequest:
       - description
       - instructions
       - notifyMemberIds
-FeatureFlagApprovalRequestReviewPostRequest:
-  name: featureFlagApprovalRequestReviewConfigBody
+ApprovalRequestReviewPostRequest:
+  name: approvalRequestReviewConfigBody
   in: body
   required: true
-  description: Review a feature flag approval request
+  description: Review an approval request
   schema:
     type: object
     properties:
@@ -695,11 +730,11 @@ FeatureFlagApprovalRequestReviewPostRequest:
         example: "This is a comment string"
     required:
       - kind
-FeatureFlagApprovalRequestApplyPostRequest:
-  name: featureFlagApprovalRequestApplyConfigBody
+ApprovalRequestApplyPostRequest:
+  name: approvalRequestApplyConfigBody
   in: body
   required: true
-  description: Apply a new feature flag approval request
+  description: Apply an approval request
   schema:
     type: object
     properties:

@@ -25,15 +25,24 @@
 /flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}:
   $ref: ./paths/flags.yaml#/UserTargetingExpirationForFlag
 
+# paths for flag config scheduled changes
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes:
+  $ref: ./paths/flags.yaml#/FlagConfigScheduledChanges
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes-conflicts:
+  $ref: ./paths/flags.yaml#/FlagConfigScheduledChangesConflicts
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes/{scheduledChangeId}:
+  $ref: ./paths/flags.yaml#/FlagConfigScheduledChange
+
+
 # paths for flag config approval request
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests:
-  $ref: ./paths/flags.yaml#/FeatureFlagApprovalRequests
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}:
-  $ref: ./paths/flags.yaml#/FeatureFlagApprovalRequest
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}/apply:
-  $ref: ./paths/flags.yaml#/ApplyFeatureFlagApprovalRequest
-/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{featureFlagApprovalRequestId}/review:
-  $ref: ./paths/flags.yaml#/ReviewFeatureFlagApprovalRequest
+  $ref: ./paths/flags.yaml#/FlagConfigApprovalRequests
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{approvalRequestId}:
+  $ref: ./paths/flags.yaml#/FlagConfigApprovalRequest
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{approvalRequestId}/apply:
+  $ref: ./paths/flags.yaml#/FlagConfigApplyApprovalRequest
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{approvalRequestId}/review:
+  $ref: ./paths/flags.yaml#/FlagConfigReviewApprovalRequest
 
 /segments/{projectKey}/{environmentKey}:
   $ref: ./paths/segments.yaml#/UserSegments
