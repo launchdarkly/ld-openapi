@@ -103,7 +103,7 @@ jobs:
 
   test-ruby:
     docker:
-    - image: circleci/ruby
+    - image: cimg/ruby:2.7
     steps:
     - checkout
     - attach_workspace:
