@@ -49,13 +49,13 @@ User:
       '200':
         description: User response.
         schema:
-          $ref: '#/definitions/User'
+          $ref: '#/definitions/UserRecord'
       '401':
         $ref: '#/responses/Standard401'
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - UserRecord
+      - Users
   delete:
     summary: Delete a user by ID.
     operationId: deleteUser
