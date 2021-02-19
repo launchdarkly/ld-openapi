@@ -55,7 +55,7 @@ User:
       '404':
         $ref: '#/responses/Standard404'
     tags:
-      - UserRecord
+      - Users
   delete:
     summary: Delete a user by ID.
     operationId: deleteUser
