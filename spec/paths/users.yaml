@@ -49,7 +49,7 @@ User:
       '200':
         description: User response.
         schema:
-          $ref: '#/definitions/User'
+          $ref: '#/definitions/UserRecord'
       '401':
         $ref: '#/responses/Standard401'
       '404':
