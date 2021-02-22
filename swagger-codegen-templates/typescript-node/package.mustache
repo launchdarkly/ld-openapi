@@ -1,0 +1,26 @@
+{
+    "name": "{{npmName}}",
+    "version": "{{npmVersion}}",
+    "description": "Build custom integrations with the LaunchDarkly REST API",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/launchdarkly/api-client-typescript.git"
+    },
+    "main": "api.js",
+    "scripts": {
+        "clean": "rm -Rf node_modules/ *.js *.js.map api.d.ts package-lock.json",
+        "build": "./node_modules/.bin/tsc",
+        "test": "echo No tests are defined."
+    },
+    "author": "Swagger Codegen Contributors",
+    "license": "Apache 2.0",
+    "dependencies": {
+        "bluebird": "^3.5.0",
+        "request": "^2.81.0",
+        "@types/bluebird": "*",
+        "@types/request": "*"
+    },
+    "devDependencies": {
+        "typescript": "^3.9.3"
+    }
+}

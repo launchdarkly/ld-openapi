@@ -36,6 +36,12 @@ node_modules
 targets/
 client-clones/
 
+# Generated files in the typescript sample
+samples/typescript-node/index.d.ts
+samples/typescript-node/index.js
+samples/typescript-node/index.js.map
+samples/typescript-node/package-lock.json
+
 # Auto generated files
 .DS_Store
 /swagger-codegen-cli-*.jar
