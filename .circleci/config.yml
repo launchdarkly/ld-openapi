@@ -132,6 +132,24 @@ jobs:
           mvn clean install
           mvn exec:java
 
+  test-typescript:
+    docker:
+    - image: circleci/node
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+    - run: |
+        cd targets/api-client-typescript-node
+        sudo npm install
+        sudo npm run build
+        sudo npm link 
+        cd ../../samples/typescript-node
+        sudo npm link launchdarkly-api-typescript
+        sudo npm install
+        sudo npm run build
+        npm start
+
 workflows:
   version: 2
   build:
@@ -157,5 +175,8 @@ workflows:
         requires:
         - build
     - test-ruby:
+        requires:
+        - build
+    - test-typescript:
         requires:
         - build

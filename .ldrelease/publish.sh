@@ -18,4 +18,4 @@ make TAG=${LD_RELEASE_VERSION} push
 
 # Publish client artifacts to registries
 echo Publishing client artifacts to registries...
-make PUBLISH_TARGETS="java javascript python ruby" publish
+make PUBLISH_TARGETS="java javascript python ruby typescript-node" publish

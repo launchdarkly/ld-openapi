@@ -3,7 +3,7 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
-SWAGGER_VERSION=2.4.8
+SWAGGER_VERSION=2.4.17
 SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
 SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
 
@@ -58,15 +58,28 @@ CODEGEN_PARAMS_java = \
 	-DdeveloperOrganization=LaunchDarkly \
 	-DdeveloperOrganizationUrl=https://launchdarkly.com \
 	-DartifactUrl=https://github.com/launchdarkly/api-client-java \
-	-DartifactDescription="LaunchDarkly API client" \
+	-DartifactDescription="Build custom integrations with the LaunchDarkly REST API" \
 	-DscmUrl="https://github.com/launchdarkly/api-client-java" \
 	-DscmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
 	-DscmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
-
-CODEGEN_PARAMS_javascript = -t $(TEMPLATES_PATH)/javascript -DprojectName=launchdarkly-api -DmoduleName=LaunchDarklyApi
-CODEGEN_PARAMS_php = -DpackagePath=LaunchDarklyApi -DcomposerVendorName=launchdarkly -DcomposerProjectName=api-client-php -DinvokerPackage=LaunchDarklyApi -DgitUserId=launchdarkly -DgitRepoId=api-client-php
+CODEGEN_PARAMS_javascript = \
+	-t $(TEMPLATES_PATH)/javascript \
+	-DprojectName=launchdarkly-api \
+	-DprojectDescription="Build custom integrations with the LaunchDarkly REST API" \
+	-DmoduleName=LaunchDarklyApi
+CODEGEN_PARAMS_php = \
+	-DpackagePath=LaunchDarklyApi \
+	-DcomposerVendorName=launchdarkly \
+	-DcomposerProjectName=api-client-php \
+	-DinvokerPackage=LaunchDarklyApi \
+	-DgitUserId=launchdarkly \
+	-DgitRepoId=api-client-php
 CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api -DpackageVersion=$(TAG)
-
+CODEGEN_PARAMS_typescript-node = \
+	-t $(TEMPLATES_PATH)/typescript-node \
+	-DnpmName=launchdarkly-api-typescript \
+	-DnpmVersion=$(TAG) \
+	-DsupportsES6=true
 CODEGEN_PARAMS_ruby = \
   -t $(TEMPLATES_PATH)/ruby \
   -DmoduleName=LaunchDarklyApi \
@@ -80,6 +93,13 @@ SAMPLE_FILE_go = main.go
 SAMPLE_FILE_javascript = index.js
 SAMPLE_FILE_python = main.py
 SAMPLE_FILE_ruby = main.rb
+SAMPLE_FILE_typescript-node = index.ts
+
+SAMPLE_FORMAT_go = go
+SAMPLE_FORMAT_javascript = js
+SAMPLE_FORMAT_python = python
+SAMPLE_FORMAT_ruby = ruby
+SAMPLE_FORMAT_typescript-node = ts
 
 TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
@@ -123,7 +143,7 @@ $(API_TARGETS): openapi_yaml
 	cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md
 	if [ -f "$(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@)" ]; then \
 		echo -e "## Sample Code\n" >> $(BUILD_DIR)/README.md; \
-		echo '```' >> $(BUILD_DIR)/README.md; \
+		echo '```${SAMPLE_FORMAT_$@}' >> $(BUILD_DIR)/README.md; \
 		cat $(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@) >> $(BUILD_DIR)/README.md; \
 		echo '```' >> $(BUILD_DIR)/README.md; \
 	fi
