@@ -3,12 +3,11 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
-SWAGGER_VERSION=2.4.17
+SWAGGER_VERSION=3.0.24
 SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
-SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
+SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
 
 API_TARGETS ?= \
-	bash \
 	csharp-dotnet2 \
 	go \
 	java \
@@ -16,7 +15,7 @@ API_TARGETS ?= \
 	php \
 	python \
 	ruby \
-	typescript-node
+	typescript-axios
 
 RELEASE_BRANCH ?= master                  # when we bump a major version, we may need to change this
 PREV_RELEASE_BRANCH ?= $(RELEASE_BRANCH)  # override this to create a revision of an older branch
@@ -104,7 +103,6 @@ SAMPLE_FORMAT_typescript-node = ts
 TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 
-MULTI_FILE_SWAGGER = node_modules/.bin/multi-file-swagger
 CODEGEN = exec java -jar ${SWAGGER_JAR}
 
 all: $(API_TARGETS) $(DOC_TARGETS) gh-pages
@@ -119,12 +117,12 @@ load_prior_targets:
 	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;) \
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
-openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
-	pip3 install bravado
-	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
-	$(MULTI_FILE_SWAGGER) -o yaml openapi.yaml > $(TARGET_OPENAPI_YAML)
-	$(CODEGEN) validate -i $(TARGET_OPENAPI_YAML)
-	python3 scripts/bravado-validate.py
+$(TARGET_OPENAPI_JSON):
+	git clone $(REPO_USER_URL)/gonfalon
+	cp gonfalon/ld-openapi.json $(TARGET_OPENAPI_JSON)
+
+openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(CHECK_CODEGEN) $(TARGET_OPENAPI_JSON)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) -l openapi-yaml -o $(TARGETS_PATH)
 
 $(TARGETS_PATH):
 	mkdir -p $@
@@ -167,9 +165,6 @@ gh-pages: openapi_yaml
 	cp $(TARGET_OPENAPI_JSON) $(TARGETS_PATH)/gh-pages/
 	cp $(TARGET_OPENAPI_YAML) $(TARGETS_PATH)/gh-pages/
 	cp gh-pages/* $(TARGETS_PATH)/gh-pages/
-
-$(MULTI_FILE_SWAGGER):
-	yarn add --no-lockfile multi-file-swagger
 
 GIT_COMMAND=git
 GIT_PUSH_COMMAND=git push
