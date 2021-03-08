@@ -6,6 +6,7 @@ REVISION:=$(shell git rev-parse --short HEAD)
 SWAGGER_VERSION=3.0.24
 SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
 SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
+OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
 API_TARGETS ?= \
 	csharp-dotnet2 \
@@ -118,8 +119,7 @@ load_prior_targets:
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
 $(TARGET_OPENAPI_JSON):
-	git clone $(REPO_USER_URL)/gonfalon
-	cp gonfalon/ld-openapi.json $(TARGET_OPENAPI_JSON)
+	wget $(OPENAPI_JSON_URL) -O $(TARGET_OPENAPI_JSON)
 
 openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(CHECK_CODEGEN) $(TARGET_OPENAPI_JSON)
 	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) -l openapi-yaml -o $(TARGETS_PATH)
