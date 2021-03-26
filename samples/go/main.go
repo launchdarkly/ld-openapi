@@ -19,21 +19,21 @@ func main() {
 	})
 
 	// Create a multi-variate feature flag
-	body := ldapi.FeatureFlagBody{
+	body := ldapi.GlobalFlagRep{
 		Name: "Test Flag Go",
 		Key:  "test-go",
-		Variations: []ldapi.Variation{
+		Variations: []ldapi.VariateRep{
 			{Value: intfPtr([]interface{}{1, 2})},
 			{Value: intfPtr([]interface{}{3, 4})},
 			{Value: intfPtr([]interface{}{5})}}}
-	flag, _, err := client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi", body, nil)
+	flag, _, err := client.DefaultApi.ApiV2FlagsProjKeyPost(ctx, body, "openapi", nil)
 	if err != nil {
 		panic(fmt.Errorf("create failed: %s", err))
 	}
 	fmt.Printf("Created flag: %+v\n", flag)
 	// Clean up new flag
 	defer func() {
-		if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key); err != nil {
+		if _, err := client.DefaultApi.ApiV2FlagsProjKeyKeyDelete(ctx, "openapi", body.Key); err != nil {
 			panic(fmt.Errorf("delete failed: %s", err))
 		}
 	}()
