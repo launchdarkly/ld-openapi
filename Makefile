@@ -6,7 +6,7 @@ REVISION:=$(shell git rev-parse --short HEAD)
 SWAGGER_VERSION=3.0.24
 SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
 SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
-OPENAPI_JSON_URL=https://ld-stg.launchdarkly.com/api/v2/openapi.json
+OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
 API_TARGETS ?= \
 	csharp-dotnet2 \
