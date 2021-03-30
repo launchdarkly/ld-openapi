@@ -2,9 +2,9 @@ from __future__ import print_function
 import os
 from pprint import pprint
 
-import launchdarkly_api
-import launchdarkly_api.models
-from launchdarkly_api.rest import ApiException
+import swagger_client as launchdarkly_api
+import swagger_client.models as models
+from swagger_client.rest import ApiException
 
 configuration = launchdarkly_api.Configuration()
 configuration.api_key['Authorization'] = os.getenv("LD_API_KEY")
@@ -20,9 +20,9 @@ feature_flag_body = launchdarkly_api.GlobalFlagRep(
     name=flag_key,
     key=flag_key,
     variations=[
-        launchdarkly_api.models.VariateRep(value=[1, 2]),
-        launchdarkly_api.models.VariateRep(value=[3, 4]),
-        launchdarkly_api.models.VariateRep(value=[5])
+        models.VariateRep(value=[1, 2]),
+        models.VariateRep(value=[3, 4]),
+        models.VariateRep(value=[5])
     ])
 
 try:
