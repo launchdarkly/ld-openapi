@@ -127,7 +127,7 @@ jobs:
     - attach_workspace:
         at: targets
     - run: |
-        cd targets/api-client-typescript-node
+        cd targets/api-client-typescript-axios
         sudo npm install
         sudo npm run build
         sudo npm link 
