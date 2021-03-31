@@ -437,14 +437,16 @@ ApprovalRequest:
     status:
       type: string
       description: |
-        | Name     | Description |
-        | --------:| ----------- |
-        | pending  | the approval request has not been applied yet |
-        | completed| the approval request has been applied successfully |
-        | failed   | the approval request has been applied but the changes were not applied successfully |
+        | Name      | Description |
+        | ---------:| ----------- |
+        | pending   | the approval request has not been applied yet |
+        | completed | the approval request has been applied successfully |
+        | scheduled | the approval request for a scheduled change has been applied successfully |
+        | failed    | the approval request has been applied but the changes were not applied successfully |
       enum:
         - pending
         - completed
+        - scheduled
         - failed
     appliedByMemberID:
       type: string
@@ -463,6 +465,12 @@ ApprovalRequest:
       example: ["memberId", "memberId2"]
     instructions:
       $ref: "#/definitions/SemanticPatchInstruction"
+    executionDate:
+      type: int64
+      description: Timestamp for when instructions will be executed
+    operatingOnId:
+      type: string
+      description: ID of scheduled change to edit or delete
 ApprovalRequestReview:
   type: object
   properties:
