@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/launchdarkly/api-client-go"
+	ldapi "github.com/launchdarkly/api-client-go"
 )
 
 func main() {

@@ -17,19 +17,19 @@ public class Main {
         ApiKeyAuth Token = (ApiKeyAuth) defaultClient.getAuthentication("Token");
         Token.setApiKey(System.getenv("LD_API_KEY"));
 
-        FeatureFlagsApi apiInstance = new FeatureFlagsApi();
+        DefaultApi apiInstance = new DefaultApi();
 
-        FeatureFlagBody body = new FeatureFlagBody()
+        GlobalFlagRep body = new GlobalFlagRep()
             .name(FLAG_KEY)
             .key(FLAG_KEY)
-            .variations(Arrays.<Variation>asList(
-                new Variation().value(Arrays.<Integer>asList(1,2)),
-                new Variation().value(Arrays.<Integer>asList(3,4)),
-                new Variation().value(Arrays.<Integer>asList(5))
+            .variations(Arrays.<VariateRep>asList(
+                new VariateRep().value(Arrays.<Integer>asList(1,2)),
+                new VariateRep().value(Arrays.<Integer>asList(3,4)),
+                new VariateRep().value(Arrays.<Integer>asList(5))
             ));
         try {
-            apiInstance.postFeatureFlag(PROJECT_KEY, body, null);
-            apiInstance.deleteFeatureFlag(PROJECT_KEY, FLAG_KEY);
+            apiInstance.apiV2FlagsProjKeyPost(PROJECT_KEY, body, null);
+            apiInstance.apiV2FlagsProjKeyKeyDelete(PROJECT_KEY, FLAG_KEY);
         } catch (ApiException e) {
             // Make sure the ld-openapi build fails if an api exception is thrown
             throw new RuntimeException(e);
