@@ -466,7 +466,8 @@ ApprovalRequest:
     instructions:
       $ref: "#/definitions/SemanticPatchInstruction"
     executionDate:
-      type: int64
+      type: integer
+      format: int64
       description: Timestamp for when instructions will be executed
     operatingOnId:
       type: string
