@@ -14,7 +14,8 @@ public class Main {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         
-        ApiKeyAuth Token = (ApiKeyAuth) defaultClient.getAuthentication("Token");
+        ApiKeyAuth Token = (ApiKeyAuth) defaultClient.getAuthentication("ApiKey");
+        System.out.println("KEY " + System.getenv("LD_API_KEY"));
         Token.setApiKey(System.getenv("LD_API_KEY"));
 
         DefaultApi apiInstance = new DefaultApi();
@@ -28,7 +29,7 @@ public class Main {
                 new VariateRep().value(Arrays.<Integer>asList(5))
             ));
         try {
-            apiInstance.apiV2FlagsProjKeyPost(PROJECT_KEY, body, null);
+            apiInstance.apiV2FlagsProjKeyPost(body, PROJECT_KEY, null);
             apiInstance.apiV2FlagsProjKeyKeyDelete(PROJECT_KEY, FLAG_KEY);
         } catch (ApiException e) {
             // Make sure the ld-openapi build fails if an api exception is thrown
