@@ -707,6 +707,13 @@ ApprovalRequestPostRequest:
       comment:
         type: string
         description: comment will be included in audit log item for change.
+      executionDate:
+        type: integer
+        format: int64
+        description: Timestamp for when instructions will be executed
+      operatingOnId:
+        type: string
+        description: ID of scheduled change to edit or delete
     required:
       - description
       - instructions
