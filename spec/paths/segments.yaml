@@ -129,15 +129,15 @@ UserTargetingExpirationForSegment:
         $ref: '#/responses/Standard409'
     tags:
       - User segments
-UnboundedSegmentTargets:
+BigSegmentTargets:
   post:
-    summary:  Update targets included or excluded in an unbounded segment
-    operationId: updatedUnboundedSegmentTargets
+    summary:  Update targets included or excluded in a big segment
+    operationId: updatedBigSegmentTargets
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKey'
       - $ref: '#/parameters/UserSegmentKey'
-      - $ref: '#/parameters/UnboundedSegmentTargetsPostRequest'
+      - $ref: '#/parameters/BigSegmentTargetsPostRequest'
     responses:
       '204':
         $ref: '#/responses/Standard204'
