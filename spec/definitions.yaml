@@ -528,12 +528,12 @@ FeatureFlagStatus:
     default:
       type: object
     _links:
-      $ref: "#/definitions/Links"
+      $ref: "#/definitions/FeatureFlagStatusLinks"
 FeatureFlagStatuses:
   type: object
   properties:
     _links:
-      $ref: "#/definitions/Links"
+      $ref: "#/definitions/FeatureFlagStatusLinks"
     items:
       type: array
       items:
@@ -564,13 +564,20 @@ FeatureFlagStatusAcrossEnvironments:
   type: object
   properties:
     _links:
-      $ref: "#/definitions/Links"
+      $ref: "#/definitions/FeatureFlagStatusLinks"
     key:
       type: string
     environments:
       type: object
       additionalProperties:
         $ref: "#/definitions/FeatureFlagStatusForQueriedEnvironment"
+FeatureFlagStatusLinks:
+  type: object
+  properties:
+    "parent":
+      $ref: "#/definitions/Link"
+    "self":
+      $ref: "#/definitions/Link"
 UserTargetingExpirationForFlags:
   type: object
   properties:
