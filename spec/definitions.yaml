@@ -437,14 +437,16 @@ ApprovalRequest:
     status:
       type: string
       description: |
-        | Name     | Description |
-        | --------:| ----------- |
-        | pending  | the approval request has not been applied yet |
-        | completed| the approval request has been applied successfully |
-        | failed   | the approval request has been applied but the changes were not applied successfully |
+        | Name      | Description |
+        | ---------:| ----------- |
+        | pending   | the approval request has not been applied yet |
+        | completed | the approval request has been applied successfully |
+        | scheduled | the approval request for a scheduled change has been applied successfully |
+        | failed    | the approval request has been applied but the changes were not applied successfully |
       enum:
         - pending
         - completed
+        - scheduled
         - failed
     appliedByMemberID:
       type: string
@@ -463,6 +465,13 @@ ApprovalRequest:
       example: ["memberId", "memberId2"]
     instructions:
       $ref: "#/definitions/SemanticPatchInstruction"
+    executionDate:
+      type: integer
+      format: int64
+      description: Timestamp for when instructions will be executed
+    operatingOnId:
+      type: string
+      description: ID of scheduled change to edit or delete
 ApprovalRequestReview:
   type: object
   properties:
@@ -519,12 +528,12 @@ FeatureFlagStatus:
     default:
       type: object
     _links:
-      $ref: "#/definitions/Links"
+      $ref: "#/definitions/FeatureFlagStatusLinks"
 FeatureFlagStatuses:
   type: object
   properties:
     _links:
-      $ref: "#/definitions/Links"
+      $ref: "#/definitions/FeatureFlagStatusLinks"
     items:
       type: array
       items:
@@ -555,13 +564,20 @@ FeatureFlagStatusAcrossEnvironments:
   type: object
   properties:
     _links:
-      $ref: "#/definitions/Links"
+      $ref: "#/definitions/FeatureFlagStatusLinks"
     key:
       type: string
     environments:
       type: object
       additionalProperties:
         $ref: "#/definitions/FeatureFlagStatusForQueriedEnvironment"
+FeatureFlagStatusLinks:
+  type: object
+  properties:
+    "parent":
+      $ref: "#/definitions/Link"
+    "self":
+      $ref: "#/definitions/Link"
 UserTargetingExpirationForFlags:
   type: object
   properties:
@@ -685,7 +701,7 @@ UserSegment:
     unbounded:
       type: boolean
       example: false
-      description: Controls whether this segment can support unlimited numbers of users. Requires the beta API and additional setup. Include/exclude lists in this payload are not used in unbounded segments.
+      description: Controls whether this is considered a "big segment" which can support an unlimited numbers of users. Include/exclude lists sent with this payload are not used in big segments. Contact your account manager for early access to this feature.
     version:
       type: integer
     _links:
@@ -715,7 +731,7 @@ UserSegments:
       type: array
       items:
         $ref: "#/definitions/UserSegment"
-UnboundedSegmentTargetChanges:
+BigSegmentTargetChanges:
   type: object
   properties:
     add:

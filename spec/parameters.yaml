@@ -216,7 +216,7 @@ UserSegmentPostRequest:
       unbounded:
         type: boolean
         example: false
-        description: Controls whether this segment can support unlimited numbers of users. Requires the beta API and additional setup. Include/exclude lists in this payload are not used in unbounded segments.
+        description: Controls whether this is considered a "big segment" which can support an unlimited numbers of users. Include/exclude lists sent with this payload are not used in big segments. Contact your account manager for early access to this feature.
       tags:
         type: array
         items:
@@ -226,18 +226,18 @@ UserSegmentPostRequest:
     required:
       - name
       - key
-UnboundedSegmentTargetsPostRequest:
-  name: unboundedSegmentTargetsBody
+BigSegmentTargetsPostRequest:
+  name: bigSegmentTargetsBody
   in: body
   required: true
-  description: Add or remove user targets to the included or excluded lists on an unbounded segment
+  description: Add or remove user targets to the included or excluded lists on a big segment. Contact your account manager for early access to this feature.
   schema:
     type: object
     properties:
       included:
-        $ref: "#/definitions/UnboundedSegmentTargetChanges"
+        $ref: "#/definitions/BigSegmentTargetChanges"
       excluded:
-        $ref: "#/definitions/UnboundedSegmentTargetChanges"
+        $ref: "#/definitions/BigSegmentTargetChanges"
 ProjectPostRequest:
   name: projectBody
   in: body
@@ -707,6 +707,13 @@ ApprovalRequestPostRequest:
       comment:
         type: string
         description: comment will be included in audit log item for change.
+      executionDate:
+        type: integer
+        format: int64
+        description: Timestamp for when instructions will be executed
+      operatingOnId:
+        type: string
+        description: ID of scheduled change to edit or delete
     required:
       - description
       - instructions
