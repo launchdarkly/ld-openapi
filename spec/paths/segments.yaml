@@ -132,7 +132,7 @@ UserTargetingExpirationForSegment:
 BigSegmentTargets:
   post:
     summary:  Update targets included or excluded in a big segment
-    operationId: updatedBigSegmentTargets
+    operationId: updateBigSegmentTargets
     parameters:
       - $ref: '#/parameters/ProjectKey'
       - $ref: '#/parameters/EnvironmentKey'

@@ -578,6 +578,80 @@ FeatureFlagStatusLinks:
       $ref: "#/definitions/Link"
     "self":
       $ref: "#/definitions/Link"
+DependentFlagsByEnvironment:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        $ref: "#/definitions/DependentFlag"
+    _links:
+      $ref: "#/definitions/DependentFlagsLinks"
+    _site:
+      $ref: "#/definitions/Site"
+DependentFlag:
+  type: object
+  properties:
+    name:
+      type: string
+    key:
+      type: string
+    _links:
+      type: object
+      properties:
+        "self":
+          $ref: "#/definitions/Link"
+    _site:
+      $ref: "#/definitions/Site"
+DependentFlagsLinks:
+  type: object
+  properties:
+    "parent":
+      $ref: "#/definitions/Link"
+    "self":
+      $ref: "#/definitions/Link"
+MultiEnvironmentDependentFlags:
+  type: object
+  properties:
+    items:
+      type: array
+      items:
+        $ref: "#/definitions/MultiEnvironmentDependentFlag"
+    _links:
+      $ref: "#/definitions/DependentFlagsLinks"
+    _site:
+      $ref: "#/definitions/Site"
+MultiEnvironmentDependentFlag:
+  type: object
+  properties:
+    name:
+      type: string
+    key:
+      type: string
+    environments:
+      type: array
+      items:
+        $ref: "#/definitions/DependentFlagEnvironment"
+    _links:
+      $ref: "#/definitions/DependentFlagsLinks"
+    _site:
+      $ref: "#/definitions/Site"
+DependentFlagEnvironment:
+  type: object
+  properties:
+    name:
+      type: string
+    key:
+      type: string
+    _links:
+      type: object
+      properties:
+        self:
+          $ref: "#/definitions/Link"
+        flagLink:
+          $ref: "#/definitions/Link"
+    _site:
+      $ref: "#/definitions/Site"
 UserTargetingExpirationForFlags:
   type: object
   properties:
