@@ -679,3 +679,42 @@ ReviewFeatureFlagApprovalRequest:
         $ref: '#/responses/Standard404'
     tags:
       - Feature flags
+DependentFlagsByEnvironment:
+  get:
+    summary: Get dependent flags for the flag in the environment specified in path parameters
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        description: Dependent flags in a single envrionemnt response
+        schema:
+          $ref: '#/definitions/DependentFlagsByEnvironment'
+      '401':
+        $ref: '#/responses/Standard401'
+      '403':
+        $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+DependentFlags:
+  get:
+    summary: Get dependent flags across all environments for the flag specified in the path parameters
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+    responses:
+      '200':
+        description: Dependent flags accross all environemnts in the project response
+        schema:
+          $ref: '#/definitions/MultiEnvironmentDependentFlags'
+      '401':
+        $ref: '#/responses/Standard401'
+      '403':
+        $ref: '#/responses/BetaApi403'
+      '404':
+        $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
