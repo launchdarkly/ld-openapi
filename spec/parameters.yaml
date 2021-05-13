@@ -223,6 +223,11 @@ UserSegmentPostRequest:
           type: string
           example: []
         description: Tags for the user segment.
+      rules:
+        type: array
+        items:
+          $ref: "#/definitions/UserSegmentRule"
+        description: An array of rules that can cause a user to be included in this segment.        
     required:
       - name
       - key
