@@ -140,14 +140,17 @@ $(API_TARGETS): openapi_yaml
 	$(CODEGEN) generate -i $(BUILD_DIR)/openapi.yml $(CODEGEN_PARAMS_$@) -l $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
-	cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md
 	if [ -f "$(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@)" ]; then \
-		echo -e "## Sample Code\n" >> $(BUILD_DIR)/README.md; \
-		echo '```${SAMPLE_FORMAT_$@}' >> $(BUILD_DIR)/README.md; \
-		cat $(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@) >> $(BUILD_DIR)/README.md; \
-		echo '```' >> $(BUILD_DIR)/README.md; \
+		echo -e "## Sample Code\n" >> $(BUILD_DIR)/README-samples.md; \
+		echo '```${SAMPLE_FORMAT_$@}' >> $(BUILD_DIR)/README-samples.md; \
+		cat $(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@) >> $(BUILD_DIR)/README-samples.md; \
+		echo '```' >> $(BUILD_DIR)/README-samples.md; \
+		cat ./README-PREFIX.md $(BUILD_DIR)/README-samples.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md; \
+	else \
+		cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md; \
 	fi
 	rm $(BUILD_DIR)/README-ORIGINAL.md
+	rm -f $(BUILD_DIR)/README-SAMPLES.md
 
 # Generates openapi.yaml using Docker
 openapi_yaml_docker:
