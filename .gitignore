@@ -46,6 +46,7 @@ samples/typescript-node/package-lock.json
 .DS_Store
 /swagger-codegen-cli-*.jar
 scripts/release/java/.gradle/*
+.swagger-codegen*
 
 # IDE settings
 .classpath

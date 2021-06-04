@@ -1,37 +1,38 @@
 # Load the gem
-require 'launchdarkly_api'
+require 'swagger_client'
 
 # Setup authorization
-LaunchDarklyApi.configure do |config|
+SwaggerClient.configure do |config|
   config.api_key['Authorization'] = ENV['LD_API_KEY']
+  config.debugging = true
 end
 
-api_instance = LaunchDarklyApi::FeatureFlagsApi.new
+api_instance = SwaggerClient::DefaultApi.new
 
 project_key = "openapi"
 flag_key = "test-ruby"
 
 # Create a flag with a json variations
-body = LaunchDarklyApi::FeatureFlagBody.new(
+body = SwaggerClient::GlobalFlagRep.new(
   name: "test-ruby",
   key: flag_key,
   variations: [
-    LaunchDarklyApi::Variation.new(value=[1,2]),
-    LaunchDarklyApi::Variation.new(value=[3,4]),
-    LaunchDarklyApi::Variation.new(value=[5]),
+    SwaggerClient::VariateRep.new({value: [1,2]}),
+    SwaggerClient::VariateRep.new({value: [3,4]}),
+    SwaggerClient::VariateRep.new({value: [5]}),
   ])
 
 begin
-  result = api_instance.post_feature_flag(project_key, body)
+  result = api_instance.api_v2_flags_proj_key_post(project_key, body)
   p result
-rescue LaunchDarklyApi::ApiError => e
+rescue SwaggerClient::ApiError => e
   puts "Exception creating feature flag: #{e}"
 end
 
 # Clean up new flag
 begin
-  result = api_instance.delete_feature_flag(project_key, flag_key)
+  result = api_instance.api_v2_flags_proj_key_key_delete(project_key, flag_key)
   p result
-rescue LaunchDarklyApi::ApiError => e
+rescue SwaggerClient::ApiError => e
   puts "Exception deleting feature flag: #{e}"
 end

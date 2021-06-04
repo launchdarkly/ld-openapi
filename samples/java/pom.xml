@@ -8,10 +8,16 @@
     <artifactId>api-client-sample</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
+        <!-- <dependency> -->
+        <!--     <groupId>com.launchdarkly</groupId> -->
+        <!--     <artifactId>api&#45;client</artifactId> -->
+        <!--     <version>[2.0.32,)</version> -->
+        <!-- </dependency> -->
         <dependency>
             <groupId>com.launchdarkly</groupId>
-            <artifactId>api-client</artifactId>
-            <version>[2.0.32,)</version>
+            <artifactId>swagger-java-client</artifactId>
+            <version>2.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
