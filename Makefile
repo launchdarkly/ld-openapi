@@ -72,12 +72,11 @@ CODEGEN_PARAMS_php = \
 	--additional-properties=composerVendorName=launchdarkly \
 	--additional-properties=composerProjectName=api-client-php \
 	--additional-properties=invokerPackage=LaunchDarklyApi \
-	--additional-properties=gitUserId=launchdarkly \
-	--additional-properties=gitRepoId=api-client-php
+	--git-user-id=launchdarkly \
+	--git-repo-id=api-client-php
 CODEGEN_PARAMS_python = --additional-properties=packageName=launchdarkly_api --additional-properties=packageVersion=$(TAG)
 CODEGEN_PARAMS_typescript-axios = \
-	-t $(TEMPLATES_PATH)/typescript-node \
-	--additional-properties=npmName=launchdarkly-api-typescript \
+	--additional-properties=npmName=launchdarkly-api-typescript-axios \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true
 CODEGEN_PARAMS_ruby = \

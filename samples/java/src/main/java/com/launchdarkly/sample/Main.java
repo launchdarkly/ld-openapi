@@ -30,7 +30,7 @@ public class Main {
                 new VariateRep().value(Arrays.<Integer>asList(5))
             ));
         try {
-            apiInstance.apiV2FlagsProjKeyPost(body, PROJECT_KEY, null);
+            apiInstance.apiV2FlagsProjKeyPost(PROJECT_KEY, body, null);
             apiInstance.apiV2FlagsProjKeyKeyDelete(PROJECT_KEY, FLAG_KEY);
         } catch (ApiException e) {
             // Make sure the ld-openapi build fails if an api exception is thrown

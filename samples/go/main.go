@@ -37,9 +37,19 @@ func main() {
 			{Value: &valTwo},
 		},
 	}
-	flag, _, err := client.DefaultApi.ApiV2FlagsProjKeyPost(ctx, "openapi").GlobalFlagRep(body).Execute()
+	flag, resp, err := client.DefaultApi.ApiV2FlagsProjKeyPost(ctx, "openapi").GlobalFlagRep(body).Execute()
 	if err != nil {
-		panic(fmt.Errorf("create failed: %s", err))
+		if resp.StatusCode != 409 {
+			panic(fmt.Errorf("create failed: %s", err))
+		} else {
+			if _, err := client.DefaultApi.ApiV2FlagsProjKeyKeyDelete(ctx, "openapi", *body.Key).Execute(); err != nil {
+				panic(fmt.Errorf("delete failed: %s", err))
+			}
+			flag, resp, err = client.DefaultApi.ApiV2FlagsProjKeyPost(ctx, "openapi").GlobalFlagRep(body).Execute()
+			if err != nil {
+				panic(fmt.Errorf("create failed: %s", err))
+			}
+		}
 	}
 	fmt.Printf("Created flag: %+v\n", flag)
 	// Clean up new flag
