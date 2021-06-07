@@ -14,26 +14,37 @@ func main() {
 		panic("LD_API_KEY env var was empty!")
 	}
 	client := ldapi.NewAPIClient(ldapi.NewConfiguration())
-	ctx := context.WithValue(context.Background(), ldapi.ContextAPIKey, ldapi.APIKey{
-		Key: apiKey,
-	})
 
+	auth := make(map[string]ldapi.APIKey)
+	auth["ApiKey"] = ldapi.APIKey{
+		Key: apiKey,
+	}
+
+	ctx := context.WithValue(context.Background(), ldapi.ContextAPIKeys, auth)
+
+	flagName := "Test Flag Go"
+	flagKey := "test-go"
 	// Create a multi-variate feature flag
+	valOneVal := []int{1, 2}
+	valOne := map[string]interface{}{"one": valOneVal}
+	valTwoVal := []int{4, 5}
+	valTwo := map[string]interface{}{"two": valTwoVal}
 	body := ldapi.GlobalFlagRep{
-		Name: "Test Flag Go",
-		Key:  "test-go",
-		Variations: []ldapi.VariateRep{
-			{Value: intfPtr([]interface{}{1, 2})},
-			{Value: intfPtr([]interface{}{3, 4})},
-			{Value: intfPtr([]interface{}{5})}}}
-	flag, _, err := client.DefaultApi.ApiV2FlagsProjKeyPost(ctx, body, "openapi", nil)
+		Name: &flagName,
+		Key:  &flagKey,
+		Variations: &[]ldapi.VariateRep{
+			{Value: &valOne},
+			{Value: &valTwo},
+		},
+	}
+	flag, _, err := client.DefaultApi.ApiV2FlagsProjKeyPost(ctx, "openapi").GlobalFlagRep(body).Execute()
 	if err != nil {
 		panic(fmt.Errorf("create failed: %s", err))
 	}
 	fmt.Printf("Created flag: %+v\n", flag)
 	// Clean up new flag
 	defer func() {
-		if _, err := client.DefaultApi.ApiV2FlagsProjKeyKeyDelete(ctx, "openapi", body.Key); err != nil {
+		if _, err := client.DefaultApi.ApiV2FlagsProjKeyKeyDelete(ctx, "openapi", *body.Key).Execute(); err != nil {
 			panic(fmt.Errorf("delete failed: %s", err))
 		}
 	}()

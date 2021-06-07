@@ -10,14 +10,6 @@ This project uses YAML file pointers to create the directory architecture descri
 
 http://azimi.me/2015/07/16/split-swagger-into-smaller-files.html
 
-## Compiling the spec
-
-The spec is joined from multiple files using a multi-file Swagger tool.  To compile just the spec run `make openapi_yaml`.
-
-Alternatively, you can test a multi-file Swagger spec using VSCode, or by following these instructions for the online editor: 
-
-https://apihandyman.io/writing-openapi-swagger-specification-tutorial-part-8-splitting-specification-file/#editing-splitted-local-files-with-the-online-editor
-
 ## Testing the spec
 
 We use the spec to build some internals tools in go.  Tests for other specs are forthcoming.

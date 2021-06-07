@@ -3,9 +3,10 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
-SWAGGER_VERSION=3.0.24
-SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
-SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
+GENERATOR_VERSION=5.1.1
+GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
+GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
+
 OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
 API_TARGETS ?= \
@@ -43,51 +44,50 @@ SAMPLES_PATH ?= ./samples
 LASTHASH := $(shell git rev-parse --short HEAD)
 
 # The following variables define any special command-line parameters that need to be passed
-# to swagger-codegen for each language/platform. In most cases these are undocumented and
-# were discovered by looking in the swagger-codegen source.
-CODEGEN_PARAMS_csharp-dotnet2 = -DpackageName=LaunchDarkly.Api -DclientPackage=LaunchDarkly.Api.Client
-CODEGEN_PARAMS_go = -DpackageName=ldapi -t $(TEMPLATES_PATH)/go
+# to openapi-generator for each language/platform.
+CODEGEN_PARAMS_csharp-dotnet2 = --additional-properties=packageName=LaunchDarkly.Api --additional-properties=clientPackage=LaunchDarkly.Api.Client
+CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi -t $(TEMPLATES_PATH)/go
 CODEGEN_PARAMS_java = \
 	--group-id com.launchdarkly \
 	--api-package com.launchdarkly.api.api \
 	--model-package com.launchdarkly.api.model \
-	-DartifactId=api-client \
-	-Demail=support@launchdarkly.com \
-	-DdeveloperName=LaunchDarkly \
-	-DdeveloperEmail=support@launchdarkly.com \
-	-DdeveloperOrganization=LaunchDarkly \
-	-DdeveloperOrganizationUrl=https://launchdarkly.com \
-	-DartifactUrl=https://github.com/launchdarkly/api-client-java \
-	-DartifactDescription="Build custom integrations with the LaunchDarkly REST API" \
-	-DscmUrl="https://github.com/launchdarkly/api-client-java" \
-	-DscmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
-	-DscmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
+	--additional-properties=artifactId=api-client \
+	--additional-properties=email=support@launchdarkly.com \
+	--additional-properties=developerName=LaunchDarkly \
+	--additional-properties=developerEmail=support@launchdarkly.com \
+	--additional-properties=developerOrganization=LaunchDarkly \
+	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
+	--additional-properties=artifactUrl=https://github.com/launchdarkly/api-client-java \
+	--additional-properties=artifactDescription="Build custom integrations with the LaunchDarkly REST API" \
+	--additional-properties=scmUrl="https://github.com/launchdarkly/api-client-java" \
+	--additional-properties=scmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
+	--additional-properties=scmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
 CODEGEN_PARAMS_javascript = \
 	-t $(TEMPLATES_PATH)/javascript \
-	-DprojectName=launchdarkly-api \
-	-DprojectDescription="Build custom integrations with the LaunchDarkly REST API" \
-	-DmoduleName=LaunchDarklyApi
+	--additional-properties=projectName=launchdarkly-api \
+	--additional-properties=projectDescription="Build custom integrations with the LaunchDarkly REST API" \
+	--additional-properties=moduleName=LaunchDarklyApi
 CODEGEN_PARAMS_php = \
-	-DpackagePath=LaunchDarklyApi \
-	-DcomposerVendorName=launchdarkly \
-	-DcomposerProjectName=api-client-php \
-	-DinvokerPackage=LaunchDarklyApi \
-	-DgitUserId=launchdarkly \
-	-DgitRepoId=api-client-php
-CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api -DpackageVersion=$(TAG)
-CODEGEN_PARAMS_typescript-node = \
+	--additional-properties=packagePath=LaunchDarklyApi \
+	--additional-properties=composerVendorName=launchdarkly \
+	--additional-properties=composerProjectName=api-client-php \
+	--additional-properties=invokerPackage=LaunchDarklyApi \
+	--additional-properties=gitUserId=launchdarkly \
+	--additional-properties=gitRepoId=api-client-php
+CODEGEN_PARAMS_python = --additional-properties=packageName=launchdarkly_api --additional-properties=packageVersion=$(TAG)
+CODEGEN_PARAMS_typescript-axios = \
 	-t $(TEMPLATES_PATH)/typescript-node \
-	-DnpmName=launchdarkly-api-typescript \
-	-DnpmVersion=$(TAG) \
-	-DsupportsES6=true
+	--additional-properties=npmName=launchdarkly-api-typescript \
+	--additional-properties=npmVersion=$(TAG) \
+	--additional-properties=supportsES6=true
 CODEGEN_PARAMS_ruby = \
   -t $(TEMPLATES_PATH)/ruby \
-  -DmoduleName=LaunchDarklyApi \
-  -DgemName=launchdarkly_api \
-  -DgemVersion=$(TAG) \
-  -DgemHomepage=https://github.com/launchdarkly/api-client-ruby \
-  -DgemAuthor=LaunchDarkly \
-  -DgemAuthorEmail=support@launchdarkly.com
+  --additional-properties=moduleName=LaunchDarklyApi \
+  --additional-properties=gemName=launchdarkly_api \
+  --additional-properties=gemVersion=$(TAG) \
+  --additional-properties=gemHomepage=https://github.com/launchdarkly/api-client-ruby \
+  --additional-properties=gemAuthor=LaunchDarkly \
+  --additional-properties=gemAuthorEmail=support@launchdarkly.com
 
 SAMPLE_FILE_go = main.go
 SAMPLE_FILE_javascript = index.js
@@ -104,7 +104,7 @@ SAMPLE_FORMAT_typescript-node = ts
 TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 
-CODEGEN = exec java -jar ${SWAGGER_JAR}
+CODEGEN = exec java -jar ${GENERATOR_JAR}
 
 all: $(API_TARGETS) $(DOC_TARGETS) gh-pages
 
@@ -118,24 +118,16 @@ load_prior_targets:
 	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;) \
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
-$(TARGET_OPENAPI_JSON):
+TARGET_OPENAPI_JSON: $(GENERATOR_JAR) $(TARGETS_PATH)
 	wget $(OPENAPI_JSON_URL) -O $(TARGET_OPENAPI_JSON)
-
-openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(CHECK_CODEGEN) $(TARGET_OPENAPI_JSON)
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) -l openapi-yaml -o $(TARGETS_PATH)
 
 $(TARGETS_PATH):
 	mkdir -p $@
 
-$(API_TARGETS): openapi_yaml
+$(API_TARGETS): TARGET_OPENAPI_JSON
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$(API_CLIENT_PREFIX)-$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	if [ -e "./scripts/preprocess-yaml-$@.sh" ]; then \
-		./scripts/preprocess-yaml-$@.sh $(TARGET_OPENAPI_YAML) > $(BUILD_DIR)/openapi.yml; \
-	else \
-		cat $(TARGET_OPENAPI_YAML) > $(BUILD_DIR)/openapi.yml; \
-	fi
-	$(CODEGEN) generate -i $(BUILD_DIR)/openapi.yml $(CODEGEN_PARAMS_$@) -l $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(VERSION) -o $(BUILD_DIR)
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md
@@ -155,15 +147,14 @@ openapi_yaml_docker:
 targets_docker:
 	docker build . -t ld-openapi && docker run -ti -v `pwd`:/workspace ld-openapi:latest make
 
-$(DOC_TARGETS): openapi_yaml
+$(DOC_TARGETS):
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_YAML) $(CODEGEN_PARAMS_$@) -l $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
 
-gh-pages: openapi_yaml
+gh-pages:
 	mkdir -p targets/gh-pages
 	cp $(TARGET_OPENAPI_JSON) $(TARGETS_PATH)/gh-pages/
-	cp $(TARGET_OPENAPI_YAML) $(TARGETS_PATH)/gh-pages/
 	cp gh-pages/* $(TARGETS_PATH)/gh-pages/
 
 GIT_COMMAND=git
@@ -211,8 +202,8 @@ publish:
 		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET) $(VERSION); \
 	)
 
-$(SWAGGER_JAR):
-	wget ${SWAGGER_DOWNLOAD_URL} -O $@
+$(GENERATOR_JAR):
+	wget ${GENERATOR_DOWNLOAD_URL} -O $@
 
 clean:
 	rm -rf $(TARGETS_PATH)

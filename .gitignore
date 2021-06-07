@@ -42,11 +42,16 @@ samples/typescript-node/index.js
 samples/typescript-node/index.js.map
 samples/typescript-node/package-lock.json
 
+# Generated files in go sample
+samples/go/go.mod
+samples/go/go.sum
+
 # Auto generated files
 .DS_Store
 /swagger-codegen-cli-*.jar
 scripts/release/java/.gradle/*
 .swagger-codegen*
+/openapi-generator-cli-*.jar
 
 # IDE settings
 .classpath

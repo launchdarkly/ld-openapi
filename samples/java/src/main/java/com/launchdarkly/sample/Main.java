@@ -1,10 +1,11 @@
 package com.launchdarkly.sample;
 
-import com.launchdarkly.api.*;
+import com.launchdarkly.api.ApiClient;
+import com.launchdarkly.api.ApiException;
+import com.launchdarkly.api.Configuration;
 import com.launchdarkly.api.auth.*;
 import com.launchdarkly.api.model.*;
-import com.launchdarkly.api.api.*;
-
+import com.launchdarkly.api.api.DefaultApi;
 import java.util.*;
 
 public class Main {
