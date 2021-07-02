@@ -5,7 +5,7 @@ var defaultClient = LaunchDarklyApi.ApiClient.instance;
 var Token = defaultClient.authentications['ApiKey'];
 Token.apiKey = process.env.LD_API_KEY;
 
-var apiInstance = new LaunchDarklyApi.DefaultApi();
+var apiInstance = new LaunchDarklyApi.FeatureFlagsApi();
 
 const projectName = "openapi";
 const keyName = "test-javascript";
@@ -24,11 +24,11 @@ var postCallback = function(error, data) {
 
   if (!error) {
     // Clean up
-    apiInstance.apiV2FlagsProjKeyKeyDelete(projectName, keyName, callback);
+    apiInstance.deleteFeatureFlag(projectName, keyName, callback);
   }
 };
 
-apiInstance.apiV2FlagsProjKeyPost(projectName,
+apiInstance.postFeatureFlag(projectName,
   {
     name: "Test Flag Javascript",
     key: keyName,
