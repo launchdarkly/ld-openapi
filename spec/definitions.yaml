@@ -1000,7 +1000,7 @@ Environment:
           - service-now
         required:
           type: boolean
-          description: Whether any changes to flags in this environment will require approval.
+          description: Whether any changes to flags in this environment will require approval. You may only set required or requiredApprovalTags, not both.
         canReviewOwnRequest:
           type: boolean
           description: Whether requesters can approve or decline their own request. They may always comment.
@@ -1012,6 +1012,11 @@ Environment:
         canApplyDeclinedChanges:
           type: boolean
           description: Whether changes can be applied as long as minNumApprovals is met, regardless of if any reviewers have declined a request.
+        requiredApprovalTags:
+          type: array
+          items:
+            type: string
+          description: An array of tags used to specify which flags with those tags require approval. You may only set requiredApprovalTags or required, not both.
 EnvironmentPost:
   type: object
   properties:
