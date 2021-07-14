@@ -33,7 +33,7 @@ Environment:
     tags:
       - Environments
   patch:
-    summary: Modify an environment by ID.
+    summary: Modify an environment by ID. If you try to patch the environment by setting both required and requiredApprovalTags, it will result in an error. Users can specify either required approvals for all flags in an environment or those with specific tags, but not both. Only customers on an Enterprise plan can require approval for flag updates with either mechanism.
     operationId: patchEnvironment
     parameters:
       - $ref: '#/parameters/ProjectKey'
