@@ -1,8 +1,8 @@
 # LaunchDarkly OpenAPI
 
-Uses [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) to create LaunchDarkly REST API libraries from our OpenAPI spec.
+This repository uses the [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) library to create LaunchDarkly REST API client libraries from our [OpenAPI spec](https://app.launchdarkly.com/api/v2/openapi.json).
 
-The LaunchDarkly REST API is for custom integrations, data export, or automating feature flag workflows. *DO NOT* use these libraries to add feature flags to web or mobile applications. To integrate feature flags with applications, please see the [SDK documentation](https://docs.launchdarkly.com/v2.0/docs).
+The LaunchDarkly REST API is for custom integrations, data export, or automating feature flag workflows. *DO NOT* use these libraries to add feature flags to web or mobile applications. To integrate feature flags with applications, please see the [SDK documentation](https://docs.launchdarkly.com/sdk).
 
 ## Code generation
 
