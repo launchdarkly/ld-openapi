@@ -14,7 +14,8 @@ cp targets/api-clients-${LD_RELEASE_VERSION}.tgz artifacts
 
 # Publish updates to client repositories
 echo Publishing updates to client repositories...
-make TAG=${LD_RELEASE_VERSION} push
+# Temporarily exclude csharp-dotnet2
+make RELEASE_TARGETS="go java javascript php python ruby typescript-axios" TAG=${LD_RELEASE_VERSION} push
 
 # Publish client artifacts to registries
 echo Publishing client artifacts to registries...
