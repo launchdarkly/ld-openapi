@@ -8,8 +8,8 @@ The LaunchDarkly REST API is for custom integrations, data export, or automating
 
 Server/client code for the API can be automatically generated. To generate the code:
 
-  1. Ensure that you have `wget`, `yarn`, `jq`, and `pip3` installed. 
-  1. Run the `generate` command:
+  1. Ensure that you have `wget` and `jq` installed.
+  1. The default make command will generate all target libraries:
 ```
 > make
 ```
