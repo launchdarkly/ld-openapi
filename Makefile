@@ -100,8 +100,8 @@ SAMPLE_FORMAT_python = python
 SAMPLE_FORMAT_ruby = ruby
 SAMPLE_FORMAT_typescript-node = ts
 
+TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
-TARGET_OPENAPI_JSON_CLEAN = $(TARGETS_PATH)/openapi-clean.json
 
 CODEGEN = exec java -jar ${GENERATOR_JAR}
 
@@ -126,8 +126,7 @@ $(TARGETS_PATH):
 $(API_TARGETS): TARGET_OPENAPI_JSON
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$(API_CLIENT_PREFIX)-$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	jq 'delpaths([["info","description"], ["tags"]])' < $(TARGET_OPENAPI_JSON) > $(TARGET_OPENAPI_JSON_CLEAN)
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON_CLEAN) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(VERSION) -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(VERSION) -o $(BUILD_DIR) --skip-validate-spec
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md
@@ -150,7 +149,7 @@ targets_docker:
 $(DOC_TARGETS):
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON_CLEAN) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
 
 gh-pages:
 	mkdir -p targets/gh-pages
