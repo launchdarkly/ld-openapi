@@ -149,7 +149,7 @@ targets_docker:
 $(DOC_TARGETS):
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(VERSION) -o $(BUILD_DIR) --skip-validate-spec
 
 gh-pages:
 	mkdir -p targets/gh-pages
