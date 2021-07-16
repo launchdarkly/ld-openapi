@@ -105,7 +105,7 @@ TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 
 CODEGEN = exec java -jar ${GENERATOR_JAR}
 
-all: $(API_TARGETS) $(DOC_TARGETS) gh-pages
+all: $(API_TARGETS) $(DOC_TARGETS)
 
 load_prior_targets:
 	rm -rf $(TARGETS_PATH)
@@ -114,8 +114,7 @@ load_prior_targets:
 	cd $(TARGETS_PATH); \
 	git init; \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;) \
-	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
+	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;)
 
 TARGET_OPENAPI_JSON: $(GENERATOR_JAR) $(TARGETS_PATH)
 	wget $(OPENAPI_JSON_URL) -O $(TARGET_OPENAPI_JSON)
@@ -151,11 +150,6 @@ $(DOC_TARGETS):
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
 	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(VERSION) -o $(BUILD_DIR) --skip-validate-spec
 
-gh-pages:
-	mkdir -p targets/gh-pages
-	cp $(TARGET_OPENAPI_JSON) $(TARGETS_PATH)/gh-pages/
-	cp gh-pages/* $(TARGETS_PATH)/gh-pages/
-
 GIT_COMMAND=git
 GIT_PUSH_COMMAND=git push
 
@@ -183,17 +177,6 @@ push:
 		fi; \
 		cd ..; \
 	) \
-	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
-		echo Publishing updates to GitHub pages...; \
-		$(GIT_COMMAND) clone git@github.com:launchdarkly/$(REPO).git; \
-		cd $(REPO); \
-		$(GIT_COMMAND) checkout gh-pages --; \
-		cp -v -r ../../$(TARGETS_PATH)/gh-pages/. .; \
-		$(GIT_COMMAND) add .; \
-		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
-		$(GIT_PUSH_COMMAND) origin gh-pages; \
-		cd ..; \
-	fi
 
 publish:
 	$(foreach TARGET, $(PUBLISH_TARGETS), \
@@ -208,4 +191,4 @@ clean:
 	rm -rf $(TARGETS_PATH)
 	rm -rf $(CLIENT_CLONES_PATH)
 
-.PHONY: $(TARGETS) all clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
+.PHONY: $(TARGETS) all clean load_prior_targets openapi_yaml push push_dry_run push_test

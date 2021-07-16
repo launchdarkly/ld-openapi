@@ -146,9 +146,6 @@ workflows:
     jobs:
     - build:
         filters:
-          branches:
-            ignore:
-            - gh-pages
           tags:
             only:
               /.*/ # Required in order to run publish job for a tag push
