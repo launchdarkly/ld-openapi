@@ -21,7 +21,7 @@ public class Main {
 
         FeatureFlagsApi apiInstance = new FeatureFlagsApi();
 
-        GlobalFlagRep body = new GlobalFlagRep()
+        FlagPost body = new FlagPost()
             .name(FLAG_KEY)
             .key(FLAG_KEY)
             .variations(Arrays.<VariateRep>asList(

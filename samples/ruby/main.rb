@@ -14,7 +14,7 @@ project_key = "openapi"
 flag_key = "test-ruby"
 
 # Create a flag with a json variations
-body = LaunchDarklyApi::GlobalFlagRep.new(
+body = LaunchDarklyApi::FlagPost.new(
   name: "test-ruby",
   key: flag_key,
   variations: [
