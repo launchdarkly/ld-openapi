@@ -1,6 +1,6 @@
 # Load the gem
 require 'launchdarkly_api'
-require 'launchdarkly_api/models/reps2_variate_rep'
+require 'launchdarkly_api/models/variate_rep'
 
 # Setup authorization
 LaunchDarklyApi.configure do |config|
@@ -14,13 +14,13 @@ project_key = "openapi"
 flag_key = "test-ruby"
 
 # Create a flag with a json variations
-body = LaunchDarklyApi::Reps2GlobalFlagRep.new(
+body = LaunchDarklyApi::GlobalFlagRep.new(
   name: "test-ruby",
   key: flag_key,
   variations: [
-    LaunchDarklyApi::Reps2VariateRep.new({value: [1,2]}),
-    LaunchDarklyApi::Reps2VariateRep.new({value: [3,4]}),
-    LaunchDarklyApi::Reps2VariateRep.new({value: [5]}),
+    LaunchDarklyApi::VariateRep.new({value: [1,2]}),
+    LaunchDarklyApi::VariateRep.new({value: [3,4]}),
+    LaunchDarklyApi::VariateRep.new({value: [5]}),
   ])
 
 begin

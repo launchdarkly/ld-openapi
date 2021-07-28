@@ -21,13 +21,13 @@ public class Main {
 
         FeatureFlagsApi apiInstance = new FeatureFlagsApi();
 
-        Reps2GlobalFlagRep body = new Reps2GlobalFlagRep()
+        GlobalFlagRep body = new GlobalFlagRep()
             .name(FLAG_KEY)
             .key(FLAG_KEY)
-            .variations(Arrays.<Reps2VariateRep>asList(
-                new Reps2VariateRep().value(Arrays.<Integer>asList(1,2)),
-                new Reps2VariateRep().value(Arrays.<Integer>asList(3,4)),
-                new Reps2VariateRep().value(Arrays.<Integer>asList(5))
+            .variations(Arrays.<VariateRep>asList(
+                new VariateRep().value(Arrays.<Integer>asList(1,2)),
+                new VariateRep().value(Arrays.<Integer>asList(3,4)),
+                new VariateRep().value(Arrays.<Integer>asList(5))
             ));
         try {
             apiInstance.postFeatureFlag(PROJECT_KEY, body, null);

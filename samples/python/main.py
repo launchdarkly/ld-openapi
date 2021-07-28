@@ -3,8 +3,8 @@ import os
 from pprint import pprint
 
 import launchdarkly_api
-from launchdarkly_api.model.reps2_variate_rep import Reps2VariateRep
-from launchdarkly_api.model.reps2_global_flag_rep import Reps2GlobalFlagRep
+from launchdarkly_api.model.variate_rep import VariateRep
+from launchdarkly_api.model.global_flag_rep import GlobalFlagRep
 from launchdarkly_api.api import feature_flags_api
 from launchdarkly_api.rest import ApiException
 
@@ -24,13 +24,13 @@ with launchdarkly_api.ApiClient(configuration) as api_client:
     flag_key = "test-python"
 
     # Create a flag with json variations
-    feature_flag_body = Reps2GlobalFlagRep(
+    feature_flag_body = GlobalFlagRep(
         name=flag_key,
         key=flag_key,
         variations=[
-            Reps2VariateRep(value=[1, 2]),
-            Reps2VariateRep(value=[3, 4]),
-            Reps2VariateRep(value=[5]),
+            VariateRep(value=[1, 2]),
+            VariateRep(value=[3, 4]),
+            VariateRep(value=[5]),
         ])
 
     try:
