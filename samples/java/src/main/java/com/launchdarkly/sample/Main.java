@@ -24,10 +24,10 @@ public class Main {
         FlagPost body = new FlagPost()
             .name(FLAG_KEY)
             .key(FLAG_KEY)
-            .variations(Arrays.<VariateRep>asList(
-                new VariateRep().value(Arrays.<Integer>asList(1,2)),
-                new VariateRep().value(Arrays.<Integer>asList(3,4)),
-                new VariateRep().value(Arrays.<Integer>asList(5))
+            .variations(Arrays.<FlagPostVariations>asList(
+                new FlagPostVariations().value(Arrays.<Integer>asList(1,2)),
+                new FlagPostVariations().value(Arrays.<Integer>asList(3,4)),
+                new FlagPostVariations().value(Arrays.<Integer>asList(5))
             ));
         try {
             apiInstance.postFeatureFlag(PROJECT_KEY, body, null);

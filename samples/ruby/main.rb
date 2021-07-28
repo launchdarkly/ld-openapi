@@ -1,6 +1,6 @@
 # Load the gem
 require 'launchdarkly_api'
-require 'launchdarkly_api/models/variate_rep'
+require 'launchdarkly_api/models/flag_post_variations'
 
 # Setup authorization
 LaunchDarklyApi.configure do |config|
@@ -18,9 +18,9 @@ body = LaunchDarklyApi::FlagPost.new(
   name: "test-ruby",
   key: flag_key,
   variations: [
-    LaunchDarklyApi::VariateRep.new({value: [1,2]}),
-    LaunchDarklyApi::VariateRep.new({value: [3,4]}),
-    LaunchDarklyApi::VariateRep.new({value: [5]}),
+    LaunchDarklyApi::FlagPostVariations.new({value: [1,2]}),
+    LaunchDarklyApi::FlagPostVariations.new({value: [3,4]}),
+    LaunchDarklyApi::FlagPostVariations.new({value: [5]}),
   ])
 
 begin

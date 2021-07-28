@@ -32,7 +32,7 @@ func main() {
 	body := ldapi.FlagPost{
 		Name: &flagName,
 		Key:  &flagKey,
-		Variations: &[]ldapi.VariateRep{
+		Variations: &[]ldapi.FlagPostVariations{
 			{Value: &valOne},
 			{Value: &valTwo},
 		},
