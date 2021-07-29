@@ -46,7 +46,13 @@ LASTHASH := $(shell git rev-parse --short HEAD)
 # The following variables define any special command-line parameters that need to be passed
 # to openapi-generator for each language/platform.
 CODEGEN_PARAMS_csharp-dotnet2 = --additional-properties=packageName=LaunchDarkly.Api --additional-properties=clientPackage=LaunchDarkly.Api.Client
-CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi -t $(TEMPLATES_PATH)/go
+CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
+	--additional-properties=email=support@launchdarkly.com \
+	--additional-properties=developerName=LaunchDarkly \
+	--additional-properties=developerEmail=support@launchdarkly.com \
+	--additional-properties=developerOrganization=LaunchDarkly \
+	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
+	-t $(TEMPLATES_PATH)/go
 CODEGEN_PARAMS_java = \
 	--group-id com.launchdarkly \
 	--api-package com.launchdarkly.api.api \
@@ -126,7 +132,7 @@ $(TARGETS_PATH):
 $(API_TARGETS): TARGET_OPENAPI_JSON
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$(API_CLIENT_PREFIX)-$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(VERSION) -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(VERSION) --git-host=github.com --git-user-id=launchdarkly --git-repo-id=api-client-$@ -o $(BUILD_DIR)
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md
