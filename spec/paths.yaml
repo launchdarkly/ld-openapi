@@ -43,6 +43,8 @@
 # paths for flag config approval request
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests:
   $ref: ./paths/flags.yaml#/FlagConfigApprovalRequests
+/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests-flag-copy:
+  $ref: ./paths/flags.yaml#/FlagConfigApprovalRequestFlagCopy
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{approvalRequestId}:
   $ref: ./paths/flags.yaml#/FlagConfigApprovalRequest
 /projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{approvalRequestId}/apply:
