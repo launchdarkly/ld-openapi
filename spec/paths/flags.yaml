@@ -477,7 +477,7 @@ FlagConfigApprovalRequest:
     responses:
       '200':
         schema:
-          $ref: '#/definitions/ApprovalRequests'
+          $ref: '#/definitions/ApprovalRequest'
         description: Approval request response
       '401':
         $ref: '#/responses/Standard401'
@@ -495,7 +495,7 @@ FlagConfigApprovalRequest:
       - $ref: '#/parameters/ApprovalRequestId'
       - $ref: '#/parameters/ApprovalRequestPostRequest'
     responses:
-      '200':
+      '201':
         schema:
           $ref: '#/definitions/ApprovalRequest'
         description: Approval request response
@@ -536,7 +536,7 @@ FlagConfigApplyApprovalRequest:
     responses:
       '200':
         schema:
-          $ref: '#/definitions/ApprovalRequests'
+          $ref: '#/definitions/ApprovalRequest'
         description: Approval request applied response
       '401':
         $ref: '#/responses/Standard401'
@@ -557,12 +557,34 @@ FlagConfigReviewApprovalRequest:
     responses:
       '200':
         schema:
-          $ref: '#/definitions/ApprovalRequests'
+          $ref: '#/definitions/ApprovalRequest'
         description: Approval request reviewed response
       '401':
         $ref: '#/responses/Standard401'
       '404':
         $ref: '#/responses/Standard404'
+    tags:
+      - Feature flags
+FlagConfigApprovalRequestFlagCopy:
+  post:
+    operationId: postApprovalRequestFlagCopy
+    summary: Create an approval request to copy feature flag config
+    parameters:
+      - $ref: '#/parameters/ProjectKey'
+      - $ref: '#/parameters/FeatureFlagKey'
+      - $ref: '#/parameters/EnvironmentKey'
+      - $ref: '#/parameters/ApprovalRequestFlagCopyPostRequest'
+    responses:
+      '201':
+        schema:
+          $ref: '#/definitions/ApprovalRequest'
+        description: Approval request applied response
+      '401':
+        $ref: '#/responses/Standard401'
+      '404':
+        $ref: '#/responses/Standard404'
+      '409':
+        $ref: '#/responses/Standard409'
     tags:
       - Feature flags
 # approval requests for global flag changes

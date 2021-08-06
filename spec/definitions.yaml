@@ -472,6 +472,19 @@ ApprovalRequest:
     operatingOnId:
       type: string
       description: ID of scheduled change to edit or delete
+    source:
+      $ref: "#/definitions/Source"
+
+Source:
+  type: object
+  properties:
+    key:
+      type: string
+      description: Environment key to be copied from
+    version:
+      type: integer
+      description: Version of environment at time of request
+
 ApprovalRequestReview:
   type: object
   properties:
