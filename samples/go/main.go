@@ -30,8 +30,8 @@ func main() {
 	valTwoVal := []int{4, 5}
 	valTwo := map[string]interface{}{"two": valTwoVal}
 	body := ldapi.FlagPost{
-		Name: &flagName,
-		Key:  &flagKey,
+		Name: flagName,
+		Key:  flagKey,
 		Variations: &[]ldapi.FlagPostVariations{
 			{Value: &valOne},
 			{Value: &valTwo},
@@ -42,7 +42,7 @@ func main() {
 		if resp.StatusCode != 409 {
 			panic(fmt.Errorf("create failed: %s", err))
 		} else {
-			if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", *body.Key).Execute(); err != nil {
+			if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key).Execute(); err != nil {
 				panic(fmt.Errorf("delete failed: %s", err))
 			}
 			flag, resp, err = client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FlagPost(body).Execute()
@@ -54,7 +54,7 @@ func main() {
 	fmt.Printf("Created flag: %+v\n", flag)
 	// Clean up new flag
 	defer func() {
-		if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", *body.Key).Execute(); err != nil {
+		if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key).Execute(); err != nil {
 			panic(fmt.Errorf("delete failed: %s", err))
 		}
 	}()
