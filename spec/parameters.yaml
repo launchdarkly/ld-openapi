@@ -586,6 +586,12 @@ EventType:
   required: true
   description: The type of event we would like to track.
   type: string
+EvaluationProjectKey:
+  name: projectKey
+  in: path
+  required: true
+  description: The project key that we want metrics from
+  type: string
 #  example: 'published'
 EvaluationEnvId:
   name: envId
@@ -600,6 +606,25 @@ EvaluationFlagKey:
   required: true
   description: The key of the flag we want metrics for.
   type: string
+EvaluationFrom:
+  name: from
+  in: query
+  required: false
+  description: A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occurred after this timestamp.
+  format: int64
+  type: integer
+EvaluationTo:
+  name: to
+  in: query
+  required: false
+  description: A timestamp filter, expressed as a Unix epoch time in milliseconds. All entries returned will have occurred before this timestamp.
+  format: int64
+  type: integer
+EvaluationTimeZone:
+  name: tz
+  in: query
+  required: false
+  description: The timezone to use for breaks between days when returning daily data.
 #  example: ''
 TokensPostRequest:
   name: tokenBody

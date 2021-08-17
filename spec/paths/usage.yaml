@@ -136,13 +136,18 @@ Evaluations:
     summary: "[BETA] Get events usage by event id and the feature flag key."
     operationId: getEvaluations
     parameters:
+      - $ref: '#/parameters/EvaluationProjectKey'
       - $ref: '#/parameters/EvaluationEnvId'
       - $ref: '#/parameters/EvaluationFlagKey'
+      - $ref: '#/parameters/EvaluationFrom'
+      - $ref: '#/parameters/EvaluationTo'
+      - $ref: '#/parameters/EvaluationTimeZone'
+
     responses:
       '200':
         description: Returns timeseries data and all sdk versions.
         schema:
-          $ref: '#/definitions/StreamSDKVersion'
+          $ref: '#/definitions/Stream'
       '403':
         $ref: '#/responses/BetaApi403'
       '404':
