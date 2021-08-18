@@ -3,9 +3,7 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
-GENERATOR_VERSION=5.2.0
-GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
-GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
+GENERATOR_JAR=ld-openapi-generator-cli.jar
 
 OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
@@ -183,9 +181,6 @@ publish:
 	    echo Publishing client artifacts for $(TARGET)...; \
 		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET) $(VERSION); \
 	)
-
-$(GENERATOR_JAR):
-	wget ${GENERATOR_DOWNLOAD_URL} -O $@
 
 clean:
 	rm -rf $(TARGETS_PATH)
