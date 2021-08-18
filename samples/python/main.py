@@ -3,8 +3,8 @@ import os
 from pprint import pprint
 
 import launchdarkly_api
-from launchdarkly_api.model.reps2_variate_rep import Reps2VariateRep
-from launchdarkly_api.model.reps2_global_flag_rep import Reps2GlobalFlagRep
+from launchdarkly_api.model.flag_post_variations import FlagPostVariations
+from launchdarkly_api.model.flag_post import FlagPost
 from launchdarkly_api.api import feature_flags_api
 from launchdarkly_api.rest import ApiException
 
@@ -24,17 +24,17 @@ with launchdarkly_api.ApiClient(configuration) as api_client:
     flag_key = "test-python"
 
     # Create a flag with json variations
-    feature_flag_body = Reps2GlobalFlagRep(
+    flag_post = FlagPost(
         name=flag_key,
         key=flag_key,
         variations=[
-            Reps2VariateRep(value=[1, 2]),
-            Reps2VariateRep(value=[3, 4]),
-            Reps2VariateRep(value=[5]),
+            FlagPostVariations(value=[1, 2]),
+            FlagPostVariations(value=[3, 4]),
+            FlagPostVariations(value=[5]),
         ])
 
     try:
-        api_response = api_instance.post_feature_flag(project_key, feature_flag_body)
+        api_response = api_instance.post_feature_flag(project_key, flag_post)
         pprint(api_response)
     except ApiException as e:
         print("Exception creating flag: %s\n" % e)

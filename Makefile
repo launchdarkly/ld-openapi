@@ -3,9 +3,7 @@ SHELL = /bin/bash
 VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
 REVISION:=$(shell git rev-parse --short HEAD)
 
-GENERATOR_VERSION=5.1.1
-GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
-GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
+GENERATOR_JAR=ld-openapi-generator-cli.jar
 
 OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
@@ -111,7 +109,7 @@ TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 
 CODEGEN = exec java -jar ${GENERATOR_JAR}
 
-all: $(API_TARGETS) $(DOC_TARGETS) gh-pages
+all: $(API_TARGETS) $(DOC_TARGETS)
 
 load_prior_targets:
 	rm -rf $(TARGETS_PATH)
@@ -120,8 +118,7 @@ load_prior_targets:
 	cd $(TARGETS_PATH); \
 	git init; \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;) \
-	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
+	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;)
 
 TARGET_OPENAPI_JSON: $(GENERATOR_JAR) $(TARGETS_PATH)
 	wget $(OPENAPI_JSON_URL) -O $(TARGET_OPENAPI_JSON)
@@ -157,11 +154,6 @@ $(DOC_TARGETS):
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
 	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
 
-gh-pages:
-	mkdir -p targets/gh-pages
-	cp $(TARGET_OPENAPI_JSON) $(TARGETS_PATH)/gh-pages/
-	cp gh-pages/* $(TARGETS_PATH)/gh-pages/
-
 GIT_COMMAND=git
 GIT_PUSH_COMMAND=git push
 
@@ -189,17 +181,6 @@ push:
 		fi; \
 		cd ..; \
 	) \
-	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
-		echo Publishing updates to GitHub pages...; \
-		$(GIT_COMMAND) clone git@github.com:launchdarkly/$(REPO).git; \
-		cd $(REPO); \
-		$(GIT_COMMAND) checkout gh-pages --; \
-		cp -v -r ../../$(TARGETS_PATH)/gh-pages/. .; \
-		$(GIT_COMMAND) add .; \
-		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
-		$(GIT_PUSH_COMMAND) origin gh-pages; \
-		cd ..; \
-	fi
 
 publish:
 	$(foreach TARGET, $(PUBLISH_TARGETS), \
@@ -207,11 +188,8 @@ publish:
 		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET) $(VERSION); \
 	)
 
-$(GENERATOR_JAR):
-	wget ${GENERATOR_DOWNLOAD_URL} -O $@
-
 clean:
 	rm -rf $(TARGETS_PATH)
 	rm -rf $(CLIENT_CLONES_PATH)
 
-.PHONY: $(TARGETS) all clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
+.PHONY: $(TARGETS) all clean load_prior_targets openapi_yaml push push_dry_run push_test

@@ -1,30 +1,15 @@
 # LaunchDarkly OpenAPI
 
-This repository contains an OpenAPI specification for LaunchDarkly's REST API.
+This repository uses the [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) library to create LaunchDarkly REST API client libraries from our [OpenAPI spec](https://app.launchdarkly.com/api/v2/openapi.json).
 
-This REST API is for custom integrations, data export, or automating your feature flag workflows. *DO NOT* use this client library to add feature flags to your web or mobile application. To integrate feature flags with your application, please see the [SDK documentation](https://docs.launchdarkly.com/v2.0/docs)
-
-## Directory architecture
-
-This project uses YAML file pointers to create the directory architecture described here: 
-
-http://azimi.me/2015/07/16/split-swagger-into-smaller-files.html
-
-## Testing the spec
-
-We use the spec to build some internals tools in go.  Tests for other specs are forthcoming.
-
-## Suggested editors
-
-- [VSCode Swagger Viewer extension](https://marketplace.visualstudio.com/items?itemName=Arjun.swagger-viewer) 
-- [Swagger Web Editor](http://editor.swagger.io/)
+The LaunchDarkly REST API is for custom integrations, data export, or automating feature flag workflows. *DO NOT* use these libraries to add feature flags to web or mobile applications. To integrate feature flags with applications, please see the [SDK documentation](https://docs.launchdarkly.com/sdk).
 
 ## Code generation
 
 Server/client code for the API can be automatically generated. To generate the code:
 
-  1. Ensure that you have `wget`, `yarn`, `jq`, and `pip3` installed. 
-  1. Run the `generate` command:
+  1. Ensure that you have `wget` and `jq` installed.
+  1. The default make command will generate all target libraries:
 ```
 > make
 ```

@@ -29,23 +29,23 @@ func main() {
 	valOne := map[string]interface{}{"one": valOneVal}
 	valTwoVal := []int{4, 5}
 	valTwo := map[string]interface{}{"two": valTwoVal}
-	body := ldapi.Reps2GlobalFlagRep{
-		Name: &flagName,
-		Key:  &flagKey,
-		Variations: &[]ldapi.Reps2VariateRep{
+	body := ldapi.FlagPost{
+		Name: flagName,
+		Key:  flagKey,
+		Variations: &[]ldapi.FlagPostVariations{
 			{Value: &valOne},
 			{Value: &valTwo},
 		},
 	}
-	flag, resp, err := client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").Reps2GlobalFlagRep(body).Execute()
+	flag, resp, err := client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FlagPost(body).Execute()
 	if err != nil {
 		if resp.StatusCode != 409 {
 			panic(fmt.Errorf("create failed: %s", err))
 		} else {
-			if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", *body.Key).Execute(); err != nil {
+			if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key).Execute(); err != nil {
 				panic(fmt.Errorf("delete failed: %s", err))
 			}
-			flag, resp, err = client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").Reps2GlobalFlagRep(body).Execute()
+			flag, resp, err = client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FlagPost(body).Execute()
 			if err != nil {
 				panic(fmt.Errorf("create failed: %s", err))
 			}
@@ -54,7 +54,7 @@ func main() {
 	fmt.Printf("Created flag: %+v\n", flag)
 	// Clean up new flag
 	defer func() {
-		if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", *body.Key).Execute(); err != nil {
+		if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key).Execute(); err != nil {
 			panic(fmt.Errorf("delete failed: %s", err))
 		}
 	}()

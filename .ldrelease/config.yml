@@ -23,5 +23,3 @@ circleci:
       GRADLE_USER_HOME: /home/circleci
     context: org-global
 
-documentation:
-  githubPages: true
