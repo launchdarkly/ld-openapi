@@ -1,6 +1,6 @@
 # Load the gem
 require 'launchdarkly_api'
-require 'launchdarkly_api/models/flag_post_variations'
+require 'launchdarkly_api/models/variate'
 
 # Setup authorization
 LaunchDarklyApi.configure do |config|
