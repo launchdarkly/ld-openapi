@@ -29,15 +29,15 @@ func main() {
 	valOne := map[string]interface{}{"one": valOneVal}
 	valTwoVal := []int{4, 5}
 	valTwo := map[string]interface{}{"two": valTwoVal}
-	body := ldapi.FlagPost{
+	body := ldapi.FeatureFlagBody{
 		Name: flagName,
 		Key:  flagKey,
-		Variations: &[]ldapi.FlagPostVariations{
+		Variations: &[]ldapi.Variate{
 			{Value: &valOne},
 			{Value: &valTwo},
 		},
 	}
-	flag, resp, err := client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FlagPost(body).Execute()
+	flag, resp, err := client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FeatureFlagBody(body).Execute()
 	if err != nil {
 		if resp.StatusCode != 409 {
 			panic(fmt.Errorf("create failed: %s", err))
@@ -45,7 +45,7 @@ func main() {
 			if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key).Execute(); err != nil {
 				panic(fmt.Errorf("delete failed: %s", err))
 			}
-			flag, resp, err = client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FlagPost(body).Execute()
+			flag, resp, err = client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FeatureFlagBody(body).Execute()
 			if err != nil {
 				panic(fmt.Errorf("create failed: %s", err))
 			}
