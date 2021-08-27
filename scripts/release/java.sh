@@ -3,13 +3,12 @@ set -ex
 
 path=$1
 name=$2
+version=$3
 
-tmpdir=$(mktemp -d)
-trap "rm -rf ${tmpdir}" EXIT
+cd ${path}
 
-cp -r ${path} $tmpdir
-cp ${path}/../../scripts/release/java/publish.gradle ${tmpdir}/$(basename ${path})
+# Publish to Sonatype
+gradle publish closeAndReleaseRepository
 
-cd ${tmpdir}/$(basename ${path})
-gradle --info -b publish.gradle publish closeAndReleaseRepository
-gradle --info -b publish.gradle publishGhPages
+# Publish to GitHub Pages
+gradle publishGhPages

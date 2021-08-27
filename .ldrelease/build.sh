@@ -18,3 +18,6 @@ cd targets
 tar cvfz api-clients-${LD_RELEASE_VERSION}.tgz api-client-*
 cd ..
 cp targets/api-clients-${LD_RELEASE_VERSION}.tgz ${LD_RELEASE_ARTIFACTS_DIR}
+
+# Verify that the generated client code can be built
+make BUILD_TARGETS="go java javascript python ruby typescript-node" build_clients

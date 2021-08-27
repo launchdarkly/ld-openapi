@@ -5,6 +5,7 @@ path=$1
 name=$2
 version=$3
 
-cd ${path}/
-gem build launchdarkly_api.gemspec
+cd ${path}
+
+# Publish to RubyGems (gem was already built by scripts/build/ruby.sh)
 gem push launchdarkly_api-${version}.gem

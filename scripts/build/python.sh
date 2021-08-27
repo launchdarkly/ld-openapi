@@ -7,5 +7,5 @@ version=$3
 
 cd ${path}
 
-# Publish to NPM
-npm publish
+# Build the package
+python3 setup.py bdist_wheel --universal

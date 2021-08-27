@@ -48,6 +48,7 @@ LASTHASH := $(shell git rev-parse --short HEAD)
 CODEGEN_PARAMS_csharp-dotnet2 = -DpackageName=LaunchDarkly.Api -DclientPackage=LaunchDarkly.Api.Client
 CODEGEN_PARAMS_go = -DpackageName=ldapi -t $(TEMPLATES_PATH)/go
 CODEGEN_PARAMS_java = \
+	-t $(TEMPLATES_PATH)/java \
 	--group-id com.launchdarkly \
 	--api-package com.launchdarkly.api.api \
 	--model-package com.launchdarkly.api.model \
@@ -120,7 +121,6 @@ load_prior_targets:
 	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
 
 openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
-	pip3 install bravado
 	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
 	$(MULTI_FILE_SWAGGER) -o yaml openapi.yaml > $(TARGET_OPENAPI_YAML)
 	$(CODEGEN) validate -i $(TARGET_OPENAPI_YAML)
@@ -151,11 +151,11 @@ $(API_TARGETS): openapi_yaml
 
 # Generates openapi.yaml using Docker
 openapi_yaml_docker:
-	docker build . -t ld-openapi && docker run -ti -v `pwd`:/workspace ld-openapi:latest make openapi_yaml
+	docker run -ti -v `pwd`:/workspace ldcircleci/openapi-release:1 make openapi_yaml
 
 # Generates all API targets using Docker
 targets_docker:
-	docker build . -t ld-openapi && docker run -ti -v `pwd`:/workspace ld-openapi:latest make
+	docker run -ti -v `pwd`:/workspace ldcircleci/openapi-release:1 make
 
 $(DOC_TARGETS): openapi_yaml
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$@)
@@ -173,16 +173,18 @@ $(MULTI_FILE_SWAGGER):
 
 GIT_COMMAND=git
 GIT_PUSH_COMMAND=git push
+GIT_PUSH_DESC=Publishing updates
 
 push_test: GIT_COMMAND=echo git
 push_test: push
 
 push_dry_run: GIT_PUSH_COMMAND=git push --dry-run
+push_dry_run: GIT_PUSH_DESC=Simulating the updates we would do
 push:
 	mkdir $(CLIENT_CLONES_PATH); \
 	cd $(CLIENT_CLONES_PATH); \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-		echo Publishing updates to the $(RELEASE_TARGET) client repository...; \
+		echo $(GIT_PUSH_DESC) to the $(RELEASE_TARGET) client repository...; \
 		$(GIT_COMMAND) clone git@github.com:launchdarkly/api-client-$(RELEASE_TARGET).git; \
 		cp -v -r ../$(TARGETS_PATH)/api-client-$(RELEASE_TARGET) .; \
 		cd api-client-$(RELEASE_TARGET); \
@@ -199,7 +201,7 @@ push:
 		cd ..; \
 	) \
 	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
-		echo Publishing updates to GitHub pages...; \
+		echo $(GIT_PUSH_DESC) to GitHub pages...; \
 		$(GIT_COMMAND) clone git@github.com:launchdarkly/$(REPO).git; \
 		cd $(REPO); \
 		$(GIT_COMMAND) checkout gh-pages --; \
@@ -210,14 +212,20 @@ push:
 		cd ..; \
 	fi
 
+build_clients:
+	./scripts/run-scripts-for-targets.sh ./scripts/build $(VERSION) \
+		"Building client code" $(BUILD_TARGETS)
+
 publish:
-	$(foreach TARGET, $(PUBLISH_TARGETS), \
-	    echo Publishing client artifacts for $(TARGET)...; \
-		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET) $(VERSION); \
-	)
+	./scripts/run-scripts-for-targets.sh ./scripts/release $(VERSION) \
+		"Publishing client artifacts" $(PUBLISH_TARGETS)
+
+publish_dry_run:
+	./scripts/run-scripts-for-targets.sh ./scripts/release-dry-run $(VERSION) \
+		"Dry run simulation of publishing client artifacts" $(PUBLISH_TARGETS)
 
 $(SWAGGER_JAR):
-	wget ${SWAGGER_DOWNLOAD_URL} -O $@
+	curl -s -L --fail ${SWAGGER_DOWNLOAD_URL} >$@
 
 clean:
 	rm -rf $(TARGETS_PATH)

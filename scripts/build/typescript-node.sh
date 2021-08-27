@@ -7,5 +7,6 @@ version=$3
 
 cd ${path}
 
-# Publish to NPM
-npm publish
+# Build the package
+npm install
+npm run build

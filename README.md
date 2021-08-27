@@ -37,14 +37,16 @@ Server/client code for the API can be automatically generated. To generate the c
 > make
 ```
 
-## Publishing code changes to platform-specific code repositories
+## How releases work
 
-Publishing codes changes is done by setting up the source repos for each client code repo as git submodules of the
-targets directory.  This is done by running `make load_prior_targets` to set up the git submodules.
+This project is set up (via the files in `.ldrelease`) to work with LaunchDarkly's internal Releaser tool. Running a release via Releaser will execute the required `make` targets in the right order, sandboxed in a Docker container that contains all the necessary build tools. You can also do a "dry run" in Releaser, which does all of the _build_ steps and provides you with the build products, but does not push anything to GitHub or to package managers.
 
-Then `make` can be run to layer changes on top of the existing repos, followed by `make push` to push the changes to
-those repos.
+That is the preferred way of doing releases, but the `make` targets can also be run locally if necessary, as long as your local environment has all of the necessary tools installed (as defined by the Docker image selected in `.ldrelease/config.yml` and anything else that's installed in `.ldrelease/prepare.sh`). Here are more details about what they do:
 
-## Uploading packages
-
-The target `make publish` will publish changes to the language-specific package managers.
+* `make load_prior_targets`: Sets up the source repos for each client repository (such as `api-client-go`) as git submodules of the `targets` directory.
+* `make all`: Generates the API spec, runs the OpenAPI code generator to create the code for each API client, and copies the generated code into the submodules in `targets`.
+* `make build_clients`: Verifies that the generated code for each client can actually be built as a package. This runs the script for each client that is in `scripts/build`.
+* `make push`: Pushes the changes in the submodules to the client repositories.
+* `make push_dry_run`: Simulates what the result of `make push` would be.
+* `make publish`: Pushes the client code to package managers, for platforms where this is applicable (such as NPM for the JavaScript clients). This runs the script for each client that is in `scripts/release`, if any.
+* `make publish_dry_run`: Simulates what the result of `make publish` would be.This runs the script for each client that is in `scripts/build`, if any.

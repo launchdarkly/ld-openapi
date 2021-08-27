@@ -10,21 +10,9 @@ experimental:
 jobs:
   build:
     docker:
-    - image: circleci/node:10-browsers  # -browsers image has java but is otherwise relatively small
+    - image: ldcircleci/openapi-release:1  # same image we use for releases, includes all necessary tools
     steps:
     - checkout
-    - run:
-        name: Install Swagger Codegen
-        command: |
-          wget https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/2.4.8/swagger-codegen-cli-2.4.8.jar -O swagger-codegen-cli.jar
-          printf '#!/bin/bash\nexec java -jar /usr/local/bin/swagger-codegen-cli.jar "$@"\n' > ./swagger-codegen
-          sudo mv ./swagger-codegen /usr/local/bin
-          sudo mv ./swagger-codegen-cli.jar /usr/local/bin
-          sudo chmod +x /usr/local/bin/swagger-codegen
-
-    - run:
-        name: Install pip
-        command: sudo apt install python3-pip
 
     - run:
         name: Loading previous client repos
