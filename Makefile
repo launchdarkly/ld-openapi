@@ -67,6 +67,7 @@ CODEGEN_PARAMS_java = \
 CODEGEN_PARAMS_javascript = \
 	-t $(TEMPLATES_PATH)/javascript \
 	--additional-properties=projectName=launchdarkly-api \
+	--additional-properties=projectVersion=$(TAG) \
 	--additional-properties=projectDescription="Build custom integrations with the LaunchDarkly REST API" \
 	--additional-properties=moduleName=LaunchDarklyApi
 CODEGEN_PARAMS_php = \
