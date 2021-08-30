@@ -3,8 +3,10 @@ set -ex
 
 path=$1
 name=$2
+version=$3
 
-cd ${path}/
+cd ${path}
+
+# Build the package
 npm install
 npm run build
-npm publish

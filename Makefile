@@ -1,7 +1,6 @@
 SHELL = /bin/bash
 
-VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
-REVISION:=$(shell git rev-parse --short HEAD)
+LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
 GENERATOR_JAR=ld-openapi-generator-cli.jar
 
@@ -26,7 +25,7 @@ PUBLISH_TARGETS ?= $(RELEASE_TARGETS)
 
 REPO ?= ld-openapi$(RELEASE_SUFFIX)
 REPO_USER_URL ?= https://github.com/launchdarkly
-TAG ?= $(VERSION)
+TAG ?= $(LD_RELEASE_VERSION)
 
 DOC_TARGETS = \
 	html \
@@ -39,8 +38,6 @@ CLIENT_CLONES_PATH ?= ./client-clones
 TEMPLATES_PATH ?= ./swagger-codegen-templates
 SAMPLES_PATH ?= ./samples
 
-LASTHASH := $(shell git rev-parse --short HEAD)
-
 # The following variables define any special command-line parameters that need to be passed
 # to openapi-generator for each language/platform.
 CODEGEN_PARAMS_csharp-dotnet2 = --additional-properties=packageName=LaunchDarkly.Api --additional-properties=clientPackage=LaunchDarkly.Api.Client
@@ -52,6 +49,7 @@ CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
 	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
 	-t $(TEMPLATES_PATH)/go
 CODEGEN_PARAMS_java = \
+	-t $(TEMPLATES_PATH)/java \
 	--group-id com.launchdarkly \
 	--api-package com.launchdarkly.api.api \
 	--model-package com.launchdarkly.api.model \
@@ -80,7 +78,7 @@ CODEGEN_PARAMS_php = \
 	--git-repo-id=api-client-php
 CODEGEN_PARAMS_python = --additional-properties=packageName=launchdarkly_api --additional-properties=packageVersion=$(TAG)
 CODEGEN_PARAMS_typescript-axios = \
-	--additional-properties=npmName=launchdarkly-api-typescript-axios \
+	--additional-properties=npmName=launchdarkly-api-typescript \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true
 CODEGEN_PARAMS_ruby = \
@@ -96,15 +94,14 @@ SAMPLE_FILE_go = main.go
 SAMPLE_FILE_javascript = index.js
 SAMPLE_FILE_python = main.py
 SAMPLE_FILE_ruby = main.rb
-SAMPLE_FILE_typescript-node = index.ts
+SAMPLE_FILE_typescript-axios = index.ts
 
 SAMPLE_FORMAT_go = go
 SAMPLE_FORMAT_javascript = js
 SAMPLE_FORMAT_python = python
 SAMPLE_FORMAT_ruby = ruby
-SAMPLE_FORMAT_typescript-node = ts
+SAMPLE_FORMAT_typescript-axios = ts
 
-TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 
 CODEGEN = exec java -jar ${GENERATOR_JAR}
@@ -120,16 +117,16 @@ load_prior_targets:
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
 	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;)
 
-TARGET_OPENAPI_JSON: $(GENERATOR_JAR) $(TARGETS_PATH)
-	wget $(OPENAPI_JSON_URL) -O $(TARGET_OPENAPI_JSON)
+$(TARGET_OPENAPI_JSON): $(GENERATOR_JAR) $(TARGETS_PATH)
+	curl -s -L --fail $(OPENAPI_JSON_URL) > $@
 
 $(TARGETS_PATH):
 	mkdir -p $@
 
-$(API_TARGETS): TARGET_OPENAPI_JSON
+$(API_TARGETS): $(TARGET_OPENAPI_JSON)
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$(API_CLIENT_PREFIX)-$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(VERSION) --git-host=github.com --git-user-id=launchdarkly --git-repo-id=api-client-$@ -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(LD_RELEASE_VERSION) --git-host=github.com --git-user-id=launchdarkly --git-repo-id=api-client-$@ -o $(BUILD_DIR)
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md
@@ -141,37 +138,36 @@ $(API_TARGETS): TARGET_OPENAPI_JSON
 	fi
 	rm $(BUILD_DIR)/README-ORIGINAL.md
 
-# Generates openapi.yaml using Docker
-openapi_yaml_docker:
-	docker build . -t ld-openapi && docker run -ti -v `pwd`:/workspace ld-openapi:latest make openapi_yaml
-
 # Generates all API targets using Docker
 targets_docker:
-	docker build . -t ld-openapi && docker run -ti -v `pwd`:/workspace ld-openapi:latest make
+	docker run -ti -v `pwd`:/workspace -e LD_RELEASE_VERSION --workdir /workspace \
+	  ldcircleci/openapi-release:1 make all
 
 $(DOC_TARGETS):
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(LD_RELEASE_VERSION) -o $(BUILD_DIR)
 
 GIT_COMMAND=git
 GIT_PUSH_COMMAND=git push
+GIT_PUSH_DESC=Publishing updates
 
 push_test: GIT_COMMAND=echo git
 push_test: push
 
 push_dry_run: GIT_PUSH_COMMAND=git push --dry-run
+push_dry_run: GIT_PUSH_DESC=Simulating the updates we would do
 push:
 	mkdir $(CLIENT_CLONES_PATH); \
 	cd $(CLIENT_CLONES_PATH); \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-		echo Publishing updates to the $(RELEASE_TARGET) client repository...; \
+		echo $(GIT_PUSH_DESC) to the $(RELEASE_TARGET) client repository...; \
 		$(GIT_COMMAND) clone git@github.com:launchdarkly/api-client-$(RELEASE_TARGET).git; \
 		cp -v -r ../$(TARGETS_PATH)/api-client-$(RELEASE_TARGET) .; \
 		cd api-client-$(RELEASE_TARGET); \
 		$(GIT_COMMAND) add .; \
 		$(GIT_COMMAND) status; \
-		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
+		$(GIT_COMMAND) commit --allow-empty -m "Version $(LD_RELEASE_VERSION) automatically generated from $(REPO)."; \
 		$(GIT_COMMAND) tag $(TAG); \
 		$(GIT_PUSH_COMMAND) origin $(TAG); \
 		$(GIT_PUSH_COMMAND) origin $(RELEASE_BRANCH); \
@@ -182,14 +178,20 @@ push:
 		cd ..; \
 	) \
 
+build_clients:
+	./scripts/run-scripts-for-targets.sh ./scripts/build $(LD_RELEASE_VERSION) \
+		"Building client code" $(BUILD_TARGETS)
+
 publish:
-	$(foreach TARGET, $(PUBLISH_TARGETS), \
-	    echo Publishing client artifacts for $(TARGET)...; \
-		[ ! -f ./scripts/release/$(TARGET).sh ] || ./scripts/release/$(TARGET).sh targets/api-client-$(TARGET) $(TARGET) $(VERSION); \
-	)
+	./scripts/run-scripts-for-targets.sh ./scripts/release $(LD_RELEASE_VERSION) \
+		"Publishing client artifacts" $(PUBLISH_TARGETS)
+
+publish_dry_run:
+	./scripts/run-scripts-for-targets.sh ./scripts/release-dry-run $(LD_RELEASE_VERSION) \
+		"Dry run simulation of publishing client artifacts" $(PUBLISH_TARGETS)
 
 clean:
 	rm -rf $(TARGETS_PATH)
 	rm -rf $(CLIENT_CLONES_PATH)
 
-.PHONY: $(TARGETS) all clean load_prior_targets openapi_yaml push push_dry_run push_test
+.PHONY: $(TARGETS) all build_clients clean load_prior_targets push push_dry_run push_test targets_docker

@@ -2,17 +2,6 @@
 
 set -eu
 
-sudo apt -q update
-
-# Install Python tools
-echo "Installing Python..."
-sudo apt -y install python3-pip python3-setuptools
-sudo pip3 install wheel twine
-
-# Install Ruby
-echo "Installing Ruby..."
-sudo apt -y install ruby
-
 # Set up credentials needed for client package releases. These have been downloaded
 # by Releaser into $LD_RELEASE_SECRETS_DIR as specified by our secrets.properties file.
 # We'll put them into the standard locations used by the various build/release tools -

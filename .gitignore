@@ -37,10 +37,10 @@ targets/
 client-clones/
 
 # Generated files in the typescript sample
-samples/typescript-node/index.d.ts
-samples/typescript-node/index.js
-samples/typescript-node/index.js.map
-samples/typescript-node/package-lock.json
+samples/typescript-axios/index.d.ts
+samples/typescript-axios/index.js
+samples/typescript-axios/index.js.map
+samples/typescript-axios/package-lock.json
 
 # Generated files in go sample
 samples/go/go.mod

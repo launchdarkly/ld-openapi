@@ -10,9 +10,10 @@ experimental:
 jobs:
   build:
     docker:
-    - image: circleci/node:10-browsers  # -browsers image has java but is otherwise relatively small
+    - image: ldcircleci/openapi-release:1  # same image we use for releases, includes all necessary tools
     steps:
     - checkout
+
     - run:
         name: Loading previous client repos
         command: |
@@ -23,14 +24,14 @@ jobs:
         name: Generating code
         command: |
           export REPO_USER_URL=https://github.com/$CIRCLE_PROJECT_USERNAME
-          make all
+          echo "Setting version to ${CIRCLE_TAG:-0.0.1}-SNAPSHOT"
+          LD_RELEASE_VERSION="${CIRCLE_TAG:-0.0.1}-SNAPSHOT" make all
 
     - run:
         name: Archiving targets
         command: |
           cd targets
-          VERSION=$(cat openapi.json | jq -r '.info.version')
-          tar cvfz api-clients-${VERSION}-${CIRCLE_SHA1:0:7}.tgz api-client-*
+          tar cvfz api-clients-${CIRCLE_TAG:-0.0.1}-SNAPSHOT-${CIRCLE_SHA1:0:7}.tgz api-client-*
           mkdir /tmp/api-clients
           cp api-clients-*.tgz /tmp/api-clients
 
@@ -119,6 +120,7 @@ jobs:
           cd targets/api-client-java
           mvn clean install
           cd ../../samples/java
+          sed -i.bak -e "s/API_CLIENT_VERSION/${CIRCLE_TAG:-0.0.1}-SNAPSHOT/g" pom.xml
           mvn clean install
           mvn exec:java
 
@@ -134,7 +136,7 @@ jobs:
         sudo npm install
         sudo npm run build
         sudo npm link 
-        cd ../../samples/typescript-node
+        cd ../../samples/typescript-axios
         sudo npm link launchdarkly-api-typescript
         sudo npm install
         sudo npm run build

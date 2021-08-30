@@ -7,5 +7,5 @@ version=$3
 
 cd ${path}
 
-# Publish to NPM
-npm publish
+# Build the gem
+gem build launchdarkly_api.gemspec

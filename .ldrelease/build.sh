@@ -11,10 +11,12 @@ make
 # Add spec artifacts to be picked up by Releaser and added to the ld-openapi GitHub release
 echo Generating artifacts...
 cp targets/openapi.json ${LD_RELEASE_ARTIFACTS_DIR}
-cp targets/openapi.yaml ${LD_RELEASE_ARTIFACTS_DIR}
 
 # Add client artifacts to be picked up by Releaser and added to the ld-openapi GitHub release
 cd targets
 tar cvfz api-clients-${LD_RELEASE_VERSION}.tgz api-client-*
 cd ..
 cp targets/api-clients-${LD_RELEASE_VERSION}.tgz ${LD_RELEASE_ARTIFACTS_DIR}
+
+# Verify that the generated client code can be built
+make BUILD_TARGETS="go java javascript python ruby typescript-axios" build_clients

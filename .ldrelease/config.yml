@@ -20,6 +20,5 @@ publications:
 
 jobs:
   - docker:
-      image: cimg/openjdk:16.0.2-node 
-    env:
-      GRADLE_USER_HOME: /home/circleci
+      image: ldcircleci/openapi-release:1  # defined in https://github.com/launchdarkly/sdks-ci-docker
+      copyGitHistory: true
