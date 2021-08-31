@@ -183,6 +183,10 @@ build_clients:
 	./scripts/run-scripts-for-targets.sh ./scripts/build $(LD_RELEASE_VERSION) \
 		"Building client code" $(BUILD_TARGETS)
 
+build_clients:
+	./scripts/run-scripts-for-targets.sh ./scripts/build $(VERSION) \
+		"Building client code" $(BUILD_TARGETS)
+
 publish:
 	./scripts/run-scripts-for-targets.sh ./scripts/release $(LD_RELEASE_VERSION) \
 		"Publishing client artifacts" $(PUBLISH_TARGETS)
