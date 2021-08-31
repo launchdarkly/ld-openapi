@@ -1,19 +1,19 @@
-import { FeatureFlagsApi, FeatureFlagsApiApiKeys, FeatureFlagBody } from "launchdarkly-api-typescript";
+import { FeatureFlagsApi, Configuration, FeatureFlagBody } from "launchdarkly-api-typescript";
 
-let apiInstance = new FeatureFlagsApi();
-const apiKey = process.env.LD_API_KEY || '';
-apiInstance.setApiKey(FeatureFlagsApiApiKeys.Token, apiKey);
+const apiToken = process.env.LD_API_KEY;
+const config = new Configuration({apiKey: apiToken});
+let apiInstance = new FeatureFlagsApi(config);
 
-const successCallback = function(data){
-    console.log('API called successfully. Returned data: ' + JSON.stringify(data));
+const successCallback = function(res){
+    console.log('API called successfully. Returned data: ' + JSON.stringify(res.data));
 };
 const errorCallback = function(error) {
     console.error('Error!', error);
     process.exit(1);
 };
 
-const createSuccessCallback = function(data){
-    successCallback(data);
+const createSuccessCallback = function(res){
+    successCallback(res);
 
     // Clean up
     apiInstance.deleteFeatureFlag(projectName, keyName).then(successCallback, errorCallback);
@@ -27,4 +27,16 @@ const flagBody: FeatureFlagBody = {
     variations: [{value: [1, 2]}, {value: [3, 4]}, {value: [5]}]
 };
 
-apiInstance.postFeatureFlag(projectName, flagBody).then(createSuccessCallback, errorCallback);
+apiInstance.deleteFeatureFlag(projectName, keyName)
+    .then(() => {
+        console.log("flag deleted")
+        apiInstance.postFeatureFlag(projectName, flagBody).then(createSuccessCallback, errorCallback);
+    })
+    .catch((err) => {
+        if (err?.response?.status == 404) {
+            console.log("No flag to cleanup")
+        } else {
+            errorCallback(err)
+        }
+        apiInstance.postFeatureFlag(projectName, flagBody).then(createSuccessCallback, errorCallback);
+    })
