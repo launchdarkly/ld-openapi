@@ -1,9 +1,11 @@
 # Load the gem
 require 'launchdarkly_api'
+require 'launchdarkly_api/models/variate'
 
 # Setup authorization
 LaunchDarklyApi.configure do |config|
-  config.api_key['Authorization'] = ENV['LD_API_KEY']
+  config.api_key['ApiKey'] = ENV['LD_API_KEY']
+  config.debugging = true
 end
 
 api_instance = LaunchDarklyApi::FeatureFlagsApi.new
@@ -16,9 +18,9 @@ body = LaunchDarklyApi::FeatureFlagBody.new(
   name: "test-ruby",
   key: flag_key,
   variations: [
-    LaunchDarklyApi::Variation.new(value=[1,2]),
-    LaunchDarklyApi::Variation.new(value=[3,4]),
-    LaunchDarklyApi::Variation.new(value=[5]),
+    LaunchDarklyApi::Variate.new({value: [1,2]}),
+    LaunchDarklyApi::Variate.new({value: [3,4]}),
+    LaunchDarklyApi::Variate.new({value: [5]}),
   ])
 
 begin

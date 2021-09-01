@@ -1,10 +1,11 @@
 package com.launchdarkly.sample;
 
-import com.launchdarkly.api.*;
+import com.launchdarkly.api.ApiClient;
+import com.launchdarkly.api.ApiException;
+import com.launchdarkly.api.Configuration;
 import com.launchdarkly.api.auth.*;
 import com.launchdarkly.api.model.*;
-import com.launchdarkly.api.api.*;
-
+import com.launchdarkly.api.api.FeatureFlagsApi;
 import java.util.*;
 
 public class Main {
@@ -14,7 +15,8 @@ public class Main {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         
-        ApiKeyAuth Token = (ApiKeyAuth) defaultClient.getAuthentication("Token");
+        ApiKeyAuth Token = (ApiKeyAuth) defaultClient.getAuthentication("ApiKey");
+        System.out.println("KEY " + System.getenv("LD_API_KEY"));
         Token.setApiKey(System.getenv("LD_API_KEY"));
 
         FeatureFlagsApi apiInstance = new FeatureFlagsApi();
@@ -22,10 +24,10 @@ public class Main {
         FeatureFlagBody body = new FeatureFlagBody()
             .name(FLAG_KEY)
             .key(FLAG_KEY)
-            .variations(Arrays.<Variation>asList(
-                new Variation().value(Arrays.<Integer>asList(1,2)),
-                new Variation().value(Arrays.<Integer>asList(3,4)),
-                new Variation().value(Arrays.<Integer>asList(5))
+            .variations(Arrays.<Variate>asList(
+                new Variate().value(Arrays.<Integer>asList(1,2)),
+                new Variate().value(Arrays.<Integer>asList(3,4)),
+                new Variate().value(Arrays.<Integer>asList(5))
             ));
         try {
             apiInstance.postFeatureFlag(PROJECT_KEY, body, null);

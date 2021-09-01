@@ -1,3 +1,5 @@
+version: 2
+
 repo:
   public: ld-openapi
   private: ld-openapi-private
@@ -16,12 +18,7 @@ publications:
   - url: https://www.rubydoc.info/gems/launchdarkly_api
     description: Ruby docs (RubyDoc)
 
-circleci:
-  linux:
-    image: circleci/openjdk:10-node-browsers
-    env:
-      GRADLE_USER_HOME: /home/circleci
-    context: org-global
-
-documentation:
-  githubPages: true
+jobs:
+  - docker:
+      image: ldcircleci/openapi-release:1  # defined in https://github.com/launchdarkly/sdks-ci-docker
+      copyGitHistory: true

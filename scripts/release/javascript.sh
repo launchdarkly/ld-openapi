@@ -3,6 +3,9 @@ set -ex
 
 path=$1
 name=$2
+version=$3
 
-cd ${path}/
+cd ${path}
+
+# Publish to NPM
 npm publish

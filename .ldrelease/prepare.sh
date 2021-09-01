@@ -1,37 +1,38 @@
 #!/usr/bin/env bash
 
-# Remove broken libc6-dev (ch77386)
-echo "Fixing broken libc6..."
-sudo apt-get purge libc6-dev
-sudo apt-get autoremove
-sudo apt-get clean
-sudo apt-get install -f
+set -eu
 
-# Install Python tools and AWS CLI
-echo "Configuring Python and AWS CLI..."
-sudo apt update
-sudo apt install awscli python3-pip python3-setuptools
-sudo pip3 install wheel twine
+# Set up credentials needed for client package releases. These have been downloaded
+# by Releaser into $LD_RELEASE_SECRETS_DIR as specified by our secrets.properties file.
+# We'll put them into the standard locations used by the various build/release tools -
+# in some cases we could put them in environment variables instead, but then it would
+# be harder to use the release scripts locally outside of Releaser.
 
-# Set up Ruby and RubyGems credentials
-echo "Configuring ruby..."
-sudo apt-get install ruby
+# Gradle properties and signing key
+java_sonatype_username="$(cat "${LD_RELEASE_SECRETS_DIR}/java_sonatype_username")"
+java_sonatype_password="$(cat "${LD_RELEASE_SECRETS_DIR}/java_sonatype_password")"
+mkdir -p ~/.gradle
+cat >~/.gradle/gradle.properties <<EOF
+signing.keyId = BFF924E9
+signing.password = 
+signing.secretKeyRingFile = ${LD_RELEASE_SECRETS_DIR}/java_code_signing_keyring
+ossrhUsername = ${java_sonatype_username}
+ossrhPassword = ${java_sonatype_password}
+nexusUsername = ${java_sonatype_username}
+nexusPassword = ${java_sonatype_password}
+systemProp.org.gradle.internal.launcher.welcomeMessageEnabled = false
+EOF
+
+# NPM token
+npm_auth_token="$(cat "${LD_RELEASE_SECRETS_DIR}/npm_auth_token")"
+echo "//registry.npmjs.org/:_authToken=${npm_auth_token}" > ~/.npmrc
+
+# PyPI token
+python_pypi_token="$(cat "${LD_RELEASE_SECRETS_DIR}/python_pypi_token")"
+echo -e "[pypi]\nusername=launchdarkly\npassword=${python_pypi_token}" > ~/.pypirc
+
+# RubyGems API key
+rubygems_api_key="$(cat "${LD_RELEASE_SECRETS_DIR}/ruby_gems_api_key")"
 mkdir -p ~/.gem
-echo -e "---\r\n:rubygems_api_key: $RUBYGEMS_API_KEY" > ~/.gem/credentials
-chmod 0600 /home/circleci/.gem/credentials
-
-# Set up git client
-echo "Configuring git..."
-git config --global user.name $GH_USER
-git config --global user.email $GH_EMAIL
-
-# Fetch credentials
-echo "Configuring gradle..."
-aws s3 cp s3://launchdarkly-pastebin/ci/openapi/gradle.properties.enc .
-aws s3 cp s3://launchdarkly-pastebin/ci/openapi/secring.gpg.enc .
-openssl enc -d -in gradle.properties.enc -aes-256-cbc -k $ENCRYPTION_SECRET -md md5 > ~/gradle.properties
-openssl enc -d -in secring.gpg.enc -aes-256-cbc -k $ENCRYPTION_SECRET -md md5 > ~/secring.gpg
-
-# Prepare configurations needed for client releases
-echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-echo -e "[pypi]\nusername=launchdarkly\npassword=$PYPI_PASSWORD" > ~/.pypirc
+echo -e "---\r\n:rubygems_api_key: ${rubygems_api_key}" > ~/.gem/credentials
+chmod 0600 ~/.gem/credentials
