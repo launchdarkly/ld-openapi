@@ -1,14 +1,12 @@
 SHELL = /bin/bash
 
-VERSION=$(shell cat $(TARGETS_PATH)/openapi.json | jq -r '.info.version' )
-REVISION:=$(shell git rev-parse --short HEAD)
+LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
-SWAGGER_VERSION=2.4.17
-SWAGGER_JAR=swagger-codegen-cli-${SWAGGER_VERSION}.jar
-SWAGGER_DOWNLOAD_URL=https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_VERSION}/${SWAGGER_JAR}
+GENERATOR_JAR=ld-openapi-generator-cli.jar
+
+OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
 API_TARGETS ?= \
-	bash \
 	csharp-dotnet2 \
 	go \
 	java \
@@ -16,7 +14,7 @@ API_TARGETS ?= \
 	php \
 	python \
 	ruby \
-	typescript-node
+	typescript-axios
 
 RELEASE_BRANCH ?= master                  # when we bump a major version, we may need to change this
 PREV_RELEASE_BRANCH ?= $(RELEASE_BRANCH)  # override this to create a revision of an older branch
@@ -27,7 +25,7 @@ PUBLISH_TARGETS ?= $(RELEASE_TARGETS)
 
 REPO ?= ld-openapi$(RELEASE_SUFFIX)
 REPO_USER_URL ?= https://github.com/launchdarkly
-TAG ?= $(VERSION)
+TAG ?= $(LD_RELEASE_VERSION)
 
 DOC_TARGETS = \
 	html \
@@ -40,75 +38,76 @@ CLIENT_CLONES_PATH ?= ./client-clones
 TEMPLATES_PATH ?= ./swagger-codegen-templates
 SAMPLES_PATH ?= ./samples
 
-LASTHASH := $(shell git rev-parse --short HEAD)
-
 # The following variables define any special command-line parameters that need to be passed
-# to swagger-codegen for each language/platform. In most cases these are undocumented and
-# were discovered by looking in the swagger-codegen source.
-CODEGEN_PARAMS_csharp-dotnet2 = -DpackageName=LaunchDarkly.Api -DclientPackage=LaunchDarkly.Api.Client
-CODEGEN_PARAMS_go = -DpackageName=ldapi -t $(TEMPLATES_PATH)/go
+# to openapi-generator for each language/platform.
+CODEGEN_PARAMS_csharp-dotnet2 = --additional-properties=packageName=LaunchDarkly.Api --additional-properties=clientPackage=LaunchDarkly.Api.Client
+CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
+	--additional-properties=email=support@launchdarkly.com \
+	--additional-properties=developerName=LaunchDarkly \
+	--additional-properties=developerEmail=support@launchdarkly.com \
+	--additional-properties=developerOrganization=LaunchDarkly \
+	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
+	-t $(TEMPLATES_PATH)/go
 CODEGEN_PARAMS_java = \
 	-t $(TEMPLATES_PATH)/java \
 	--group-id com.launchdarkly \
 	--api-package com.launchdarkly.api.api \
 	--model-package com.launchdarkly.api.model \
-	-DartifactId=api-client \
-	-Demail=support@launchdarkly.com \
-	-DdeveloperName=LaunchDarkly \
-	-DdeveloperEmail=support@launchdarkly.com \
-	-DdeveloperOrganization=LaunchDarkly \
-	-DdeveloperOrganizationUrl=https://launchdarkly.com \
-	-DartifactUrl=https://github.com/launchdarkly/api-client-java \
-	-DartifactDescription="Build custom integrations with the LaunchDarkly REST API" \
-	-DscmUrl="https://github.com/launchdarkly/api-client-java" \
-	-DscmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
-	-DscmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
+	--additional-properties=artifactId=api-client \
+	--additional-properties=email=support@launchdarkly.com \
+	--additional-properties=developerName=LaunchDarkly \
+	--additional-properties=developerEmail=support@launchdarkly.com \
+	--additional-properties=developerOrganization=LaunchDarkly \
+	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
+	--additional-properties=artifactUrl=https://github.com/launchdarkly/api-client-java \
+	--additional-properties=artifactDescription="Build custom integrations with the LaunchDarkly REST API" \
+	--additional-properties=scmUrl="https://github.com/launchdarkly/api-client-java" \
+	--additional-properties=scmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
+	--additional-properties=scmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
 CODEGEN_PARAMS_javascript = \
 	-t $(TEMPLATES_PATH)/javascript \
-	-DprojectName=launchdarkly-api \
-	-DprojectDescription="Build custom integrations with the LaunchDarkly REST API" \
-	-DmoduleName=LaunchDarklyApi
+	--additional-properties=projectName=launchdarkly-api \
+	--additional-properties=projectVersion=$(TAG) \
+	--additional-properties=projectDescription="Build custom integrations with the LaunchDarkly REST API" \
+	--additional-properties=moduleName=LaunchDarklyApi
 CODEGEN_PARAMS_php = \
-	-DpackagePath=LaunchDarklyApi \
-	-DcomposerVendorName=launchdarkly \
-	-DcomposerProjectName=api-client-php \
-	-DinvokerPackage=LaunchDarklyApi \
-	-DgitUserId=launchdarkly \
-	-DgitRepoId=api-client-php
-CODEGEN_PARAMS_python = -DpackageName=launchdarkly_api -DpackageVersion=$(TAG)
-CODEGEN_PARAMS_typescript-node = \
-	-t $(TEMPLATES_PATH)/typescript-node \
-	-DnpmName=launchdarkly-api-typescript \
-	-DnpmVersion=$(TAG) \
-	-DsupportsES6=true
+	--additional-properties=packagePath=LaunchDarklyApi \
+	--additional-properties=composerVendorName=launchdarkly \
+	--additional-properties=composerProjectName=api-client-php \
+	--additional-properties=invokerPackage=LaunchDarklyApi \
+	--git-user-id=launchdarkly \
+	--git-repo-id=api-client-php
+CODEGEN_PARAMS_python = --additional-properties=packageName=launchdarkly_api --additional-properties=packageVersion=$(TAG)
+CODEGEN_PARAMS_typescript-axios = \
+	--additional-properties=npmName=launchdarkly-api-typescript \
+	--additional-properties=npmVersion=$(TAG) \
+	--additional-properties=supportsES6=true
 CODEGEN_PARAMS_ruby = \
   -t $(TEMPLATES_PATH)/ruby \
-  -DmoduleName=LaunchDarklyApi \
-  -DgemName=launchdarkly_api \
-  -DgemVersion=$(TAG) \
-  -DgemHomepage=https://github.com/launchdarkly/api-client-ruby \
-  -DgemAuthor=LaunchDarkly \
-  -DgemAuthorEmail=support@launchdarkly.com
+  --additional-properties=moduleName=LaunchDarklyApi \
+  --additional-properties=gemName=launchdarkly_api \
+  --additional-properties=gemVersion=$(TAG) \
+  --additional-properties=gemHomepage=https://github.com/launchdarkly/api-client-ruby \
+  --additional-properties=gemAuthor=LaunchDarkly \
+  --additional-properties=gemAuthorEmail=support@launchdarkly.com
 
 SAMPLE_FILE_go = main.go
 SAMPLE_FILE_javascript = index.js
 SAMPLE_FILE_python = main.py
 SAMPLE_FILE_ruby = main.rb
-SAMPLE_FILE_typescript-node = index.ts
+SAMPLE_FILE_typescript-axios = index.ts
 
 SAMPLE_FORMAT_go = go
 SAMPLE_FORMAT_javascript = js
 SAMPLE_FORMAT_python = python
 SAMPLE_FORMAT_ruby = ruby
-SAMPLE_FORMAT_typescript-node = ts
+SAMPLE_FORMAT_typescript-axios = ts
 
-TARGET_OPENAPI_YAML = $(TARGETS_PATH)/openapi.yaml
 TARGET_OPENAPI_JSON = $(TARGETS_PATH)/openapi.json
 
-MULTI_FILE_SWAGGER = node_modules/.bin/multi-file-swagger
-CODEGEN = exec java -jar ${SWAGGER_JAR}
+CODEGEN = exec java -jar ${GENERATOR_JAR}
 
-all: $(API_TARGETS) $(DOC_TARGETS) gh-pages
+all: $(API_TARGETS) $(DOC_TARGETS)
 
 load_prior_targets:
 	rm -rf $(TARGETS_PATH)
@@ -117,27 +116,18 @@ load_prior_targets:
 	cd $(TARGETS_PATH); \
 	git init; \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;) \
-	git submodule add -b gh-pages $(REPO_USER_URL)/ld-openapi$(RELEASE_SUFFIX) gh-pages
+	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;)
 
-openapi_yaml: $(SWAGGER_JAR) $(TARGETS_PATH) $(MULTI_FILE_SWAGGER) $(CHECK_CODEGEN)
-	$(MULTI_FILE_SWAGGER) openapi.yaml > $(TARGET_OPENAPI_JSON)
-	$(MULTI_FILE_SWAGGER) -o yaml openapi.yaml > $(TARGET_OPENAPI_YAML)
-	$(CODEGEN) validate -i $(TARGET_OPENAPI_YAML)
-	python3 scripts/bravado-validate.py
+$(TARGET_OPENAPI_JSON): $(GENERATOR_JAR) $(TARGETS_PATH)
+	curl -s -L --fail $(OPENAPI_JSON_URL) > $@
 
 $(TARGETS_PATH):
 	mkdir -p $@
 
-$(API_TARGETS): openapi_yaml
+$(API_TARGETS): $(TARGET_OPENAPI_JSON)
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$(API_CLIENT_PREFIX)-$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	if [ -e "./scripts/preprocess-yaml-$@.sh" ]; then \
-		./scripts/preprocess-yaml-$@.sh $(TARGET_OPENAPI_YAML) > $(BUILD_DIR)/openapi.yml; \
-	else \
-		cat $(TARGET_OPENAPI_YAML) > $(BUILD_DIR)/openapi.yml; \
-	fi
-	$(CODEGEN) generate -i $(BUILD_DIR)/openapi.yml $(CODEGEN_PARAMS_$@) -l $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(LD_RELEASE_VERSION) --git-host=github.com --git-user-id=launchdarkly --git-repo-id=api-client-$@ -o $(BUILD_DIR)
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
 	cat ./README-PREFIX.md $(BUILD_DIR)/README-ORIGINAL.md > $(BUILD_DIR)/README.md
@@ -149,27 +139,15 @@ $(API_TARGETS): openapi_yaml
 	fi
 	rm $(BUILD_DIR)/README-ORIGINAL.md
 
-# Generates openapi.yaml using Docker
-openapi_yaml_docker:
-	docker run -ti -v `pwd`:/workspace ldcircleci/openapi-release:1 make openapi_yaml
-
 # Generates all API targets using Docker
 targets_docker:
-	docker run -ti -v `pwd`:/workspace ldcircleci/openapi-release:1 make
+	docker run -ti -v `pwd`:/workspace -e LD_RELEASE_VERSION --workdir /workspace \
+	  ldcircleci/openapi-release:1 make all
 
-$(DOC_TARGETS): openapi_yaml
+$(DOC_TARGETS):
 	$(eval BUILD_DIR := $(TARGETS_PATH)/$@)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
-	$(CODEGEN) generate -i $(TARGET_OPENAPI_YAML) $(CODEGEN_PARAMS_$@) -l $@ --artifact-version $(VERSION) -o $(BUILD_DIR)
-
-gh-pages: openapi_yaml
-	mkdir -p targets/gh-pages
-	cp $(TARGET_OPENAPI_JSON) $(TARGETS_PATH)/gh-pages/
-	cp $(TARGET_OPENAPI_YAML) $(TARGETS_PATH)/gh-pages/
-	cp gh-pages/* $(TARGETS_PATH)/gh-pages/
-
-$(MULTI_FILE_SWAGGER):
-	yarn add --no-lockfile multi-file-swagger
+	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --artifact-version $(LD_RELEASE_VERSION) -o $(BUILD_DIR)
 
 GIT_COMMAND=git
 GIT_PUSH_COMMAND=git push
@@ -190,7 +168,7 @@ push:
 		cd api-client-$(RELEASE_TARGET); \
 		$(GIT_COMMAND) add .; \
 		$(GIT_COMMAND) status; \
-		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
+		$(GIT_COMMAND) commit --allow-empty -m "Version $(LD_RELEASE_VERSION) automatically generated from $(REPO)."; \
 		$(GIT_COMMAND) tag $(TAG); \
 		$(GIT_PUSH_COMMAND) origin $(TAG); \
 		$(GIT_PUSH_COMMAND) origin $(RELEASE_BRANCH); \
@@ -200,35 +178,25 @@ push:
 		fi; \
 		cd ..; \
 	) \
-	if [ $(PREV_RELEASE_BRANCH) == "master" ]; then \
-		echo $(GIT_PUSH_DESC) to GitHub pages...; \
-		$(GIT_COMMAND) clone git@github.com:launchdarkly/$(REPO).git; \
-		cd $(REPO); \
-		$(GIT_COMMAND) checkout gh-pages --; \
-		cp -v -r ../../$(TARGETS_PATH)/gh-pages/. .; \
-		$(GIT_COMMAND) add .; \
-		$(GIT_COMMAND) commit --allow-empty -m "Version $(VERSION) automatically generated from $(REPO)@$(REVISION)."; \
-		$(GIT_PUSH_COMMAND) origin gh-pages; \
-		cd ..; \
-	fi
+
+build_clients:
+	./scripts/run-scripts-for-targets.sh ./scripts/build $(LD_RELEASE_VERSION) \
+		"Building client code" $(BUILD_TARGETS)
 
 build_clients:
 	./scripts/run-scripts-for-targets.sh ./scripts/build $(VERSION) \
 		"Building client code" $(BUILD_TARGETS)
 
 publish:
-	./scripts/run-scripts-for-targets.sh ./scripts/release $(VERSION) \
+	./scripts/run-scripts-for-targets.sh ./scripts/release $(LD_RELEASE_VERSION) \
 		"Publishing client artifacts" $(PUBLISH_TARGETS)
 
 publish_dry_run:
-	./scripts/run-scripts-for-targets.sh ./scripts/release-dry-run $(VERSION) \
+	./scripts/run-scripts-for-targets.sh ./scripts/release-dry-run $(LD_RELEASE_VERSION) \
 		"Dry run simulation of publishing client artifacts" $(PUBLISH_TARGETS)
-
-$(SWAGGER_JAR):
-	curl -s -L --fail ${SWAGGER_DOWNLOAD_URL} >$@
 
 clean:
 	rm -rf $(TARGETS_PATH)
 	rm -rf $(CLIENT_CLONES_PATH)
 
-.PHONY: $(TARGETS) all clean gh-pages load_prior_targets openapi_yaml push push_dry_run push_test
+.PHONY: $(TARGETS) all build_clients clean load_prior_targets push push_dry_run push_test targets_docker

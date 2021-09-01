@@ -8,4 +8,4 @@ make TAG=${LD_RELEASE_VERSION} push_dry_run
 
 # Publish client artifacts to registries
 echo Dry run of publishing client artifacts to registries...
-make PUBLISH_TARGETS="java javascript python ruby typescript-node" publish_dry_run
+make PUBLISH_TARGETS="java javascript python ruby typescript-axios" publish_dry_run

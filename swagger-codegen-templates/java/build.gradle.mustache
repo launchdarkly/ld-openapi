@@ -6,6 +6,11 @@
 // javax.annotation dependency. It also had the option of building for Android,
 // but we do not need that. This script also adds code signing and pom properties.
 
+// IMPORTANT: If the Java client fails to build due to a dependency problem, it
+// probably means that the Swagger code generator changed the dependencies in its
+// own build.gradle and we did not update them here. Unfortunately, overriding the
+// build.gradle in this way does not allow us to copy their dependencies.
+
 buildscript {
     repositories {
         mavenLocal()
@@ -33,6 +38,24 @@ allprojects {
     group = '{{groupId}}'
     version = '{{artifactVersion}}'
     archivesBaseName = '{{artifactId}}'
+<<<<<<< HEAD:swagger-codegen-templates/java/build.gradle.mustache
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+dependencies {
+    implementation 'io.swagger:swagger-annotations:1.5.24'
+    implementation "com.google.code.findbugs:jsr305:3.0.2"
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'io.gsonfire:gson-fire:1.8.4'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.1'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
+    implementation 'org.threeten:threetenbp:1.4.3'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    testImplementation 'junit:junit:4.13.1'
+=======
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
 }
@@ -46,6 +69,7 @@ dependencies {
     implementation 'org.threeten:threetenbp:1.3.5'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     testImplementation 'junit:junit:4.12'
+>>>>>>> master:scripts/release/java/publish.gradle
 }
 
 githubPages {
@@ -53,6 +77,23 @@ githubPages {
     pages {
         from javadoc
     }
+<<<<<<< HEAD:swagger-codegen-templates/java/build.gradle.mustache
+}
+
+compileJava {
+    // The generated code should be treated as UTF-8 because some of the properties
+    // in our openapi.json may include non-ASCII Unicode characters.
+    options.encoding = "UTF-8"
+}
+
+compileTestJava {
+    options.encoding = "UTF-8"
+}
+
+javadoc {
+    options.encoding = "UTF-8"
+=======
+>>>>>>> master:scripts/release/java/publish.gradle
 }
 
 task sourceJar(type: Jar, dependsOn: classes) {
