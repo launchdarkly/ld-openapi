@@ -4,6 +4,7 @@ set -eu
 
 # Get host key for github
 echo Adding github.com to known hosts
+mkdir -p ~/.ssh
 ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
 # Configure GitHub access token for pushing to client repositories
