@@ -163,7 +163,7 @@ push:
 	cd $(CLIENT_CLONES_PATH); \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
 		echo $(GIT_PUSH_DESC) to the $(RELEASE_TARGET) client repository...; \
-		$(GIT_COMMAND) clone git@github.com:launchdarkly/api-client-$(RELEASE_TARGET).git; \
+		$(GIT_COMMAND) clone https://github.com/launchdarkly/api-client-$(RELEASE_TARGET).git || exit 1; \
 		cp -v -r ../$(TARGETS_PATH)/api-client-$(RELEASE_TARGET) .; \
 		cd api-client-$(RELEASE_TARGET); \
 		$(GIT_COMMAND) add .; \
