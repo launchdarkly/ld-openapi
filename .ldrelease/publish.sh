@@ -16,4 +16,4 @@ make RELEASE_TARGETS="go java javascript php python ruby typescript-axios" TAG=$
 
 # Publish client artifacts to registries
 echo Publishing client artifacts to registries...
-make PUBLISH_TARGETS="java javascript python ruby typescript-axios" publish
+make PUBLISH_TARGETS="javascript python ruby typescript-axios java" publish
