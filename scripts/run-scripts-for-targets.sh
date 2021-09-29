@@ -29,7 +29,7 @@ for target_name in ${target_names}; do
     build_dir=targets/build/${repo_name}
     if [ ! -d "${build_dir}" ]; then
       mkdir -p ${build_dir}
-      cp -r targets/${repo_name}/* ${build_dir}
+      cp -r targets/${repo_name}/. ${build_dir}
     fi
 
     ${script_path} ${build_dir} ${target_name} ${version}

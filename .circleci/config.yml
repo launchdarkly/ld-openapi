@@ -53,21 +53,21 @@ jobs:
 
   test-go:
     docker:
-    - image: circleci/golang:1.15
+    - image: cimg/go:1.15
     steps:
     - checkout
     - attach_workspace:
         at: targets
     - run:  |
-        mkdir -p /go/src/github.com/launchdarkly
-        cp -r targets/api-client-go /go/src/github.com/launchdarkly/
+        sudo mkdir -p /go/src/github.com/launchdarkly
+        sudo cp -r targets/api-client-go /go/src/github.com/launchdarkly/
     - run: |
         cd samples/go
         make
 
   test-javascript:
     docker:
-    - image: circleci/node
+    - image: cimg/node:14.17
     steps:
     - checkout
     - attach_workspace:
@@ -82,14 +82,15 @@ jobs:
 
   test-python:
     docker:
-    - image: circleci/python:3.7
+    - image: cimg/python:3.7
     steps:
     - checkout
     - attach_workspace:
         at: targets
+    - run: sudo apt-get update && sudo apt-get install -y pip
     - run: |
         cd samples/python
-        sudo pip3 install -e ../../targets/api-client-python
+        pip install -e ../../targets/api-client-python
         python main.py
 
   test-ruby:
@@ -111,7 +112,7 @@ jobs:
 
   test-java:
     docker:
-    - image: circleci/java
+    - image: circleci/openjdk:8
     steps:
     - checkout
     - attach_workspace:
@@ -126,7 +127,7 @@ jobs:
 
   test-typescript:
     docker:
-    - image: circleci/node
+    - image: cimg/node:14.17
     steps:
     - checkout
     - attach_workspace:
