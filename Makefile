@@ -87,13 +87,9 @@ CODEGEN_PARAMS_typescript-axios = \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true
 CODEGEN_PARAMS_ruby = \
-  -t $(TEMPLATES_PATH)/ruby \
   --additional-properties=moduleName=LaunchDarklyApi \
   --additional-properties=gemName=launchdarkly_api \
   --additional-properties=gemVersion=$(TAG) \
-  --additional-properties=gemHomepage=https://github.com/launchdarkly/api-client-ruby \
-  --additional-properties=gemAuthor=LaunchDarkly \
-  --additional-properties=gemAuthorEmail=support@launchdarkly.com
 
 SAMPLE_FILE_go = main.go
 SAMPLE_FILE_javascript = index.js
