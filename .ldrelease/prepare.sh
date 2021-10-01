@@ -29,7 +29,7 @@ echo "//registry.npmjs.org/:_authToken=${npm_auth_token}" > ~/.npmrc
 
 # PyPI token
 python_pypi_token="$(cat "${LD_RELEASE_SECRETS_DIR}/python_pypi_token")"
-echo -e "[pypi]\nusername=launchdarkly\npassword=${python_pypi_token}" > ~/.pypirc
+echo -e "[pypi]\nusername=__token__\npassword=${python_pypi_token}" > ~/.pypirc
 
 # RubyGems API key
 rubygems_api_key="$(cat "${LD_RELEASE_SECRETS_DIR}/ruby_gems_api_key")"
