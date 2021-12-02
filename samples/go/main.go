@@ -32,7 +32,7 @@ func main() {
 	body := ldapi.FeatureFlagBody{
 		Name: flagName,
 		Key:  flagKey,
-		Variations: &[]ldapi.Variate{
+		Variations: &[]ldapi.Variation{
 			{Value: &valOne},
 			{Value: &valTwo},
 		},
