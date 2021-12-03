@@ -3,7 +3,7 @@ import os
 from pprint import pprint
 
 import launchdarkly_api
-from launchdarkly_api.model.variate import Variate
+from launchdarkly_api.model.variation import Variation
 from launchdarkly_api.model.feature_flag_body import FeatureFlagBody
 from launchdarkly_api.api import feature_flags_api
 from launchdarkly_api.rest import ApiException
@@ -28,9 +28,9 @@ with launchdarkly_api.ApiClient(configuration) as api_client:
         name=flag_key,
         key=flag_key,
         variations=[
-            Variate(value=[1, 2]),
-            Variate(value=[3, 4]),
-            Variate(value=[5]),
+            Variation(value=[1, 2]),
+            Variation(value=[3, 4]),
+            Variation(value=[5]),
         ])
 
     try:

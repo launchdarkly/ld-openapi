@@ -24,10 +24,10 @@ public class Main {
         FeatureFlagBody body = new FeatureFlagBody()
             .name(FLAG_KEY)
             .key(FLAG_KEY)
-            .variations(Arrays.<Variate>asList(
-                new Variate().value(Arrays.<Integer>asList(1,2)),
-                new Variate().value(Arrays.<Integer>asList(3,4)),
-                new Variate().value(Arrays.<Integer>asList(5))
+            .variations(Arrays.<Variation>asList(
+                new Variation().value(Arrays.<Integer>asList(1,2)),
+                new Variation().value(Arrays.<Integer>asList(3,4)),
+                new Variation().value(Arrays.<Integer>asList(5))
             ));
         try {
             apiInstance.postFeatureFlag(PROJECT_KEY, body, null);

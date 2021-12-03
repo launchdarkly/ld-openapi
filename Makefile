@@ -47,6 +47,7 @@ CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
 	--additional-properties=developerEmail=support@launchdarkly.com \
 	--additional-properties=developerOrganization=LaunchDarkly \
 	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
+	--additional-properties=packageVersion=$(firstword $(subst ., ,$(TAG))) \
 	-t $(TEMPLATES_PATH)/go
 CODEGEN_PARAMS_java = \
 	-t $(TEMPLATES_PATH)/java \
