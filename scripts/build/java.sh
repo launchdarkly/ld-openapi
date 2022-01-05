@@ -9,4 +9,4 @@ cd ${path}
 
 # "Publish" to the local filesystem - this verifies that the entire build/packaging
 # flow works, from compiling through code signing and generating the pom 
-gradle --stacktrace publishToMavenLocal
+./gradlew --stacktrace publishToMavenLocal
