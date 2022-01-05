@@ -9,7 +9,7 @@ cd ${path}
 
 # Publish to Sonatype
 PUBLISH_FAILED=
-gradle publish closeAndReleaseRepository || PUBLISH_FAILED=1
+./gradlew publish closeAndReleaseRepository || PUBLISH_FAILED=1
 
 if [ -n "${PUBLISH_FAILED}" ]; then
   # If publication failed because this version of this package already exists,
@@ -28,4 +28,4 @@ if [ -n "${PUBLISH_FAILED}" ]; then
 fi
 
 # Publish to GitHub Pages
-gradle publishGhPages
+./gradlew gitPublishPush

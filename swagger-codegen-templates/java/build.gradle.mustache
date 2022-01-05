@@ -23,7 +23,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'io.codearte.nexus-staging' version '0.12.0'
-    id 'org.ajoberstar.github-pages' version '1.7.2'
+    id 'org.ajoberstar.git-publish' version '3.0.0'
 }
 
 repositories {
@@ -56,9 +56,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
 }
 
-githubPages {
-    repoUri = 'https://github.com/launchdarkly/api-client-java.git'
-    pages {
+gitPublish {
+    repoUri = 'git@github.com:launchdarkly/api-client-java.git'
+    branch = 'gh-pages'
+    contents {
         from javadoc
     }
 }
