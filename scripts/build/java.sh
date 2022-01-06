@@ -7,6 +7,8 @@ version=$3
 
 cd ${path}
 
+chmod u+x ./gradlew
+
 # "Publish" to the local filesystem - this verifies that the entire build/packaging
 # flow works, from compiling through code signing and generating the pom 
 ./gradlew --stacktrace publishToMavenLocal
