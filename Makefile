@@ -7,7 +7,6 @@ GENERATOR_JAR=ld-openapi-generator-cli.jar
 OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
 API_TARGETS ?= \
-	csharp-dotnet2 \
 	go \
 	java \
 	javascript \
@@ -40,7 +39,6 @@ SAMPLES_PATH ?= ./samples
 
 # The following variables define any special command-line parameters that need to be passed
 # to openapi-generator for each language/platform.
-CODEGEN_PARAMS_csharp-dotnet2 = --additional-properties=packageName=LaunchDarkly.Api --additional-properties=clientPackage=LaunchDarkly.Api.Client
 CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
 	--additional-properties=email=support@launchdarkly.com \
 	--additional-properties=developerName=LaunchDarkly \

@@ -11,7 +11,6 @@ git config --global user.email launchdarklyreleasebot@launchdarkly.com
 
 # Publish updates to client repositories
 echo Publishing updates to client repositories...
-# Temporarily exclude csharp-dotnet2
 make RELEASE_TARGETS="go java javascript php python ruby typescript-axios" TAG=${LD_RELEASE_VERSION} push
 
 # Publish client artifacts to registries
