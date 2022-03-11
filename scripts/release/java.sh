@@ -26,6 +26,3 @@ if [ -n "${PUBLISH_FAILED}" ]; then
     exit 1
   fi
 fi
-
-# Publish to GitHub Pages
-./gradlew gitPublishPush

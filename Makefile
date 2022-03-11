@@ -7,7 +7,6 @@ GENERATOR_JAR=ld-openapi-generator-cli.jar
 OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
 API_TARGETS ?= \
-	csharp-dotnet2 \
 	go \
 	java \
 	javascript \
@@ -16,7 +15,7 @@ API_TARGETS ?= \
 	ruby \
 	typescript-axios
 
-RELEASE_BRANCH ?= master                  # when we bump a major version, we may need to change this
+RELEASE_BRANCH ?= main                  # when we bump a major version, we may need to change this
 PREV_RELEASE_BRANCH ?= $(RELEASE_BRANCH)  # override this to create a revision of an older branch
 RELEASE_TARGETS ?= $(API_TARGETS)         # for now, we don't release the docs to repos
 RELEASE_SUFFIX ?=                         # allows the private branch to push to repos with a "-private" suffix
@@ -40,7 +39,6 @@ SAMPLES_PATH ?= ./samples
 
 # The following variables define any special command-line parameters that need to be passed
 # to openapi-generator for each language/platform.
-CODEGEN_PARAMS_csharp-dotnet2 = --additional-properties=packageName=LaunchDarkly.Api --additional-properties=clientPackage=LaunchDarkly.Api.Client
 CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
 	--additional-properties=email=support@launchdarkly.com \
 	--additional-properties=developerName=LaunchDarkly \
@@ -113,11 +111,11 @@ all: $(API_TARGETS) $(DOC_TARGETS)
 load_prior_targets:
 	rm -rf $(TARGETS_PATH)
 	mkdir -p $(TARGETS_PATH)
-	set -e; \
-	cd $(TARGETS_PATH); \
-	git init; \
+	set -e
+	cd $(TARGETS_PATH)
+	git init
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
-	 git submodule add -b $(PREV_RELEASE_BRANCH) $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) ;)
+	 git submodule add $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) && git checkout $(PREV_RELEASE_BRANCH) ;)
 
 $(TARGET_OPENAPI_JSON): $(GENERATOR_JAR) $(TARGETS_PATH)
 	curl -s -L --fail $(OPENAPI_JSON_URL) > $@

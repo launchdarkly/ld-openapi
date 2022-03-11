@@ -56,14 +56,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
 }
 
-gitPublish {
-    repoUri = 'git@github.com:launchdarkly/api-client-java.git'
-    branch = 'gh-pages'
-    contents {
-        from javadoc
-    }
-}
-
 compileJava {
     // The generated code should be treated as UTF-8 because some of the properties
     // in our openapi.json may include non-ASCII Unicode characters.

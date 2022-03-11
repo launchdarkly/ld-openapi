@@ -57,3 +57,4 @@ scripts/release/java/.gradle/*
 .classpath
 .project
 .settings/
+.idea
