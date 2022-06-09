@@ -24,14 +24,14 @@ jobs:
         name: Generating code
         command: |
           export REPO_USER_URL=https://github.com/$CIRCLE_PROJECT_USERNAME
-          echo "Setting version to ${CIRCLE_TAG:-0.0.1}-SNAPSHOT"
-          LD_RELEASE_VERSION="${CIRCLE_TAG:-0.0.1}-SNAPSHOT" make all
+          echo "Setting version to ${CIRCLE_TAG:-0.0.1}"
+          LD_RELEASE_VERSION="${CIRCLE_TAG:-0.0.1}" make all
 
     - run:
         name: Archiving targets
         command: |
           cd targets
-          tar cvfz api-clients-${CIRCLE_TAG:-0.0.1}-SNAPSHOT-${CIRCLE_SHA1:0:7}.tgz api-client-*
+          tar cvfz api-clients-${CIRCLE_TAG:-0.0.1}-${CIRCLE_SHA1:0:7}.tgz api-client-*
           mkdir /tmp/api-clients
           cp api-clients-*.tgz /tmp/api-clients
 
@@ -121,7 +121,7 @@ jobs:
           cd targets/api-client-java
           mvn clean install
           cd ../../samples/java
-          sed -i.bak -e "s/API_CLIENT_VERSION/${CIRCLE_TAG:-0.0.1}-SNAPSHOT/g" pom.xml
+          sed -i.bak -e "s/API_CLIENT_VERSION/${CIRCLE_TAG:-0.0.1}/g" pom.xml
           mvn clean install
           mvn exec:java
 
@@ -142,6 +142,19 @@ jobs:
         sudo npm install
         sudo npm run build
         npm start
+
+  test-php:
+    docker:
+    - image: cimg/php:8.0.19
+    steps:
+    - checkout
+    - attach_workspace:
+        at: targets
+    - run: |
+        cd samples/php
+        echo '{"require":{"launchdarkly/api-client-php":"@dev","guzzlehttp/guzzle":"*"},"repositories":[{"type":"path","url":"../../targets/api-client-php","options":{"symlink":true}}]}' > composer.json 
+        composer update
+        php index.php
 
 workflows:
   version: 2
@@ -168,5 +181,8 @@ workflows:
         requires:
         - build
     - test-typescript:
+        requires:
+        - build
+    - test-php:
         requires:
         - build
