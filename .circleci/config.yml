@@ -15,12 +15,6 @@ jobs:
     - checkout
 
     - run:
-        name: Loading previous client repos
-        command: |
-          export REPO_USER_URL=https://github.com/$CIRCLE_PROJECT_USERNAME
-          make load_prior_targets
-
-    - run:
         name: Generating code
         command: |
           export REPO_USER_URL=https://github.com/$CIRCLE_PROJECT_USERNAME

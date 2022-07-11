@@ -6,6 +6,7 @@ import com.launchdarkly.api.Configuration;
 import com.launchdarkly.api.auth.*;
 import com.launchdarkly.api.model.*;
 import com.launchdarkly.api.api.FeatureFlagsApi;
+import com.launchdarkly.api.api.ProjectsApi;
 import java.util.*;
 
 public class Main {
@@ -30,7 +31,7 @@ public class Main {
                 new Variation().value(Arrays.<Integer>asList(5))
             ));
         try {
-            apiInstance.postFeatureFlag(PROJECT_KEY, body, null);
+            System.out.println(apiInstance.postFeatureFlag(PROJECT_KEY, body, null));
             apiInstance.deleteFeatureFlag(PROJECT_KEY, FLAG_KEY);
         } catch (ApiException e) {
             // Make sure the ld-openapi build fails if an api exception is thrown
