@@ -2,7 +2,9 @@ SHELL = /bin/bash
 
 LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
-GENERATOR_JAR=ld-openapi-generator-cli.jar
+GENERATOR_VERSION=6.0.0
+GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
+GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
 
 OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
 
@@ -52,6 +54,7 @@ CODEGEN_PARAMS_java = \
 	--group-id com.launchdarkly \
 	--api-package com.launchdarkly.api.api \
 	--model-package com.launchdarkly.api.model \
+	--additional-properties=disallowAdditionalPropertiesIfNotPresent=false \
 	--additional-properties=artifactId=api-client \
 	--additional-properties=email=support@launchdarkly.com \
 	--additional-properties=developerName=LaunchDarkly \
@@ -82,6 +85,7 @@ CODEGEN_PARAMS_python = \
 	--additional-properties=packageVersion=$(TAG) \
 
 CODEGEN_PARAMS_typescript-axios = \
+	-t $(TEMPLATES_PATH)/typescript-axios \
 	--additional-properties=npmName=launchdarkly-api-typescript \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true
@@ -116,6 +120,9 @@ load_prior_targets:
 	git init
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
 	 git submodule add $(REPO_USER_URL)/api-client-$(RELEASE_TARGET)$(RELEASE_SUFFIX) ./api-client-$(RELEASE_TARGET) && git checkout $(PREV_RELEASE_BRANCH) ;)
+
+$(GENERATOR_JAR):
+	curl -s -L --fail ${GENERATOR_DOWNLOAD_URL} > $@
 
 $(TARGET_OPENAPI_JSON): $(GENERATOR_JAR) $(TARGETS_PATH)
 	curl -s -L --fail $(OPENAPI_JSON_URL) > $@
@@ -177,10 +184,6 @@ push:
 		fi; \
 		cd ..; \
 	) \
-
-build_clients:
-	./scripts/run-scripts-for-targets.sh ./scripts/build $(LD_RELEASE_VERSION) \
-		"Building client code" $(BUILD_TARGETS)
 
 build_clients:
 	./scripts/run-scripts-for-targets.sh ./scripts/build $(VERSION) \

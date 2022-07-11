@@ -1,0 +1,9 @@
+{
+  "require": {
+    "launchdarkly/api-client-php": "*",
+    "guzzlehttp/guzzle": "*"
+  },
+  "scripts": {
+    "test": "php index.php"
+  }
+}

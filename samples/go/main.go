@@ -29,10 +29,11 @@ func main() {
 	valOne := map[string]interface{}{"one": valOneVal}
 	valTwoVal := []int{4, 5}
 	valTwo := map[string]interface{}{"two": valTwoVal}
+
 	body := ldapi.FeatureFlagBody{
 		Name: flagName,
 		Key:  flagKey,
-		Variations: &[]ldapi.Variation{
+		Variations: []ldapi.Variation{
 			{Value: &valOne},
 			{Value: &valTwo},
 		},
