@@ -164,12 +164,14 @@ push_test: push
 
 push_dry_run: GIT_PUSH_COMMAND=git push --dry-run
 push_dry_run: GIT_PUSH_DESC=Simulating the updates we would do
+# for each client library, clone the repository and replace the contents with the newly generated client
 push:
 	mkdir $(CLIENT_CLONES_PATH); \
 	cd $(CLIENT_CLONES_PATH); \
 	$(foreach RELEASE_TARGET, $(RELEASE_TARGETS), \
 		echo $(GIT_PUSH_DESC) to the $(RELEASE_TARGET) client repository...; \
 		$(GIT_COMMAND) clone https://github.com/launchdarkly/api-client-$(RELEASE_TARGET).git || exit 1; \
+		rm -r api-client-$(RELEASE_TARGET)/*; \
 		cp -v -r ../$(TARGETS_PATH)/api-client-$(RELEASE_TARGET) .; \
 		cd api-client-$(RELEASE_TARGET); \
 		$(GIT_COMMAND) add .; \

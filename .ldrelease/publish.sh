@@ -11,8 +11,8 @@ git config --global user.email launchdarklyreleasebot@launchdarkly.com
 
 # Publish updates to client repositories
 echo Publishing updates to client repositories...
-make RELEASE_TARGETS="java" TAG=${LD_RELEASE_VERSION} push
+make RELEASE_TARGETS="go java javascript php python ruby typescript-axios" TAG=${LD_RELEASE_VERSION} push
 
 # Publish client artifacts to registries
 echo Publishing client artifacts to registries...
-make PUBLISH_TARGETS="java" publish
+make PUBLISH_TARGETS="javascript python ruby typescript-axios java" publish
