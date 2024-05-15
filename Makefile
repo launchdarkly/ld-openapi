@@ -42,6 +42,7 @@ SAMPLES_PATH ?= ./samples
 # The following variables define any special command-line parameters that need to be passed
 # to openapi-generator for each language/platform.
 CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
+	--additional-properties=generateInterfaces=true \
 	--additional-properties=email=support@launchdarkly.com \
 	--additional-properties=developerName=LaunchDarkly \
 	--additional-properties=developerEmail=support@launchdarkly.com \
