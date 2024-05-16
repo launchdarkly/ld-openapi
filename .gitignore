@@ -58,3 +58,4 @@ scripts/release/java/.gradle/*
 .project
 .settings/
 .idea
+.vscode/
