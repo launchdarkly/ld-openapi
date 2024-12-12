@@ -13,8 +13,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    container:
-      image: ldcircleci/openapi-release:1
     env:
       LD_RELEASE_VERSION: ${{ inputs.releaseVersion }}
       GH_TOKEN: ${{ secrets.BOT_TOKEN }}
