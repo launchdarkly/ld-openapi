@@ -1,0 +1,55 @@
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: Next release version
+        required: true
+        type: string
+      changeLog:
+        description: Pending changelog
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    container:
+      image: ldcircleci/openapi-release:1
+    env:
+      LD_RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: launchdarkly/gh-actions/actions/release-secrets@release-secrets-v1.1.0
+        name: Get secrets
+        with:
+          aws_assume_role: ${{ vars.AWS_ROLE_ARN }}
+          s3_path_pairs: 'launchdarkly-releaser/java/code-signing-keyring.gpg = code-signing-keyring.gpg'
+      - name: Build clients
+        run: |
+          make
+          # Verify that the generated client code can be built
+          make BUILD_TARGETS="go java javascript python ruby typescript-axios" build_clients
+        # This step will:
+        # * Push built clients to their respective Github repos
+        # * Tag those commits with the release version
+        # * Publish each client to it's respective platform (e.g. Rubygems)
+      - name: Publish clients
+        run: |
+          ./scripts/publish.sh
+        # This step creates a release with changelog from the tag
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: release
+    strategy:
+      matrix:
+        repo: ['api-client-go', 'api-client-java', 'api-client-javascript', 'api-client-php', 'api-client-python', 'api-client-ruby', 'api-client-typescript']
+    steps:
+      - uses: ncipollo/release-action@v1.14.0
+        with:
+          repo: ${{ matrix.repo }}
+          token: ${{ secrets.BOT_TOKEN }}
+          tag: v${{ inputs.releaseVersion }} 
+          body: ${{ inputs.changeLog }}
