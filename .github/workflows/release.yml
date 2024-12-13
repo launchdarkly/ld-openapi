@@ -43,6 +43,9 @@ jobs:
         with:
           aws_assume_role: ${{ vars.AWS_ROLE_ARN }}
           s3_path_pairs: 'launchdarkly-releaser/java/code-signing-keyring.gpg = code-signing-keyring.gpg'
+      - name: Prepare secrets
+        run: |
+          ./scripts/release/prepare.sh 
       - name: Build clients
         run: |
           export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
@@ -59,7 +62,7 @@ jobs:
         run: |
           export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
           export GEM_HOME=$HOME/.rubygems
-          ./scripts/publish.sh
+          ./scripts/release/publish.sh
         # This step creates a release with changelog from the tag
   create-release:
     runs-on: ubuntu-latest
