@@ -47,6 +47,7 @@ jobs:
         run: |
           export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
           export GEM_HOME=$HOME/.rubygems
+          java -XX:+PrintFlagsFinal -version | grep ThreadStackSize
           make
           # Verify that the generated client code can be built
           make BUILD_TARGETS="go java javascript python ruby typescript-axios" build_clients
