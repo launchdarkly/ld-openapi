@@ -34,8 +34,8 @@ jobs:
           # Install yarn
           npm install --global yarn
           # Install python deps
-          update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-          update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+          sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+          sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
           pip install bravado
           pip install twine
           # Set up ruby
