@@ -16,6 +16,7 @@ jobs:
     env:
       LD_RELEASE_VERSION: ${{ inputs.releaseVersion }}
       GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+      JAVA_OPTS: -Xss2M
     permissions:
       id-token: write
       contents: read
