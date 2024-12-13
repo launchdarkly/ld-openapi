@@ -185,7 +185,7 @@ push:
 		if [ $(RELEASE_TARGET) == "go" ]; then \
 		  $(GIT_COMMAND) tag v$(TAG); \
 		  $(GIT_PUSH_COMMAND) origin v$(TAG); \
-		else
+		else \
 			$(GIT_COMMAND) tag $(TAG); \
 			$(GIT_PUSH_COMMAND) origin $(TAG); \
 		fi; \
