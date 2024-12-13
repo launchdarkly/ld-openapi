@@ -9,7 +9,7 @@ mkdir -p ~/.gradle
 cat >~/.gradle/gradle.properties <<EOF
 signing.keyId = BFF924E9
 signing.password = 
-signing.secretKeyRingFile = ./code-signing-keyring.gpg
+signing.secretKeyRingFile = ${HOME}/code-signing-keyring.gpg
 ossrhUsername = ${SONATYPE_USERNAME}
 ossrhPassword = ${SONATYPE_PASSWORD}
 nexusUsername = ${SONATYPE_USERNAME}
