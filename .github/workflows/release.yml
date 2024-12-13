@@ -47,7 +47,7 @@ jobs:
         name: Get secrets
         with:
           aws_assume_role: ${{ vars.AWS_ROLE_ARN }}
-          s3_path_pairs: 'launchdarkly-releaser/java/code-signing-keyring.gpg = ~/code-signing-keyring.gpg'
+          s3_path_pairs: 'launchdarkly-releaser/java/code-signing-keyring.gpg = /home/runner/code-signing-keyring.gpg'
       - name: Prepare secrets
         run: |
           ./scripts/release/prepare.sh 
