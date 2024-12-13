@@ -16,7 +16,7 @@ jobs:
     env:
       LD_RELEASE_VERSION: ${{ inputs.releaseVersion }}
       GH_TOKEN: ${{ secrets.BOT_TOKEN }}
-      GRADLE_VERSION: 6.8.3
+      JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
     permissions:
       id-token: write
       contents: read
@@ -24,16 +24,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
-          sudo apt -q install -y unzip jq openjdk-11-jdk nodejs npm python3 python3-pip ruby
+          sudo apt -q install -y unzip jq nodejs npm python3 python3-pip ruby
           # Install Go
           curl -s https://dl.google.com/go/go1.15.5.linux-amd64.tar.gz | sudo tar -xz -C /usr/local
-          # Install Java
-          export PATH=/opt/gradle/bin:$PATH
-          curl -sSL --fail --retry 3 "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" >gradle.zip && \
-          unzip -d /opt gradle.zip && \
-          rm gradle.zip && \
-          sudo ln -s /opt/gradle-* /opt/gradle && \
-          gradle --version
           # Install yarn
           npm install --global yarn
           # Install python deps
@@ -43,6 +36,9 @@ jobs:
           pip install twine
           # Set up ruby
           mkdir -p ~/.rubygems
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
       - uses: launchdarkly/gh-actions/actions/release-secrets@release-secrets-v1.1.0
         name: Get secrets
         with:
