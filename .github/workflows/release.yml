@@ -16,8 +16,30 @@ jobs:
     env:
       LD_RELEASE_VERSION: ${{ inputs.releaseVersion }}
       GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+      GRADLE_VERSION: 6.8.3
     steps:
-      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # 4.1.6
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt -q install -y unzip jq openjdk-11-jdk nodejs npm python3 python3-pip ruby
+          # Install Go
+          curl -s https://dl.google.com/go/go1.15.5.linux-amd64.tar.gz | tar -xz -C /usr/local
+          # Install Java
+          export PATH=/opt/gradle/bin:$PATH
+          curl -sSL --fail --retry 3 "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" >gradle.zip && \
+          unzip -d /opt gradle.zip && \
+          rm gradle.zip && \
+          sudo ln -s /opt/gradle-* /opt/gradle && \
+          gradle --version
+          # Install yarn
+          npm install --global yarn
+          # Install python deps
+          update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+          update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+          pip install bravado
+          pip install twine
+          # Set up ruby
+          mkdir -p ~/.rubygems
       - uses: launchdarkly/gh-actions/actions/release-secrets@release-secrets-v1.1.0
         name: Get secrets
         with:
@@ -25,6 +47,8 @@ jobs:
           s3_path_pairs: 'launchdarkly-releaser/java/code-signing-keyring.gpg = code-signing-keyring.gpg'
       - name: Build clients
         run: |
+          export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
+          export GEM_HOME=$HOME/.rubygems
           make
           # Verify that the generated client code can be built
           make BUILD_TARGETS="go java javascript python ruby typescript-axios" build_clients
@@ -34,6 +58,8 @@ jobs:
         # * Publish each client to it's respective platform (e.g. Rubygems)
       - name: Publish clients
         run: |
+          export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
+          export GEM_HOME=$HOME/.rubygems
           ./scripts/publish.sh
         # This step creates a release with changelog from the tag
   create-release:
