@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo apt -q install -y unzip jq openjdk-11-jdk nodejs npm python3 python3-pip ruby
           # Install Go
-          curl -s https://dl.google.com/go/go1.15.5.linux-amd64.tar.gz | tar -xz -C /usr/local
+          curl -s https://dl.google.com/go/go1.15.5.linux-amd64.tar.gz | sudo tar -xz -C /usr/local
           # Install Java
           export PATH=/opt/gradle/bin:$PATH
           curl -sSL --fail --retry 3 "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" >gradle.zip && \
