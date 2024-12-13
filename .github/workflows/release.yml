@@ -17,6 +17,9 @@ jobs:
       LD_RELEASE_VERSION: ${{ inputs.releaseVersion }}
       GH_TOKEN: ${{ secrets.BOT_TOKEN }}
       GRADLE_VERSION: 6.8.3
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
