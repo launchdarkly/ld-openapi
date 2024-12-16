@@ -182,13 +182,14 @@ push:
 		$(GIT_COMMAND) add .; \
 		$(GIT_COMMAND) status; \
 		$(GIT_COMMAND) commit --allow-empty -m "Version $(LD_RELEASE_VERSION) automatically generated from $(REPO)."; \
-		$(GIT_COMMAND) tag $(TAG); \
-		$(GIT_PUSH_COMMAND) origin $(TAG); \
-		$(GIT_PUSH_COMMAND) origin $(RELEASE_BRANCH); \
 		if [ $(RELEASE_TARGET) == "go" ]; then \
 		  $(GIT_COMMAND) tag v$(TAG); \
 		  $(GIT_PUSH_COMMAND) origin v$(TAG); \
+		else \
+			$(GIT_COMMAND) tag $(TAG); \
+			$(GIT_PUSH_COMMAND) origin $(TAG); \
 		fi; \
+		$(GIT_PUSH_COMMAND) origin $(RELEASE_BRANCH); \
 		cd ..; \
 	) \
 

@@ -1,0 +1,86 @@
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: Next release version
+        required: true
+        type: string
+      changeLog:
+        description: Pending changelog
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      LD_RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+      PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt -q install -y unzip jq nodejs npm python3 python3-pip ruby
+          # Install Go
+          curl -s https://dl.google.com/go/go1.15.5.linux-amd64.tar.gz | sudo tar -xz -C /usr/local
+          # Install yarn
+          npm install --global yarn
+          # Install python deps
+          sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+          sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+          pip install bravado
+          pip install twine
+          # Set up ruby
+          mkdir -p ~/.rubygems
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - uses: launchdarkly/gh-actions/actions/release-secrets@release-secrets-v1.1.0
+        name: Get secrets
+        with:
+          aws_assume_role: ${{ vars.AWS_ROLE_ARN }}
+          s3_path_pairs: 'launchdarkly-releaser/java/code-signing-keyring.gpg = /home/runner/code-signing-keyring.gpg'
+      - name: Prepare secrets
+        run: |
+          ./scripts/release/prepare.sh 
+      - name: Build clients
+        run: |
+          export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
+          export GEM_HOME=$HOME/.rubygems
+          java -XX:+PrintFlagsFinal -version | grep ThreadStackSize
+          make
+          # Verify that the generated client code can be built
+          make BUILD_TARGETS="go java javascript python ruby typescript-axios" build_clients
+        # This step will:
+        # * Push built clients to their respective Github repos
+        # * Tag those commits with the release version
+        # * Publish each client to it's respective platform (e.g. Rubygems)
+      - name: Publish clients
+        run: |
+          export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
+          export GEM_HOME=$HOME/.rubygems
+          ./scripts/release/publish.sh
+        # This step creates a release with changelog from the tag
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: release
+    strategy:
+      matrix:
+        repo: ['api-client-go', 'api-client-java', 'api-client-javascript', 'api-client-php', 'api-client-python', 'api-client-ruby', 'api-client-typescript']
+    steps:
+      - uses: ncipollo/release-action@v1.14.0
+        with:
+          repo: ${{ matrix.repo }}
+          token: ${{ secrets.BOT_TOKEN }}
+          tag: v${{ inputs.releaseVersion }} 
+          body: ${{ inputs.changeLog }}
