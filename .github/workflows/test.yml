@@ -41,9 +41,8 @@ jobs:
       - run: npm install
         working-directory: targets/api-client-javascript
       - run: |
-          echo '{"type": "module"}' > package.json
           npm link $GITHUB_WORKSPACE/targets/api-client-javascript
-          node index.js
+          node --experimental-modules index.js
         working-directory: samples/javascript
       
 
