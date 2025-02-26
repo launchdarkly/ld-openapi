@@ -31,7 +31,7 @@ jobs:
           LD_RELEASE_VERSION: ${{ env.VERSION }}
       - name: Archive targets
         run: |
-          tar czvf apt-clients-${{ env.VERSION }}-${{ env.SHORT_SHA }}.tgz api-client-*
+          tar czvf api-clients-${{ env.VERSION }}-${{ env.SHORT_SHA }}.tgz api-client-*
           mkdir /tmp/api-clients
           cp api-clients-*.tgz /tmp/api-clients/
         working-directory: targets
