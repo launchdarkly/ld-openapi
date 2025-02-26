@@ -38,11 +38,10 @@ jobs:
         with:
           name: targets
           path: ./targets
+      - run: npm install
+        working-directory: targets/api-client-javascript
       - run: |
-          cd targets/api-client-javascript
-          npm install
-      - run: |
-          sudo npm link ../../targets/api-client-javascript
+          npm link $GITHUB_WORKSPACE/targets/api-client-javascript
           node index.js
         working-directory: samples/javascript
       
@@ -128,6 +127,7 @@ jobs:
       - run: |
           npm link launchdarkly-api-typescript
           npm install
+          npm run build
           npm start
         working-directory: samples/typescript-axios
 
