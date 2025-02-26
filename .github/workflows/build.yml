@@ -36,6 +36,11 @@ jobs:
           cp api-clients-*.tgz /tmp/api-clients/
         working-directory: targets
 
+      - name: Upload targets directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: targets
+          path: targets/
       - name: Upload API clients
         uses: actions/upload-artifact@v4
         with:
