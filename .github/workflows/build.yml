@@ -8,9 +8,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.VERSION }}
     steps:
       - uses: actions/checkout@v4
       - name: Get tag name, or set default
+        id: get_version
         run: |
           # Use the pushed tag, or default to 0.0.1 if no tag
           VERSION="${GITHUB_REF#refs/tags/}"
@@ -20,6 +23,7 @@ jobs:
             VERSION="0.0.1"
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         shell: bash
       - name: Generate SHA data
         run: |
@@ -61,3 +65,5 @@ jobs:
     needs: build
     uses: './.github/workflows/test.yml'
     secrets: inherit
+    with:
+      version: ${{ needs.build.outputs.version }}
