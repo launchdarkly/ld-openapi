@@ -1,0 +1,53 @@
+name: Build & Test
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get tag name, or set default
+        run: |
+          # Use the pushed tag, or default to 0.0.1 if no tag
+          VERSION="${GITHUB_REF#refs/tags/}"
+          
+          # If no tag was pushed, use default
+          if [[ "$VERSION" == "$GITHUB_REF" ]]; then
+            VERSION="0.0.1"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+        shell: bash
+      - name: Generate SHA data
+        run: |
+          echo "SHA=${{ github.event.pull_request.head.sha || github.sha }}" >> "$GITHUB_ENV"
+          echo "SHORT_SHA=$(cut -c 1-7 <<< ${{ github.event.pull_request.head.sha || github.sha }})" >> "$GITHUB_ENV"
+      - name: Generate code
+        run: make all
+        env:
+          LD_RELEASE_VERSION: ${{ env.VERSION }}
+      - name: Archive targets
+        run: |
+          tar czvf apt-clients-${{ env.VERSION }}-${{ env.SHORT_SHA }}.tgz api-client-*
+          mkdir /tmp/api-clients
+          cp api-clients-*.tgz /tmp/api-clients/
+        working-directory: targets
+
+      - name: Upload API clients
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-clients-${{ env.VERSION }}-${{ env.SHORT_SHA }}
+          path: /tmp/api-clients
+      - name: Upload HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: html
+          path: targets/html2
+      - name: Upload plain HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: plain-html
+          path: targets/html
