@@ -42,7 +42,7 @@ jobs:
         working-directory: targets/api-client-javascript
       - run: |
           npm link $GITHUB_WORKSPACE/targets/api-client-javascript
-          node --experimental-modules index.js
+          node index.js
         working-directory: samples/javascript
       
 

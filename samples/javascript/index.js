@@ -1,4 +1,4 @@
-var LaunchDarklyApi = require('launchdarkly-api');
+import * as LaunchDarklyApi from 'launchdarkly-api';
 
 var defaultClient = LaunchDarklyApi.ApiClient.instance;
 
