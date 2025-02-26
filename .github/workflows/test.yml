@@ -15,7 +15,7 @@ jobs:
           path: ./targets
       - run: |
           mkdir -p /home/runner/go/src/github.com/launchdarkly
-          cp -r targets/api-client-go /go/src/github.com/launchdarkly/
+          cp -r targets/api-client-go /home/runner/go/src/github.com/launchdarkly/
       - run: make
         working-directory: samples/go
         env:
