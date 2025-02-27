@@ -1,5 +1,4 @@
-import * as LaunchDarklyApi from 'launchdarkly-api';
-
+var LaunchDarklyApi = require('launchdarkly-api');
 var defaultClient = LaunchDarklyApi.ApiClient.instance;
 
 var Token = defaultClient.authentications['ApiKey'];
