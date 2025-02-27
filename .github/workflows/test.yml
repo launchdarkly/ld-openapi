@@ -44,7 +44,7 @@ jobs:
           cd ../..
           cd samples/javascript
           sudo npm link ../../targets/api-client-javascript
-          node index.js
+          node --experimental-modules index.js
       
 
   test-python:
