@@ -38,12 +38,13 @@ jobs:
         with:
           name: targets
           path: ./targets
-      - run: npm install
-        working-directory: targets/api-client-javascript
       - run: |
-          npm link $GITHUB_WORKSPACE/targets/api-client-javascript
+          cd targets/api-client-javascript
+          npm install
+          cd ../..
+          cd samples/javascript
+          sudo npm link ../../targets/api-client-javascript
           node index.js
-        working-directory: samples/javascript
       
 
   test-python:
