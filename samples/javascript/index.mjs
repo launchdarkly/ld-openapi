@@ -1,18 +1,16 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+var LaunchDarklyApi = require('launchdarkly-api');
 
-const LaunchDarklyApi = require('launchdarkly-api');
-const defaultClient = LaunchDarklyApi.ApiClient.instance;
+var defaultClient = LaunchDarklyApi.ApiClient.instance;
 
-const Token = defaultClient.authentications['ApiKey'];
+var Token = defaultClient.authentications['ApiKey'];
 Token.apiKey = process.env.LD_API_KEY;
 
-const apiInstance = new LaunchDarklyApi.FeatureFlagsApi();
+var apiInstance = new LaunchDarklyApi.FeatureFlagsApi();
 
 const projectName = "openapi";
 const keyName = "test-javascript";
 
-const callback = (error, data) => {
+var callback = function(error, data) {
   if (error) {
     console.error(error);
     process.exit(1);
@@ -21,7 +19,7 @@ const callback = (error, data) => {
   }
 };
 
-const postCallback = (error, data) => {
+var postCallback = function(error, data) {
   callback(error, data);
 
   if (!error) {

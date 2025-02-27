@@ -33,18 +33,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
       - uses: actions/download-artifact@v4
         with:
           name: targets
           path: ./targets
+      - run: npm install
+        working-directory: targets/api-client-javascript
       - run: |
-          cd targets/api-client-javascript
-          npm install
-          cd ../..
-          cd samples/javascript
-          sudo npm link ../../targets/api-client-javascript
-          node index.mjs
+          npm link $GITHUB_WORKSPACE/targets/api-client-javascript
+          node --experimental-modules index.js
+        working-directory: samples/javascript
       
 
   test-python:
