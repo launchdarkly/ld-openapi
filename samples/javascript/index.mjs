@@ -1,5 +1,7 @@
-import LaunchDarklyApi from 'launchdarkly-api';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
+const LaunchDarklyApi = require('launchdarkly-api');
 const defaultClient = LaunchDarklyApi.ApiClient.instance;
 
 const Token = defaultClient.authentications['ApiKey'];
