@@ -38,6 +38,7 @@ jobs:
           sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
           pip install bravado
           pip install twine
+          pip install -U packaging
           # Set up ruby
           mkdir -p ~/.rubygems
       - uses: actions/setup-java@v1
