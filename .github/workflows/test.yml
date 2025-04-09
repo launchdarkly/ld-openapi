@@ -5,11 +5,12 @@ on:
         required: true
         type: string
 
+env:
+  LD_API_KEY: ${{ secrets.LD_API_TOKEN }}
+
 jobs:
   test-go:
     runs-on: ubuntu-latest
-    env:
-      LD_API_KEY: ${{ secrets.TEMP_LD_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -28,8 +29,6 @@ jobs:
   test-javascript:
     runs-on: ubuntu-latest
     if: false # Disable the test for now - it's broken due to ES6 stuff. Other tests confirm the clients are working
-    env:
-      LD_API_KEY: ${{ secrets.TEMP_LD_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -45,12 +44,10 @@ jobs:
           npm link $GITHUB_WORKSPACE/targets/api-client-javascript
           node --experimental-modules index.js
         working-directory: samples/javascript
-      
+
 
   test-python:
     runs-on: ubuntu-latest
-    env:
-      LD_API_KEY: ${{ secrets.TEMP_LD_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -67,8 +64,6 @@ jobs:
 
   test-ruby:
     runs-on: ubuntu-latest
-    env:
-      LD_API_KEY: ${{ secrets.TEMP_LD_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
@@ -87,8 +82,6 @@ jobs:
 
   test-java:
     runs-on: ubuntu-latest
-    env:
-      LD_API_KEY: ${{ secrets.TEMP_LD_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -109,8 +102,6 @@ jobs:
 
   test-typescript:
     runs-on: ubuntu-latest
-    env:
-      LD_API_KEY: ${{ secrets.TEMP_LD_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -134,8 +125,6 @@ jobs:
 
   test-php:
     runs-on: ubuntu-latest
-    env:
-      LD_API_KEY: ${{ secrets.TEMP_LD_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
@@ -146,7 +135,7 @@ jobs:
           name: targets
           path: ./targets
       - run: |
-          echo '{"require":{"launchdarkly/api-client-php":"@dev","guzzlehttp/guzzle":"*"},"repositories":[{"type":"path","url":"../../targets/api-client-php","options":{"symlink":true}}]}' > composer.json 
+          echo '{"require":{"launchdarkly/api-client-php":"@dev","guzzlehttp/guzzle":"*"},"repositories":[{"type":"path","url":"../../targets/api-client-php","options":{"symlink":true}}]}' > composer.json
           composer update
           php index.php
         working-directory: samples/php
