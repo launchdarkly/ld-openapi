@@ -2,7 +2,7 @@
 
 This repository contains an OpenAPI specification for LaunchDarkly's REST API.
 
-This REST API is for custom integrations, data export, or automating your feature flag workflows. *DO NOT* use this client library to add feature flags to your web or mobile application. To integrate feature flags with your application, please see the [SDK documentation](https://docs.launchdarkly.com/v2.0/docs)
+This REST API is for custom integrations, data export, or automating your feature flag workflows. *DO NOT* use this client library to add feature flags to your web or mobile application. To integrate feature flags with your application, please see the [SDK documentation]((https://launchdarkly.com/docs/sdk)
 
 ## Directory architecture
 
