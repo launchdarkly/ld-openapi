@@ -15,7 +15,6 @@ jobs:
     runs-on: runs-on=${{ github.run_id }}/runner=ubuntu22-2cpu-8gb-x64
     container:
       image: ldcircleci/openapi-release:1
-      options: --user 1001
     defaults:
       run:
         shell: bash
