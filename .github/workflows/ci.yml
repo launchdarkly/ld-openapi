@@ -12,14 +12,15 @@ permissions:
 
 jobs:
   build:
-    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
+    runs-on: ubuntu-latest
     container:
       image: ldcircleci/openapi-release:1
+      options: --user 1001
     defaults:
       run:
         shell: bash
     steps:
-    #   - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
+      # - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
       - uses: actions/checkout@v4
       - name: Compute TAG/SHORT_SHA and envs
         id: meta
@@ -62,10 +63,10 @@ jobs:
           path: /tmp/api-clients
 
   test-go:
-    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
+    runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
+      # - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
       - uses: actions/checkout@v4
       - name: Download targets
         uses: actions/download-artifact@v4
@@ -86,10 +87,10 @@ jobs:
           make
 
   test-javascript:
-    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
+    runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
+      # - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
       - uses: actions/checkout@v4
       - name: Download targets
         uses: actions/download-artifact@v4
@@ -114,10 +115,10 @@ jobs:
 
   test-python:
 
-    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
+    runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
+      # - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
       - uses: actions/checkout@v4
       - name: Download targets
         uses: actions/download-artifact@v4
@@ -135,10 +136,10 @@ jobs:
           python main.py
 
   test-ruby:
-    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
+    runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
+      # - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
       - uses: actions/checkout@v4
       - name: Download targets
         uses: actions/download-artifact@v4
@@ -163,10 +164,10 @@ jobs:
           ruby main.rb
 
   test-java:
-    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
+    runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
+      # - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
       - uses: actions/checkout@v4
       - name: Download targets
         uses: actions/download-artifact@v4
@@ -191,10 +192,10 @@ jobs:
           mvn exec:java
 
   test-typescript:
-    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
+    runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
+      # - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
       - uses: actions/checkout@v4
       - name: Download targets
         uses: actions/download-artifact@v4
