@@ -15,7 +15,6 @@ jobs:
     runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
     container:
       image: ldcircleci/openapi-release:1
-      options: --user 1000
     defaults:
       run:
         shell: bash
@@ -81,8 +80,8 @@ jobs:
           GO111MODULE: "on"
         run: |
           # GOPATH copy is likely unnecessary with modules, but kept to mirror CircleCI
-          sudo mkdir -p /go/src/github.com/launchdarkly
-          sudo cp -r targets/api-client-go /go/src/github.com/launchdarkly/
+          mkdir -p /go/src/github.com/launchdarkly
+          cp -r targets/api-client-go /go/src/github.com/launchdarkly/
           cd samples/go
           make
 
@@ -110,7 +109,7 @@ jobs:
         run: |
           cd samples/javascript
           # link the local package name (dir name is fine with npm link path)
-          sudo npm link ../../targets/api-client-javascript
+          npm link ../../targets/api-client-javascript
           node index.js
 
   test-python:
@@ -208,11 +207,11 @@ jobs:
       - name: Run TS sample (axios)
         run: |
           cd targets/api-client-typescript-axios
-          sudo npm install
-          sudo npm run build
-          sudo npm link
+          npm install
+          npm run build
+          npm link
           cd ../../samples/typescript-axios
-          sudo npm link launchdarkly-api-typescript
-          sudo npm install
-          sudo npm run build
+          npm link launchdarkly-api-typescript
+          npm install
+          npm run build
           npm start
