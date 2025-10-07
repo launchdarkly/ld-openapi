@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: runs-on=${{ github.run_id }}/runner=ubuntu22-2cpu-8gb-x64
+    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
     container:
       image: ldcircleci/openapi-release:1
     defaults:
@@ -62,7 +62,7 @@ jobs:
           path: /tmp/api-clients
 
   test-go:
-    runs-on: runs-on=${{ github.run_id }}/runner=ubuntu22-2cpu-8gb-x64
+    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
     needs: build
     steps:
       - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
@@ -86,7 +86,7 @@ jobs:
           make
 
   test-javascript:
-    runs-on: runs-on=${{ github.run_id }}/runner=ubuntu22-2cpu-8gb-x64
+    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
     needs: build
     steps:
       - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
@@ -114,7 +114,7 @@ jobs:
 
   test-python:
 
-    runs-on: runs-on=${{ github.run_id }}/runner=ubuntu22-2cpu-8gb-x64
+    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
     needs: build
     steps:
       - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
@@ -135,7 +135,7 @@ jobs:
           python main.py
 
   test-ruby:
-    runs-on: runs-on=${{ github.run_id }}/runner=ubuntu22-2cpu-8gb-x64
+    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
     needs: build
     steps:
       - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
@@ -163,7 +163,7 @@ jobs:
           ruby main.rb
 
   test-java:
-    runs-on: runs-on=${{ github.run_id }}/runner=ubuntu22-2cpu-8gb-x64
+    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
     needs: build
     steps:
       - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
@@ -191,7 +191,7 @@ jobs:
           mvn exec:java
 
   test-typescript:
-    runs-on: runs-on=${{ github.run_id }}/runner=ubuntu22-2cpu-8gb-x64
+    runs-on: runs-on=${{ github.run_id }}/runner=ub24-xlarge-amd
     needs: build
     steps:
       - uses: runs-on/action@cd2b598b0515d39d78c38a02d529db87d2196d1e # v2.0.2  
