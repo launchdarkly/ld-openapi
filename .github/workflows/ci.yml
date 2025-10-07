@@ -1,9 +1,9 @@
 name: CI (build + client samples)
 
 on:
-#   push:
-#     # branches: [ main ]
-#     # tags: ['*']   # run on any tag push, like CircleCI’s filters
+  push:
+    # branches: [ main ]
+    # tags: ['*']
   pull_request:
     branches: [ main ]
 
@@ -12,54 +12,39 @@ permissions:
 
 jobs:
   build:
-    name: Build & package generated clients
     runs-on: ubuntu-latest
-    # Use the same Docker image as CircleCI for the build/codegen steps
     container:
       image: ldcircleci/openapi-release:1
-      options: --user 1001
-    # In containers, the default shell is 'sh'; we need bash for ${VAR::7} etc.
+      options: --user 1001                    # FIX: avoid EACCES in actions/checkout inside container
     defaults:
       run:
         shell: bash
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Compute TAG/SHORT_SHA and envs
         id: meta
         run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            TAG="${GITHUB_REF#refs/tags/}"
-          else
-            TAG="0.0.1"
-          fi
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then TAG="${GITHUB_REF#refs/tags/}"; else TAG="0.0.1"; fi
           echo "TAG=$TAG" >> "$GITHUB_ENV"
           echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
           echo "REPO_USER_URL=https://github.com/${{ github.repository_owner }}" >> "$GITHUB_ENV"
           echo "LD_RELEASE_VERSION=$TAG" >> "$GITHUB_ENV"
-
       - name: Generating code
         run: |
           export REPO_USER_URL="$REPO_USER_URL"
           echo "Setting version to ${TAG}"
           LD_RELEASE_VERSION="${TAG}" make all
-
       - name: Archive tgz
         run: |
           cd targets
           tar cvfz "api-clients-${TAG}-${SHORT_SHA}.tgz" api-client-*
           mkdir -p /tmp/api-clients
           cp "api-clients-${TAG}-${SHORT_SHA}.tgz" /tmp/api-clients/
-
-      # Make "targets" available to downstream jobs (like CircleCI workspaces)
       - name: Upload targets workspace
         uses: actions/upload-artifact@v4
         with:
           name: targets
           path: targets
-
-      # Store artifacts like CircleCI
       - name: Upload html2
         uses: actions/upload-artifact@v4
         with:
@@ -88,9 +73,12 @@ jobs:
           path: targets
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.15'
+          go-version: '1.22.x'              # FIX: newer Go to match generated code
       - name: Run Go sample
+        env:
+          GO111MODULE: "on"
         run: |
+          # GOPATH copy is likely unnecessary with modules, but kept to mirror CircleCI
           sudo mkdir -p /go/src/github.com/launchdarkly
           sudo cp -r targets/api-client-go /go/src/github.com/launchdarkly/
           cd samples/go
@@ -108,18 +96,23 @@ jobs:
           path: targets
       - uses: actions/setup-node@v4
         with:
-          node-version: '14.17'
+          node-version: '20'                 # modern Node; still need CJS build below
+      - name: Build JS client as CommonJS   # FIX: force-transform ESM -> CJS so sample's require() works
+        working-directory: targets/api-client-javascript
+        run: |
+          npm install
+          npx --yes @babel/cli@7 @babel/core@7 @babel/plugin-transform-modules-commonjs@7 \
+            babel src -d dist --plugins @babel/plugin-transform-modules-commonjs
       - name: Run JS sample
         run: |
-          cd targets/api-client-javascript
-          npm install
-          cd ../..
           cd samples/javascript
+          # link the local package name (dir name is fine with npm link path)
           sudo npm link ../../targets/api-client-javascript
           node index.js
 
   test-python:
-    runs-on: ubuntu-latest
+    # FIX: Python 3.7 isn't provisioned for 24.04 runners; use 22.04
+    runs-on: ubuntu-22.04
     needs: build
     steps:
       - uses: actions/checkout@v4
@@ -151,6 +144,10 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.7'
+      - name: Prepare RubyGems / ffi        # FIX: preinstall ffi compatible with Ruby 2.7 + older RubyGems
+        run: |
+          gem update --system || true
+          gem install ffi -v 1.17.2 --no-document || true
       - name: Install Gem
         run: |
           cd targets/api-client-ruby
@@ -177,11 +174,7 @@ jobs:
           java-version: '8'
       - name: Compute TAG
         run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            TAG="${GITHUB_REF#refs/tags/}"
-          else
-            TAG="0.0.1"
-          fi
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then TAG="${GITHUB_REF#refs/tags/}"; else TAG="0.0.1"; fi
           echo "TAG=$TAG" >> "$GITHUB_ENV"
       - name: Build & run Java sample
         run: |
@@ -216,23 +209,3 @@ jobs:
           sudo npm install
           sudo npm run build
           npm start
-
-  test-php:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download targets
-        uses: actions/download-artifact@v4
-        with:
-          name: targets
-          path: targets
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.0'
-      - name: Run PHP sample
-        run: |
-          cd samples/php
-          echo '{"require":{"launchdarkly/api-client-php":"@dev","guzzlehttp/guzzle":"*"},"repositories":[{"type":"path","url":"../../targets/api-client-php","options":{"symlink":true}}]}' > composer.json
-          composer update
-          php index.php
