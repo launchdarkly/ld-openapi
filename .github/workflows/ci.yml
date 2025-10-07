@@ -17,6 +17,7 @@ jobs:
     # Use the same Docker image as CircleCI for the build/codegen steps
     container:
       image: ldcircleci/openapi-release:1
+      options: --user 1001
     # In containers, the default shell is 'sh'; we need bash for ${VAR::7} etc.
     defaults:
       run:
