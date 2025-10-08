@@ -96,20 +96,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Build JS client as CommonJS
+      - name: Build JS client to CJS (no lifecycle scripts)
         working-directory: targets/api-client-javascript
-        run: >
-          npm install
-
-          npx --yes @babel/cli@7 @babel/core@7
-          @babel/plugin-transform-modules-commonjs@7 \
-            babel src -d dist --plugins @babel/plugin-transform-modules-commonjs
-      - name: Run JS sample
         run: |
-          cd samples/javascript
-          # link the local package name (dir name is fine with npm link path)
-          npm link ../../targets/api-client-javascript
-          node index.js
+            rm -rf dist-cjs
+            npx --yes @babel/cli@7 @babel/core@7 @babel/plugin-transform-modules-commonjs@7 \
+            babel src --out-dir dist-cjs --plugins @babel/plugin-transform-modules-commonjs
+            # 2) Point package "main" at the CJS build so require(...) loads it
+            node -e 'const fs=require("fs");const p=require("./package.json");p.main="dist-cjs/index.js";delete p.module;fs.writeFileSync("package.json",JSON.stringify(p,null,2))'
+
+      - name: Install local client into sample (ignore scripts)
+        working-directory: samples/javascript
+        run: |
+            [ -f package.json ] || npm init -y
+            npm install --ignore-scripts ../../targets/api-client-javascript
+            node index.js
   test-python:
     runs-on: ubuntu-latest
     needs: build
