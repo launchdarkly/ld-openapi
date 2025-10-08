@@ -3,8 +3,13 @@ name: CI (build + client samples)
   pull_request:
     branches:
       - main
+
+env:
+  LD_API_KEY: ${{ secrets.LD_API_KEY }}   
+        
 permissions:
   contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
