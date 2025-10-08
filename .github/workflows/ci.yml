@@ -95,22 +95,21 @@ jobs:
           path: targets
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: Build JS client to CJS (no lifecycle scripts)
+          node-version: '14.17'
+      - name: Build JS client as CommonJS
         working-directory: targets/api-client-javascript
-        run: |
-            rm -rf dist-cjs
-            npx -y -p @babel/core@7 -p @babel/cli@7 -p @babel/plugin-transform-modules-commonjs@7 \
-            babel src --out-dir dist-cjs --plugins @babel/plugin-transform-modules-commonjs
-            # point package to the CJS entry and remove ESM flags
-            node -e 'const fs=require("fs");const p=require("./package.json");p.main="dist-cjs/index.js";if(p.type==="module") delete p.type;delete p.module;fs.writeFileSync("package.json",JSON.stringify(p,null,2))'
+        run: >
+          npm install
 
-      - name: Install local client into sample (ignore scripts)
-        working-directory: samples/javascript
+          npx --yes @babel/cli@7 @babel/core@7
+          @babel/plugin-transform-modules-commonjs@7 \
+            babel src -d dist --plugins @babel/plugin-transform-modules-commonjs
+      - name: Run JS sample
         run: |
-            [ -f package.json ] || npm init -y
-            npm install --ignore-scripts ../../targets/api-client-javascript
-            node index.js
+          cd samples/javascript
+          # link the local package name (dir name is fine with npm link path)
+          npm link ../../targets/api-client-javascript
+          node index.js
   test-python:
     runs-on: ubuntu-latest
     needs: build
