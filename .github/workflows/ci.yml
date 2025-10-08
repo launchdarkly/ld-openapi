@@ -100,7 +100,7 @@ jobs:
         working-directory: targets/api-client-javascript
         run: |
             rm -rf dist-cjs
-            npx --yes @babel/cli@7 @babel/core@7 @babel/plugin-transform-modules-commonjs@7 \
+            npx --yes -p @babel/cli@7 @babel/core@7 @babel/plugin-transform-modules-commonjs@7 \
             babel src --out-dir dist-cjs --plugins @babel/plugin-transform-modules-commonjs
             # 2) Point package "main" at the CJS build so require(...) loads it
             node -e 'const fs=require("fs");const p=require("./package.json");p.main="dist-cjs/index.js";delete p.module;fs.writeFileSync("package.json",JSON.stringify(p,null,2))'
