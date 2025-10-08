@@ -6,7 +6,7 @@ name: CI (build + client samples)
 
 env:
   LD_API_KEY: ${{ secrets.LD_API_KEY }}   
-        
+
 permissions:
   contents: read
 
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: 'ldcircleci/openapi-release:1'
-      options: '--user 1001'
+      options: --user 1001
     defaults:
       run:
         shell: bash
