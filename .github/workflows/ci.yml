@@ -82,17 +82,7 @@ jobs:
       - name: Run Go sample
         env:
           GO111MODULE: 'on'
-        run: >
-          # GOPATH copy is likely unnecessary with modules, but kept to mirror
-          CircleCI
-
-          mkdir -p /go/src/github.com/launchdarkly
-
-          cp -r targets/api-client-go /go/src/github.com/launchdarkly/
-
-          cd samples/go
-
-          make
+        run: make
   test-javascript:
     runs-on: ubuntu-latest
     needs: build
