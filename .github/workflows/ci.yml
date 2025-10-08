@@ -100,10 +100,10 @@ jobs:
         working-directory: targets/api-client-javascript
         run: |
             rm -rf dist-cjs
-            npx --yes -p @babel/cli@7 @babel/core@7 @babel/plugin-transform-modules-commonjs@7 \
+            npx -y -p @babel/core@7 -p @babel/cli@7 -p @babel/plugin-transform-modules-commonjs@7 \
             babel src --out-dir dist-cjs --plugins @babel/plugin-transform-modules-commonjs
-            # 2) Point package "main" at the CJS build so require(...) loads it
-            node -e 'const fs=require("fs");const p=require("./package.json");p.main="dist-cjs/index.js";delete p.module;fs.writeFileSync("package.json",JSON.stringify(p,null,2))'
+            # point package to the CJS entry and remove ESM flags
+            node -e 'const fs=require("fs");const p=require("./package.json");p.main="dist-cjs/index.js";if(p.type==="module") delete p.type;delete p.module;fs.writeFileSync("package.json",JSON.stringify(p,null,2))'
 
       - name: Install local client into sample (ignore scripts)
         working-directory: samples/javascript
