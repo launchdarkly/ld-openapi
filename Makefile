@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
-GENERATOR_VERSION=7.0.0
+GENERATOR_VERSION=6.0.0
 GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
 GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
 
@@ -194,8 +194,8 @@ push:
 	) \
 
 build_clients:
-	./scripts/run-scripts-for-targets.sh ./scripts/build $(LD_RELEASE_VERSION) \
-		"Building client code" $(API_TARGETS)
+	./scripts/run-scripts-for-targets.sh ./scripts/build $(VERSION) \
+		"Building client code" $(BUILD_TARGETS)
 
 publish:
 	./scripts/run-scripts-for-targets.sh ./scripts/release $(LD_RELEASE_VERSION) \
