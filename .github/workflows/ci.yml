@@ -154,8 +154,12 @@ jobs:
           ruby-version: '2.7'
       - name: Prepare RubyGems / ffi
         run: |
-          gem update --system || true
-          gem install ffi -v 1.17.2 --no-document || true
+            # Update RubyGems to a version new enough for ffi 1.17.2
+            gem update --system 3.4.22 || gem update --system 3.3.22
+            gem --version
+
+            # Install ffi pinned to the last series that supports older Ruby/RubyGems
+            gem install ffi -v 1.17.2 --no-document
       - name: Install Gem
         run: |
           cd targets/api-client-ruby
