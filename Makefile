@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
-GENERATOR_VERSION=6.0.0
+GENERATOR_VERSION=7.5.0
 GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
 GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
 
@@ -42,7 +42,9 @@ SAMPLES_PATH ?= ./samples
 # The following variables define any special command-line parameters that need to be passed
 # to openapi-generator for each language/platform.
 CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
+	--additional-properties=disallowAdditionalPropertiesIfNotPresent=false \
 	--additional-properties=generateInterfaces=true \
+	--additional-properties=apiNameSuffix=Api \
 	--additional-properties=email=support@launchdarkly.com \
 	--additional-properties=developerName=LaunchDarkly \
 	--additional-properties=developerEmail=support@launchdarkly.com \
@@ -81,12 +83,10 @@ CODEGEN_PARAMS_php = \
 	--git-user-id=launchdarkly \
 	--git-repo-id=api-client-php
 CODEGEN_PARAMS_python = \
-	-t $(TEMPLATES_PATH)/python \
 	--additional-properties=packageName=launchdarkly_api \
 	--additional-properties=packageVersion=$(TAG) \
 
 CODEGEN_PARAMS_typescript-axios = \
-	-t $(TEMPLATES_PATH)/typescript-axios \
 	--additional-properties=npmName=launchdarkly-api-typescript \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true
