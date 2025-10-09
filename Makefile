@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
-GENERATOR_VERSION=7.5.0
+GENERATOR_VERSION=7.16.0
 GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
 GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
 
