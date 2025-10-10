@@ -52,6 +52,7 @@ CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
 	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
 	--additional-properties=packageVersion=$(firstword $(subst ., ,$(TAG))) \
 	-t $(TEMPLATES_PATH)/go
+
 CODEGEN_PARAMS_java = \
 	-t $(TEMPLATES_PATH)/java \
 	--group-id com.launchdarkly \
@@ -68,7 +69,8 @@ CODEGEN_PARAMS_java = \
 	--additional-properties=artifactDescription="Build custom integrations with the LaunchDarkly REST API" \
 	--additional-properties=scmUrl="https://github.com/launchdarkly/api-client-java" \
 	--additional-properties=scmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
-	--additional-properties=scmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
+	--additional-properties=scmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git' \
+	--additional-properties=gradleProperties=systemProp.org.gradle.internal.http.connectionTimeout=300000$$'\n'systemProp.org.gradle.internal.http.socketTimeout=300000$$'\n'org.gradle.jvmargs=-Xss2m
 CODEGEN_PARAMS_javascript = \
 	-t $(TEMPLATES_PATH)/javascript \
 	--additional-properties=projectName=launchdarkly-api \
