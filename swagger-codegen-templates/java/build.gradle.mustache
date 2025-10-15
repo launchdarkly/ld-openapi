@@ -31,8 +31,8 @@ repositories {
     mavenCentral()
 }
 
-def ossrhUsername = hasProperty('ossrhUsername') ? ossrhUsername : System.getenv('OSSRH_USERNAME')
-def ossrhPassword = hasProperty('ossrhPassword') ? ossrhPassword : System.getenv('OSSRH_PASSWORD')
+def centralPortalUsername = hasProperty('centralPortalUsername') ? centralPortalUsername : System.getenv('CENTRAL_PORTAL_USERNAME')
+def centralPortalPassword = hasProperty('centralPortalPassword') ? centralPortalPassword : System.getenv('CENTRAL_PORTAL_PASSWORD')
 
 allprojects {
     group = '{{groupId}}'
@@ -90,17 +90,17 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 nexusStaging {
     packageGroup = "com.launchdarkly"
-    username = ossrhUsername
-    password = ossrhPassword
+    username = centralPortalUsername
+    password = centralPortalPassword
 }
 
 publishing {
     repositories {
         maven {
-            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
             credentials {
-                username = ossrhUsername
-                password = ossrhPassword
+                username = centralPortalUsername
+                password = centralPortalPassword
             }
         }
     }
