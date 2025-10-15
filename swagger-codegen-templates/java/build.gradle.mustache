@@ -89,6 +89,7 @@ if (JavaVersion.current().isJava8Compatible()) {
 }
 
 nexusStaging {
+    serverUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/"
     packageGroup = "com.launchdarkly"
     username = centralPortalUsername
     password = centralPortalPassword
