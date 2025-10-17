@@ -9,7 +9,7 @@ cd ${path}
 
 # Publish to Sonatype
 PUBLISH_FAILED=
-./gradlew publishToSonatype closeAndReleaseSonatypeRepository || PUBLISH_FAILED=1
+./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository || PUBLISH_FAILED=1
 
 if [ -n "${PUBLISH_FAILED}" ]; then
   # If publication failed because this version of this package already exists,
