@@ -1,0 +1,23 @@
+name: Dependency Scan
+permissions:
+    contents: read
+
+on:
+    pull_request:
+    push:
+        branches:
+            - main
+
+jobs:
+    dependency-scan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Generate SBOM
+              uses: launchdarkly/gh-actions/actions/dependency-scan/generate-sbom@main
+              with:
+                  types: 'nodejs'
+
+            - name: Evaluate SBOM Policy
+              uses: launchdarkly/gh-actions/actions/dependency-scan/evaluate-policy@main
+              with:
+                  bom-file: bom.nodejs.json

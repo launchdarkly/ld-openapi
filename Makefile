@@ -138,6 +138,7 @@ $(API_TARGETS): $(TARGET_OPENAPI_JSON)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
 	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(LD_RELEASE_VERSION) --git-host=github.com --git-user-id=launchdarkly --git-repo-id=api-client-$@ -o $(BUILD_DIR)
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
+	mkdir -p $(BUILD_DIR)/.github/workflows && cp ./dependency-scan-gha.yml $(BUILD_DIR)/.github/workflows/dependency-scan.yml
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
 	if [ -f "$(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@)" ]; then \
 		cat ./README-PREFIX.md > $(BUILD_DIR)/README.md; \
