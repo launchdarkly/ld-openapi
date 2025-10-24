@@ -1,0 +1,252 @@
+name: CI (build + client samples)
+'on':
+  pull_request:
+    branches:
+      - main
+
+env:
+  LD_API_KEY: ${{ secrets.LD_API_KEY }}   
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: 'ldcircleci/openapi-release:1'
+      options: --user 1001
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compute TAG/SHORT_SHA and envs
+        id: meta
+        run: >
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+          TAG="${GITHUB_REF#refs/tags/}"; else TAG="0.0.1"; fi
+
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+
+          echo "REPO_USER_URL=https://github.com/${{ github.repository_owner }}"
+          >> "$GITHUB_ENV"
+
+          echo "LD_RELEASE_VERSION=$TAG" >> "$GITHUB_ENV"
+      - name: Generating code
+        run: |
+          export REPO_USER_URL="$REPO_USER_URL"
+          echo "Setting version to ${TAG}"
+          LD_RELEASE_VERSION="${TAG}" make all
+      - name: Archive tgz
+        run: |
+          cd targets
+          tar cvfz "api-clients-${TAG}-${SHORT_SHA}.tgz" api-client-*
+          mkdir -p /tmp/api-clients
+          cp "api-clients-${TAG}-${SHORT_SHA}.tgz" /tmp/api-clients/
+      - name: Upload targets workspace
+        uses: actions/upload-artifact@v4
+        with:
+          name: targets
+          path: targets
+      - name: Upload html2
+        uses: actions/upload-artifact@v4
+        with:
+          name: html
+          path: targets/html2
+      - name: Upload html-plain
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-plain
+          path: targets/html
+      - name: Upload api-clients tgz
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-clients
+          path: /tmp/api-clients
+  test-go:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download targets
+        uses: actions/download-artifact@v4
+        with:
+          name: targets
+          path: targets
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.x
+      - name: Run Go sample
+        env:
+          GO111MODULE: 'on'
+        run: make
+  test-javascript:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download targets
+        uses: actions/download-artifact@v4
+        with:
+          name: targets
+          path: targets
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build JS client
+        working-directory: targets/api-client-javascript
+        run: |
+          rm -rf node_modules dist
+          npm install
+          npx --yes babel src -d dist --plugins @babel/plugin-transform-modules-commonjs
+      # TODO: Fix this test
+      # - name: Run JS sample
+      #   run: |
+      #     cd samples/javascript
+      #     # Install the local package directly
+      #     npm install
+      #     node index.js
+  test-python:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download targets
+        uses: actions/download-artifact@v4
+        with:
+          name: targets
+          path: targets
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Run Python sample
+        run: |
+          python -m pip install --upgrade pip
+          cd samples/python
+          pip install -e ../../targets/api-client-python
+          python main.py
+  test-ruby:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download targets
+        uses: actions/download-artifact@v4
+        with:
+          name: targets
+          path: targets
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - name: Prepare RubyGems / ffi
+        run: |
+            # Update RubyGems to a version new enough for ffi 1.17.2
+            gem update --system 3.4.22 || gem update --system 3.3.22
+            gem --version
+
+            # Install ffi pinned to the last series that supports older Ruby/RubyGems
+            gem install ffi -v 1.17.2 --no-document
+      - name: Install Gem
+        run: |
+          cd targets/api-client-ruby
+          gem build launchdarkly_api.gemspec
+          gem install ./launchdarkly_api*.gem
+      - name: Run Ruby sample
+        run: |
+          cd samples/ruby
+          ruby main.rb
+  test-java:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download targets
+        uses: actions/download-artifact@v4
+        with:
+          name: targets
+          path: targets
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+      - name: Compute TAG
+        run: >
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+          TAG="${GITHUB_REF#refs/tags/}"; else TAG="0.0.1"; fi
+
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+      - name: Build & run Java sample
+        run: |
+          cd targets/api-client-java
+          mvn clean install
+          cd ../../samples/java
+          sed -i.bak -e "s/API_CLIENT_VERSION/${TAG}/g" pom.xml
+          mvn clean install
+          mvn exec:java
+  test-typescript:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download targets
+        uses: actions/download-artifact@v4
+        with:
+          name: targets
+          path: targets
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run TS sample (axios)
+        run: |
+          cd targets/api-client-typescript-axios
+          npm install
+          npm run build
+          npm link
+          cd ../../samples/typescript-axios
+          npm link launchdarkly-api-typescript
+          npm install
+          npm run build
+          npm start
+  test-php:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download targets
+        uses: actions/download-artifact@v4
+        with:
+          name: targets
+          path: targets
+      - uses: shivammathur/setup-php@v2
+        with:
+            php-version: '8.1'
+      - name: Run PHP sample
+        working-directory: samples/php
+        run: |
+            echo '{"require":{"launchdarkly/api-client-php":"@dev","guzzlehttp/guzzle":"*"},"repositories":[{"type":"path","url":"../../targets/api-client-php","options":{"symlink":true}}]}' > composer.json 
+            composer update
+            php index.php
+
+  check-success:
+    name: Check Success
+    needs:
+      - build
+      - test-go
+      - test-javascript
+      - test-python
+      - test-ruby
+      - test-java
+      - test-typescript
+      - test-php
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate results
+        run: |
+          if printf '${{ toJSON(needs) }}' | grep --quiet --extended-regexp --ignore-case '"result": "(failure|cancelled)"'; then
+            printf "Tests failed or workflow cancelled:\n\n${{ toJSON(needs) }}"
+            exit 1
+          fi

@@ -46,7 +46,7 @@ func main() {
 			if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key).Execute(); err != nil {
 				panic(fmt.Errorf("delete failed: %s", err))
 			}
-			flag, resp, err = client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FeatureFlagBody(body).Execute()
+			flag, _, err = client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FeatureFlagBody(body).Execute()
 			if err != nil {
 				panic(fmt.Errorf("create failed: %s", err))
 			}
@@ -59,8 +59,4 @@ func main() {
 			panic(fmt.Errorf("delete failed: %s", err))
 		}
 	}()
-}
-
-func intfPtr(i interface{}) *interface{} {
-	return &i
 }

@@ -19,8 +19,8 @@ jobs:
       PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+      CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
     permissions:
       id-token: write
       contents: read
