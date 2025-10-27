@@ -3,8 +3,8 @@ import os
 from pprint import pprint
 
 import launchdarkly_api
-from launchdarkly_api.model.variation import Variation
-from launchdarkly_api.model.feature_flag_body import FeatureFlagBody
+from launchdarkly_api.models.variation import Variation
+from launchdarkly_api.models.feature_flag_body import FeatureFlagBody
 from launchdarkly_api.api import feature_flags_api
 from launchdarkly_api.rest import ApiException
 

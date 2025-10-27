@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
-GENERATOR_VERSION=6.0.0
+GENERATOR_VERSION=7.16.0
 GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
 GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
 
@@ -42,7 +42,9 @@ SAMPLES_PATH ?= ./samples
 # The following variables define any special command-line parameters that need to be passed
 # to openapi-generator for each language/platform.
 CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
+	--additional-properties=disallowAdditionalPropertiesIfNotPresent=false \
 	--additional-properties=generateInterfaces=true \
+	--additional-properties=apiNameSuffix=Api \
 	--additional-properties=email=support@launchdarkly.com \
 	--additional-properties=developerName=LaunchDarkly \
 	--additional-properties=developerEmail=support@launchdarkly.com \
@@ -50,6 +52,7 @@ CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
 	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
 	--additional-properties=packageVersion=$(firstword $(subst ., ,$(TAG))) \
 	-t $(TEMPLATES_PATH)/go
+
 CODEGEN_PARAMS_java = \
 	-t $(TEMPLATES_PATH)/java \
 	--group-id com.launchdarkly \
@@ -66,7 +69,8 @@ CODEGEN_PARAMS_java = \
 	--additional-properties=artifactDescription="Build custom integrations with the LaunchDarkly REST API" \
 	--additional-properties=scmUrl="https://github.com/launchdarkly/api-client-java" \
 	--additional-properties=scmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
-	--additional-properties=scmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git'
+	--additional-properties=scmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git' \
+	--additional-properties=gradleProperties=systemProp.org.gradle.internal.http.connectionTimeout=300000$$'\n'systemProp.org.gradle.internal.http.socketTimeout=300000$$'\n'org.gradle.jvmargs=-Xss2m
 CODEGEN_PARAMS_javascript = \
 	-t $(TEMPLATES_PATH)/javascript \
 	--additional-properties=projectName=launchdarkly-api \
@@ -81,12 +85,10 @@ CODEGEN_PARAMS_php = \
 	--git-user-id=launchdarkly \
 	--git-repo-id=api-client-php
 CODEGEN_PARAMS_python = \
-	-t $(TEMPLATES_PATH)/python \
 	--additional-properties=packageName=launchdarkly_api \
 	--additional-properties=packageVersion=$(TAG) \
 
 CODEGEN_PARAMS_typescript-axios = \
-	-t $(TEMPLATES_PATH)/typescript-axios \
 	--additional-properties=npmName=launchdarkly-api-typescript \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true
@@ -136,6 +138,7 @@ $(API_TARGETS): $(TARGET_OPENAPI_JSON)
 	mkdir -p $(BUILD_DIR) && rm -rf $(BUILD_DIR)/*
 	$(CODEGEN) generate -i $(TARGET_OPENAPI_JSON) $(CODEGEN_PARAMS_$@) -g $@ --additional-properties=artifactVersion=$(LD_RELEASE_VERSION) --git-host=github.com --git-user-id=launchdarkly --git-repo-id=api-client-$@ -o $(BUILD_DIR)
 	cp ./LICENSE.txt $(BUILD_DIR)/LICENSE.txt
+	mkdir -p $(BUILD_DIR)/.github/workflows && cp ./dependency-scan-gha.yml $(BUILD_DIR)/.github/workflows/dependency-scan.yml
 	mv $(BUILD_DIR)/README.md $(BUILD_DIR)/README-ORIGINAL.md || touch $(BUILD_DIR)/README-ORIGINAL.md
 	if [ -f "$(SAMPLES_PATH)/$@/$(SAMPLE_FILE_$@)" ]; then \
 		cat ./README-PREFIX.md > $(BUILD_DIR)/README.md; \

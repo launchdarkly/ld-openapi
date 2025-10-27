@@ -10,10 +10,8 @@ cat >~/.gradle/gradle.properties <<EOF
 signing.keyId = BFF924E9
 signing.password = 
 signing.secretKeyRingFile = ${HOME}/code-signing-keyring.gpg
-ossrhUsername = ${SONATYPE_USERNAME}
-ossrhPassword = ${SONATYPE_PASSWORD}
-nexusUsername = ${SONATYPE_USERNAME}
-nexusPassword = ${SONATYPE_PASSWORD}
+centralPortalUsername = ${CENTRAL_PORTAL_USERNAME}
+centralPortalPassword = ${CENTRAL_PORTAL_PASSWORD}
 systemProp.org.gradle.internal.launcher.welcomeMessageEnabled = false
 EOF
 
