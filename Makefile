@@ -91,7 +91,8 @@ CODEGEN_PARAMS_python = \
 CODEGEN_PARAMS_typescript-axios = \
 	--additional-properties=npmName=launchdarkly-api-typescript \
 	--additional-properties=npmVersion=$(TAG) \
-	--additional-properties=supportsES6=true
+	--additional-properties=supportsES6=true \
+	--additional-properties=axiosVersion=^1.13.1
 CODEGEN_PARAMS_ruby = \
   --additional-properties=moduleName=LaunchDarklyApi \
   --additional-properties=gemName=launchdarkly_api \
