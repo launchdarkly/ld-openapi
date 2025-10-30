@@ -31,3 +31,4 @@ That is the preferred way of doing releases, but the `make` targets can also be 
 Or, if you just want to look at the generated code locally, run `make targets_docker` which is equivalent to `make all` but uses a Docker container, so that the only tool you need to have installed locally is Docker. The output will appear in `./targets`. This is a convenient way to validate any local changes that relate to code generation. If you are also making changes that affect how the client code is packaged or published, it is better to use the slower but more comprehensive method of a Releaser dry run.
 
 When running any `make` targets locally, set the environment variable `$LD_RELEASE_VERSION` to the version you are releasing, such as "6.0.0". It is set automatically when releases are run through Releaser.
+
