@@ -51,7 +51,7 @@ jobs:
           s3_path_pairs: 'launchdarkly-releaser/java/code-signing-keyring.gpg = /home/runner/code-signing-keyring.gpg'
       - name: Prepare secrets
         run: |
-          ./scripts/release/prepare.sh 
+          ./scripts/release/prepare.sh
       - name: Build clients
         run: |
           export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
@@ -83,5 +83,5 @@ jobs:
         with:
           repo: ${{ matrix.repo }}
           token: ${{ secrets.BOT_TOKEN }}
-          tag: v${{ inputs.releaseVersion }} 
+          tag: v${{ inputs.releaseVersion }}
           body: ${{ inputs.changeLog }}

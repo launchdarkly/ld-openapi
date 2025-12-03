@@ -5,7 +5,7 @@ name: CI (build + client samples)
       - main
 
 env:
-  LD_API_KEY: ${{ secrets.LD_API_KEY }}   
+  LD_API_KEY: ${{ secrets.LD_API_KEY }}
 
 permissions:
   contents: read
@@ -226,7 +226,7 @@ jobs:
       - name: Run PHP sample
         working-directory: samples/php
         run: |
-            echo '{"require":{"launchdarkly/api-client-php":"@dev","guzzlehttp/guzzle":"*"},"repositories":[{"type":"path","url":"../../targets/api-client-php","options":{"symlink":true}}]}' > composer.json 
+            echo '{"require":{"launchdarkly/api-client-php":"@dev","guzzlehttp/guzzle":"*"},"repositories":[{"type":"path","url":"../../targets/api-client-php","options":{"symlink":true}}]}' > composer.json
             composer update
             php index.php
 
