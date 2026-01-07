@@ -82,7 +82,9 @@ jobs:
       - name: Run Go sample
         env:
           GO111MODULE: 'on'
-        run: make
+        run: |
+          cd samples/go
+          make
   test-javascript:
     runs-on: ubuntu-latest
     needs: build

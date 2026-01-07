@@ -2,7 +2,13 @@ SHELL = /bin/bash
 
 LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
-GENERATOR_VERSION=7.16.0
+# IMPORTANT: Whenever updating this generator version, check if the ApiClient mustache files need corresponding updates.
+#  - Go:         https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/go/client.mustache
+#  - Java:       https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/Java/libraries/okhttp-gson/ApiClient.mustache
+#  - Python:     https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/python/api_client.mustache
+#  - Ruby:       https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/ruby-client/api_client.mustache
+#  - Typescript: https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/typescript-axios/apiInner.mustache
+GENERATOR_VERSION=7.18.0
 GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
 GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
 
@@ -87,16 +93,18 @@ CODEGEN_PARAMS_php = \
 CODEGEN_PARAMS_python = \
 	--additional-properties=packageName=launchdarkly_api \
 	--additional-properties=packageVersion=$(TAG) \
-
+	-t $(TEMPLATES_PATH)/python
 CODEGEN_PARAMS_typescript-axios = \
 	--additional-properties=npmName=launchdarkly-api-typescript \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true \
-	--additional-properties=axiosVersion=^1.13.1
+	--additional-properties=axiosVersion=^1.13.1 \
+	-t $(TEMPLATES_PATH)/typescript
 CODEGEN_PARAMS_ruby = \
-  --additional-properties=moduleName=LaunchDarklyApi \
-  --additional-properties=gemName=launchdarkly_api \
-  --additional-properties=gemVersion=$(TAG) \
+    --additional-properties=moduleName=LaunchDarklyApi \
+    --additional-properties=gemName=launchdarkly_api \
+    --additional-properties=gemVersion=$(TAG) \
+	-t $(TEMPLATES_PATH)/ruby
 
 SAMPLE_FILE_go = main.go
 SAMPLE_FILE_javascript = index.js
