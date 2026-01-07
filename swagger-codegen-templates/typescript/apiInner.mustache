@@ -212,7 +212,9 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
 
             // CUSTOM-START
             // Set default API version.
-            localVarHeaderParameter['LD-API-Version'] = '20240415';
+            localVarHeaderParameter['LD-API-Version'] = '{{launchDarklyApiVersion}}';
+            // Set a custom LaunchDarkly user agent header.
+            localVarHeaderParameter['X-LaunchDarkly-User-Agent'] = 'OpenAPI-Generator/{{npmVersion}}/typescript';
             // CUSTOM-END
 
     {{#headerParams}}

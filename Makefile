@@ -3,6 +3,7 @@ SHELL = /bin/bash
 LD_RELEASE_VERSION ?= 0.0.1-SNAPSHOT
 
 # IMPORTANT: Whenever updating this generator version, check if the ApiClient mustache files need corresponding updates.
+#            We have copied of these into the swagger-codegen-templates directory. Look for code blocks notated by CUSTOM-START and CUSTOM-END.
 #  - Go:         https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/go/client.mustache
 #  - Java:       https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/Java/libraries/okhttp-gson/ApiClient.mustache
 #  - Python:     https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/python/api_client.mustache
@@ -13,6 +14,7 @@ GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
 GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
 
 OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
+LATEST_API_VERSION=20240415 # the API version (for the LD-API-Version header value) corresponding to what is specified in this OpenAPI spec
 
 API_TARGETS ?= \
 	go \
@@ -47,7 +49,9 @@ SAMPLES_PATH ?= ./samples
 
 # The following variables define any special command-line parameters that need to be passed
 # to openapi-generator for each language/platform.
-CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
+CODEGEN_PARAMS_go = \
+	-t $(TEMPLATES_PATH)/go \
+    --additional-properties=packageName=ldapi \
 	--additional-properties=disallowAdditionalPropertiesIfNotPresent=false \
 	--additional-properties=generateInterfaces=true \
 	--additional-properties=apiNameSuffix=Api \
@@ -57,8 +61,7 @@ CODEGEN_PARAMS_go = --additional-properties=packageName=ldapi \
 	--additional-properties=developerOrganization=LaunchDarkly \
 	--additional-properties=developerOrganizationUrl=https://launchdarkly.com \
 	--additional-properties=packageVersion=$(firstword $(subst ., ,$(TAG))) \
-	-t $(TEMPLATES_PATH)/go
-
+    --additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 CODEGEN_PARAMS_java = \
 	-t $(TEMPLATES_PATH)/java \
 	--group-id com.launchdarkly \
@@ -76,7 +79,8 @@ CODEGEN_PARAMS_java = \
 	--additional-properties=scmUrl="https://github.com/launchdarkly/api-client-java" \
 	--additional-properties=scmConnection='scm:git:git://github.com/launchdarkly/api-client-java.git' \
 	--additional-properties=scmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git' \
-	--additional-properties=gradleProperties=systemProp.org.gradle.internal.http.connectionTimeout=300000$$'\n'systemProp.org.gradle.internal.http.socketTimeout=300000$$'\n'org.gradle.jvmargs=-Xss2m
+	--additional-properties=gradleProperties=systemProp.org.gradle.internal.http.connectionTimeout=300000$$'\n'systemProp.org.gradle.internal.http.socketTimeout=300000$$'\n'org.gradle.jvmargs=-Xss2m \
+	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 CODEGEN_PARAMS_javascript = \
 	-t $(TEMPLATES_PATH)/javascript \
 	--additional-properties=projectName=launchdarkly-api \
@@ -91,20 +95,23 @@ CODEGEN_PARAMS_php = \
 	--git-user-id=launchdarkly \
 	--git-repo-id=api-client-php
 CODEGEN_PARAMS_python = \
+	-t $(TEMPLATES_PATH)/python \
 	--additional-properties=packageName=launchdarkly_api \
 	--additional-properties=packageVersion=$(TAG) \
-	-t $(TEMPLATES_PATH)/python
+	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 CODEGEN_PARAMS_typescript-axios = \
+	-t $(TEMPLATES_PATH)/typescript \
 	--additional-properties=npmName=launchdarkly-api-typescript \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true \
 	--additional-properties=axiosVersion=^1.13.1 \
-	-t $(TEMPLATES_PATH)/typescript
+	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 CODEGEN_PARAMS_ruby = \
+	-t $(TEMPLATES_PATH)/ruby \
     --additional-properties=moduleName=LaunchDarklyApi \
     --additional-properties=gemName=launchdarkly_api \
     --additional-properties=gemVersion=$(TAG) \
-	-t $(TEMPLATES_PATH)/ruby
+	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 
 SAMPLE_FILE_go = main.go
 SAMPLE_FILE_javascript = index.js

@@ -272,7 +272,7 @@ public class ApiClient {
 
         // CUSTOM-START
         // Set default API version.
-        addDefaultHeader("LD-API-Version", "20240415");
+        addDefaultHeader("LD-API-Version", "{{launchDarklyApiVersion}}");
         // CUSTOM-END
 
         authentications = new HashMap<String, Authentication>();

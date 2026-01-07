@@ -86,7 +86,7 @@ class ApiClient:
 
         # CUSTOM-START
         # Set default API version.
-        self.default_headers['LD-API-Version'] = '20240415'
+        self.default_headers['LD-API-Version'] = '{{launchDarklyApiVersion}}'
         # CUSTOM-END
         
         self.cookie = cookie

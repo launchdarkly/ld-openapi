@@ -424,7 +424,7 @@ func (c *APIClient) prepareRequest(
     // CUSTOM-START
 	// Add the default API version.
 	if _, exists := localVarRequest.Header["LD-API-Version"]; !exists {
-	    localVarRequest.Header.Add("LD-API-Version", "20240415")
+	    localVarRequest.Header.Add("LD-API-Version", "{{launchDarklyApiVersion}}")
 	}
     // CUSTOM-END
 
