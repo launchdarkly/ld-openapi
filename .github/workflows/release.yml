@@ -59,7 +59,7 @@ jobs:
           java -XX:+PrintFlagsFinal -version | grep ThreadStackSize
           make
           # Verify that the generated client code can be built
-          make BUILD_TARGETS="go java javascript python ruby typescript-axios" build_clients
+          make BUILD_TARGETS="go java python ruby typescript-axios" build_clients
         # This step will:
         # * Push built clients to their respective Github repos
         # * Tag those commits with the release version
@@ -77,7 +77,7 @@ jobs:
     needs: release
     strategy:
       matrix:
-        repo: ['api-client-go', 'api-client-java', 'api-client-javascript', 'api-client-php', 'api-client-python', 'api-client-ruby', 'api-client-typescript']
+        repo: ['api-client-go', 'api-client-java', 'api-client-python', 'api-client-ruby', 'api-client-typescript']
     steps:
       - uses: ncipollo/release-action@v1.14.0
         with:

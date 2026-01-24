@@ -19,8 +19,6 @@ LATEST_API_VERSION=20240415 # the API version (for the LD-API-Version header val
 API_TARGETS ?= \
 	go \
 	java \
-	javascript \
-	php \
 	python \
 	ruby \
 	typescript-axios
@@ -81,19 +79,6 @@ CODEGEN_PARAMS_java = \
 	--additional-properties=scmDeveloperConnection='scm:git:ssh:git@github.com:launchdarkly/api-client-java.git' \
 	--additional-properties=gradleProperties=systemProp.org.gradle.internal.http.connectionTimeout=300000$$'\n'systemProp.org.gradle.internal.http.socketTimeout=300000$$'\n'org.gradle.jvmargs=-Xss2m \
 	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
-CODEGEN_PARAMS_javascript = \
-	-t $(TEMPLATES_PATH)/javascript \
-	--additional-properties=projectName=launchdarkly-api \
-	--additional-properties=projectVersion=$(TAG) \
-	--additional-properties=projectDescription="Build custom integrations with the LaunchDarkly REST API" \
-	--additional-properties=moduleName=LaunchDarklyApi
-CODEGEN_PARAMS_php = \
-	--additional-properties=packagePath=LaunchDarklyApi \
-	--additional-properties=composerVendorName=launchdarkly \
-	--additional-properties=composerProjectName=api-client-php \
-	--additional-properties=invokerPackage=LaunchDarklyApi \
-	--git-user-id=launchdarkly \
-	--git-repo-id=api-client-php
 CODEGEN_PARAMS_python = \
 	-t $(TEMPLATES_PATH)/python \
 	--additional-properties=packageName=launchdarkly_api \
@@ -114,13 +99,11 @@ CODEGEN_PARAMS_ruby = \
 	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 
 SAMPLE_FILE_go = main.go
-SAMPLE_FILE_javascript = index.js
 SAMPLE_FILE_python = main.py
 SAMPLE_FILE_ruby = main.rb
 SAMPLE_FILE_typescript-axios = index.ts
 
 SAMPLE_FORMAT_go = go
-SAMPLE_FORMAT_javascript = js
 SAMPLE_FORMAT_python = python
 SAMPLE_FORMAT_ruby = ruby
 SAMPLE_FORMAT_typescript-axios = ts
