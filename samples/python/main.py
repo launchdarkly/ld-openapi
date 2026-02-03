@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+import sys
 from pprint import pprint
 
 import launchdarkly_api
@@ -38,6 +39,7 @@ with launchdarkly_api.ApiClient(configuration) as api_client:
         pprint(api_response)
     except ApiException as e:
         print("Exception creating flag: %s\n" % e)
+        sys.exit("Failed to create the flag")
 
     # Clean up the flag
     try:
@@ -45,3 +47,4 @@ with launchdarkly_api.ApiClient(configuration) as api_client:
         pprint(api_response)
     except ApiException as e:
         print("Exception deleting flag: %s\n" % e)
+        sys.exit("Failed to delete the flag")

@@ -41,14 +41,14 @@ func main() {
 	flag, resp, err := client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FeatureFlagBody(body).Execute()
 	if err != nil {
 		if resp.StatusCode != 409 {
-			panic(fmt.Errorf("create failed: %s", err))
+			panic(fmt.Errorf("create failed: %s", resp))
 		} else {
 			if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key).Execute(); err != nil {
-				panic(fmt.Errorf("delete failed: %s", err))
+				panic(fmt.Errorf("delete failed: %s", resp))
 			}
 			flag, _, err = client.FeatureFlagsApi.PostFeatureFlag(ctx, "openapi").FeatureFlagBody(body).Execute()
 			if err != nil {
-				panic(fmt.Errorf("create failed: %s", err))
+				panic(fmt.Errorf("create failed: %s", resp))
 			}
 		}
 	}
@@ -56,7 +56,7 @@ func main() {
 	// Clean up new flag
 	defer func() {
 		if _, err := client.FeatureFlagsApi.DeleteFeatureFlag(ctx, "openapi", body.Key).Execute(); err != nil {
-			panic(fmt.Errorf("delete failed: %s", err))
+			panic(fmt.Errorf("delete failed: %s", resp))
 		}
 	}()
 }
