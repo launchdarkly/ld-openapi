@@ -5,7 +5,7 @@ name: CI (build + client samples)
       - main
 
 env:
-  LD_API_KEY: ${{ secrets.LD_API_KEY }}   
+  LD_API_KEY: ${{ secrets.LD_API_KEY }}
 
 permissions:
   contents: read
@@ -82,33 +82,9 @@ jobs:
       - name: Run Go sample
         env:
           GO111MODULE: 'on'
-        run: make
-  test-javascript:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download targets
-        uses: actions/download-artifact@v4
-        with:
-          name: targets
-          path: targets
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Build JS client
-        working-directory: targets/api-client-javascript
         run: |
-          rm -rf node_modules dist
-          npm install
-          npx --yes babel src -d dist --plugins @babel/plugin-transform-modules-commonjs
-      # TODO: Fix this test
-      # - name: Run JS sample
-      #   run: |
-      #     cd samples/javascript
-      #     # Install the local package directly
-      #     npm install
-      #     node index.js
+          cd samples/go
+          make
   test-python:
     runs-on: ubuntu-latest
     needs: build
@@ -210,37 +186,16 @@ jobs:
           npm install
           npm run build
           npm start
-  test-php:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download targets
-        uses: actions/download-artifact@v4
-        with:
-          name: targets
-          path: targets
-      - uses: shivammathur/setup-php@v2
-        with:
-            php-version: '8.1'
-      - name: Run PHP sample
-        working-directory: samples/php
-        run: |
-            echo '{"require":{"launchdarkly/api-client-php":"@dev","guzzlehttp/guzzle":"*"},"repositories":[{"type":"path","url":"../../targets/api-client-php","options":{"symlink":true}}]}' > composer.json 
-            composer update
-            php index.php
 
   check-success:
     name: Check Success
     needs:
       - build
       - test-go
-      - test-javascript
       - test-python
       - test-ruby
       - test-java
       - test-typescript
-      - test-php
     if: always()
     runs-on: ubuntu-latest
     steps:

@@ -4,7 +4,7 @@ require 'launchdarkly_api/models/variation'
 
 # Setup authorization
 LaunchDarklyApi.configure do |config|
-  config.api_key['ApiKey'] = ENV['LD_API_KEY']
+  config.api_key['Authorization'] = ENV['LD_API_KEY']
   config.debugging = true
 end
 
@@ -28,6 +28,7 @@ begin
   p result
 rescue LaunchDarklyApi::ApiError => e
   puts "Exception creating feature flag: #{e}"
+  exit("Failed to create the flag")
 end
 
 # Clean up new flag
@@ -36,4 +37,5 @@ begin
   p result
 rescue LaunchDarklyApi::ApiError => e
   puts "Exception deleting feature flag: #{e}"
+  exit("Failed to delete the flag")
 end
