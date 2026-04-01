@@ -79,7 +79,7 @@ jobs:
       matrix:
         repo: ['api-client-go', 'api-client-java', 'api-client-python', 'api-client-ruby', 'api-client-typescript']
     steps:
-      - uses: ncipollo/release-action@v1.14.0
+      - uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
         with:
           repo: ${{ matrix.repo }}
           token: ${{ secrets.BOT_TOKEN }}

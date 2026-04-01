@@ -114,7 +114,7 @@ jobs:
         with:
           name: targets
           path: targets
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@3ff19f5e2baf30647122352b96108b1fbe250c64 # v1
         with:
           ruby-version: '2.7'
       - name: Prepare RubyGems / ffi
