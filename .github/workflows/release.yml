@@ -1,20 +1,129 @@
+name: Release client libraries
+
+# Implements the full release runbook.
+#
+# Dispatch with no inputs for a normal release. Everything the runbook asks a
+# human to look up — whether gonfalon is healthy, whether prod is caught up, the
+# bump type, the version, the changelog body — is derived in the preflight job,
+# which aborts with a specific reason rather than releasing on a guess.
 on:
   workflow_dispatch:
     inputs:
       releaseVersion:
-        description: Next release version
-        required: true
+        description: 'Override the derived version (bare semver, e.g. 24.0.0). Blank = derive.'
+        required: false
         type: string
-      changeLog:
-        description: Pending changelog
-        required: true
-        type: string
+      bumpType:
+        description: 'Override the bump inferred from the changelog headings.'
+        required: false
+        type: choice
+        default: ''
+        options: ['', 'major', 'minor', 'patch']
+      dryRun:
+        description: 'Rehearse: clone and commit, but push nothing and publish nothing.'
+        required: false
+        type: boolean
+        default: false
+      force:
+        description: 'Delete tags left behind by a previous failed attempt instead of aborting.'
+        required: false
+        type: boolean
+        default: false
+      openDownstreamPr:
+        description: 'Open the downstream PRs (gonfalon and terraform-provider-launchdarkly).'
+        required: false
+        type: boolean
+        default: true
+      mirrorPublic:
+        description: 'Squash-mirror this repo onto the public launchdarkly/ld-openapi.'
+        required: false
+        type: boolean
+        default: true
+      skipCiGate:
+        description: "Release even if gonfalon's main branch is red."
+        required: false
+        type: boolean
+        default: false
+      skipSpecParity:
+        description: "Release the spec production is serving even if gonfalon main is ahead. Check the gonfalon PR's changelog entries before merging it."
+        required: false
+        type: boolean
+        default: false
+
+# Two concurrent releases would race on client-repo tags.
+concurrency:
+  group: release-client-libraries
+  cancel-in-progress: false
 
 jobs:
+  # Runs on every release, not just rehearsals. A bad registry credential would
+  # otherwise surface only after `make push` had already tagged five client repos,
+  # which is the case that forces the delete-the-tags-and-retry dance. A dry run
+  # cannot cover this on its own: create-release is skipped, pr-downstream skips
+  # PR creation, and the publish dry-run scripts never authenticate to a registry.
+  token-audit:
+    name: Token audit
+    # A reusable workflow is capped by what its caller grants, so id-token has to
+    # be granted here as well as inside token-audit.yml.
+    permissions:
+      id-token: write
+      contents: read
+    uses: ./.github/workflows/token-audit.yml
+    with:
+      # Only demand the credentials this run will actually use, so a switched-off
+      # job cannot block the release — and so the flow can be rehearsed before
+      # those tokens have been created.
+      requireMirrorToken: ${{ inputs.mirrorPublic }}
+      requireDownstreamToken: ${{ inputs.openDownstreamPr }}
+    secrets: inherit
+
+  preflight:
+    name: Preflight
+    runs-on: ubuntu-latest
+    # Required for the OIDC token the octosts-action step exchanges.
+    permissions:
+      id-token: write
+      contents: read
+    outputs:
+      version: ${{ steps.derive.outputs.version }}
+      major: ${{ steps.derive.outputs.major }}
+      bump: ${{ steps.derive.outputs.bump }}
+      changelog: ${{ steps.derive.outputs.changelog }}
+      previous_version: ${{ steps.derive.outputs.previous_version }}
+    steps:
+      - uses: actions/checkout@v4
+      # Reading gonfalon needs a credential the releaser token does not have.
+      # Minted at runtime rather than stored: no long-lived secret, and the trust
+      # policy in launchdarkly/.github-private is what grants it.
+      - uses: launchdarkly/octosts-action@v1
+        id: sts
+        with:
+          identity: ld-openapi-downstream
+          scope: launchdarkly
+      - name: Derive release inputs and check gates
+        id: derive
+        # Two tokens: the releaser token for the client repos (tag checks, and tag
+        # deletes when force=true), and the federated token for reading gonfalon.
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GONFALON_TOKEN: ${{ steps.sts.outputs.token }}
+          VERSION_OVERRIDE: ${{ inputs.releaseVersion }}
+          BUMP_OVERRIDE: ${{ inputs.bumpType }}
+          FORCE: ${{ inputs.force }}
+          SKIP_CI_GATE: ${{ inputs.skipCiGate }}
+          SKIP_SPEC_PARITY: ${{ inputs.skipSpecParity }}
+        run: ./scripts/release/preflight.sh
+
   release:
+    name: Build and publish clients
+    needs: [preflight, token-audit]
     runs-on: ubuntu-latest
     env:
-      LD_RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      LD_RELEASE_VERSION: ${{ needs.preflight.outputs.version }}
+      DRY_RUN: ${{ inputs.dryRun }}
+      # The scripts/release-dry-run/*.sh scripts copy the artifacts they would
+      # have published into this directory, and fail without it.
+      LD_RELEASE_ARTIFACTS_DIR: ${{ github.workspace }}/dry-run-artifacts
       GH_TOKEN: ${{ secrets.BOT_TOKEN }}
       PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
@@ -64,24 +173,145 @@ jobs:
         # * Push built clients to their respective Github repos
         # * Tag those commits with the release version
         # * Publish each client to it's respective platform (e.g. Rubygems)
+        # With DRY_RUN=true it clones and commits but pushes/publishes nothing.
       - name: Publish clients
         run: |
           export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
           export GEM_HOME=$HOME/.rubygems
+          mkdir -p "$LD_RELEASE_ARTIFACTS_DIR"
           ./scripts/release/publish.sh
-        # This step creates a release with changelog from the tag
+      # Lets a rehearsal be inspected: these are the exact artifacts a real run
+      # would have pushed to the registries.
+      - name: Upload dry-run artifacts
+        if: ${{ inputs.dryRun }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: dry-run-artifacts
+          path: ${{ github.workspace }}/dry-run-artifacts
+          if-no-files-found: error
+
+  verify-published:
+    name: Verify published
+    needs: [preflight, release]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Poll registries and client repo tags
+        if: ${{ !inputs.dryRun }}
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: ./scripts/release/verify-published.sh "${{ needs.preflight.outputs.version }}"
+      - name: Skipped
+        if: ${{ inputs.dryRun }}
+        run: echo "Dry run — nothing was published, so there is nothing to verify."
+
   create-release:
+    name: Create GitHub release
+    needs: [preflight, verify-published]
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    needs: release
     strategy:
       matrix:
         repo: ['api-client-go', 'api-client-java', 'api-client-python', 'api-client-ruby', 'api-client-typescript']
     steps:
       - uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
+        if: ${{ !inputs.dryRun }}
         with:
           repo: ${{ matrix.repo }}
           token: ${{ secrets.BOT_TOKEN }}
-          tag: v${{ inputs.releaseVersion }}
-          body: ${{ inputs.changeLog }}
+          tag: v${{ needs.preflight.outputs.version }}
+          body: ${{ needs.preflight.outputs.changelog }}
+
+  downstream-gonfalon:
+    name: Gonfalon PR (changelog + api-client-go bump)
+    needs: [preflight, verify-published]
+    # Skipped on a rehearsal. The pinned pr-downstream has no `dryrun` input, so
+    # passing one was silently ignored and a dry run would open a real PR; it only
+    # avoided doing so because the version it bumps to did not exist yet.
+    if: ${{ inputs.openDownstreamPr && !inputs.dryRun }}
+    permissions:
+      id-token: write
+      contents: read
+    # gonfalon's `make tidy` resolves Go modules from private launchdarkly repos.
+    # Without this, go consults proxy.golang.org for them and gets a 404. The
+    # equivalent workflow in launchdarkly/foundation sets the same variable.
+    env:
+      GOPRIVATE: github.com/launchdarkly/*
+    # gonfalon's `make tidy` and gazelle need bazel and a beefy runner, matching
+    # the gonfalon job in launchdarkly/foundation's pr-downstream workflow.
+    runs-on: runs-on=${{ github.run_id }}/runner=ub24-large-amd
+    steps:
+      - uses: runs-on/action@15385172809cc0346c6821b00c3c3dd2598785b4 # v2.1.0
+      # Checked out at the workspace root; pr-downstream clones gonfalon into a
+      # subdirectory, so the update script stays reachable by absolute path.
+      - uses: actions/checkout@v4
+      - uses: bazel-contrib/setup-bazel@083175551ceeceebc757ebee2127fde78840ca77 # 0.18.0
+        with:
+          bazelisk-version: '1.x'
+          bazelisk-cache: true
+      - uses: launchdarkly/octosts-action@v1
+        id: sts
+        with:
+          identity: ld-openapi-downstream
+          scope: launchdarkly
+      - uses: launchdarkly-labs/pr-downstream@08b3feb5df321ebfed2d0855493e81edbb06a2cf # v1.4.0
+        with:
+          repository: launchdarkly/gonfalon
+          token: ${{ steps.sts.outputs.token }}
+          author: launchdarkly-octoauth[bot]<226478175+launchdarkly-octoauth[bot]@users.noreply.github.com>
+          # A user, not a team: an OctoSTS App installation token cannot request team
+          # reviewers ("If requesting team reviewers a 'repo' scoped PAT is required"),
+          # which failed the job even though the PR was created. CODEOWNERS in the
+          # downstream repo still pulls in the owning team.
+          reviewers: ${{ github.actor }}
+          title: '[bot] API ${{ needs.preflight.outputs.version }}: release changelog and bump api-client-go'
+          branch: bump-api-client-go/${{ needs.preflight.outputs.version }}
+          commit-message: '[bot] Release API ${{ needs.preflight.outputs.version }}: changelog + api-client-go bump'
+          # A major bump rewrites import paths across ~18 Go files and the Bazel
+          # graph, so this wants human eyes before it merges.
+          auto-merge: false
+          update-command: $GITHUB_WORKSPACE/scripts/release/gonfalon-update.sh ${{ needs.preflight.outputs.version }}
+
+  downstream-terraform-provider:
+    name: Terraform provider PR (api-client-go bump)
+    needs: [preflight, verify-published]
+    if: ${{ inputs.openDownstreamPr && !inputs.dryRun }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: launchdarkly/octosts-action@v1
+        id: sts
+        with:
+          identity: ld-openapi-downstream
+          scope: launchdarkly
+      - uses: launchdarkly-labs/pr-downstream@08b3feb5df321ebfed2d0855493e81edbb06a2cf # v1.4.0
+        with:
+          repository: launchdarkly/terraform-provider-launchdarkly
+          token: ${{ steps.sts.outputs.token }}
+          author: launchdarkly-octoauth[bot]<226478175+launchdarkly-octoauth[bot]@users.noreply.github.com>
+          reviewers: ${{ github.actor }}
+          title: 'chore(deps): bump api-client-go to v${{ needs.preflight.outputs.version }}'
+          branch: bump-api-client-go/${{ needs.preflight.outputs.version }}
+          # The provider uses release-please, which reads this prefix. `chore` keeps
+          # the bump from cutting a provider release on its own; change to `feat`
+          # if a client bump should ship one.
+          commit-message: 'chore(deps): bump api-client-go to v${{ needs.preflight.outputs.version }}'
+          # A major bump rewrites the import path across ~220 files here.
+          auto-merge: false
+          update-command: make update-api-client-go API_CLIENT_GO_VERSION=${{ needs.preflight.outputs.version }}
+
+  mirror-public:
+    name: Mirror to public ld-openapi
+    needs: [preflight, verify-published]
+    if: ${{ inputs.mirrorPublic }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Squash-mirror private main onto the public repo
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          DRY_RUN: ${{ inputs.dryRun }}
+        run: ./scripts/release/mirror-public.sh "${{ needs.preflight.outputs.version }}"

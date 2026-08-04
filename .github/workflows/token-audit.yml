@@ -1,0 +1,67 @@
+name: Token audit
+
+# Read-only check that every credential the release needs still has the
+# permissions it needs. Makes no changes, so it is safe to run at any time.
+#
+# Exists because a dry run cannot answer this on its own: create-release is
+# skipped, pr-downstream skips PR creation, and the publish dry-run scripts never
+# authenticate to a registry. `release.yml` runs this as a gate before it builds,
+# so a bad credential fails the run before any tag has been pushed rather than
+# halfway through publishing.
+on:
+  workflow_dispatch:
+    inputs:
+      requireMirrorToken:
+        description: "Treat BOT_TOKEN lacking push on the public ld-openapi as a failure."
+        required: false
+        type: boolean
+        default: true
+      requireDownstreamToken:
+        description: 'Require push on the downstream PR targets.'
+        required: false
+        type: boolean
+        default: true
+  workflow_call:
+    inputs:
+      requireMirrorToken:
+        required: false
+        type: boolean
+        default: true
+      requireDownstreamToken:
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  # id-token is what lets the audit mint the same federated token the release
+  # jobs use; without it the exchange fails before it reaches the trust policy.
+  id-token: write
+  contents: read
+
+jobs:
+  audit:
+    name: Audit release credentials
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Mint the same federated token the release jobs use, so the audit proves
+      # the trust policy works rather than inspecting a stored secret.
+      - uses: launchdarkly/octosts-action@v1
+        id: sts
+        continue-on-error: true
+        with:
+          identity: ld-openapi-downstream
+          scope: launchdarkly
+      - name: Audit
+        env:
+          REQUIRE_MIRROR_TOKEN: ${{ inputs.requireMirrorToken }}
+          REQUIRE_DOWNSTREAM_TOKEN: ${{ inputs.requireDownstreamToken }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          STS_TOKEN: ${{ steps.sts.outputs.token }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
+          CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+          CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
+          LD_API_KEY: ${{ secrets.LD_API_KEY }}
+        run: ./scripts/release/token-audit.sh

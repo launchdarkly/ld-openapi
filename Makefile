@@ -80,15 +80,33 @@ CODEGEN_PARAMS_java = \
 	--additional-properties=gradleProperties=systemProp.org.gradle.internal.http.connectionTimeout=300000$$'\n'systemProp.org.gradle.internal.http.socketTimeout=300000$$'\n'org.gradle.jvmargs=-Xss2m \
 	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 CODEGEN_PARAMS_python = \
+	-t $(TEMPLATES_PATH)/python \
 	--additional-properties=packageName=launchdarkly_api \
 	--additional-properties=packageVersion=$(TAG) \
 	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
+# TEMPORARY: axios is pinned to 1.18.1 rather than a floating ^1.13.1 range.
+# axios 1.19.0 (2026-07-29) added `declare const axiosResponseDefault: unique symbol`
+# to its index.d.ts and refers to it from the public return type of `request()`.
+# The symbol is never exported, so tsc cannot name it when it infers the type of
+# the generated common.ts `createRequestFunction`, and the client fails to build:
+#   common.ts(108,14): error TS2527: The inferred type of 'createRequestFunction'
+#   references an inaccessible 'unique symbol' type. A type annotation is necessary.
+# Everything up to and including 1.18.1 builds. This is not fixed upstream:
+# openapi-generator master still emits the unannotated function, and 1.19.0 is
+# still axios latest.
+#
+# The real fix is a swagger-codegen-templates/typescript/common.mustache override
+# annotating the returned closure — `): Promise<R> =>` plus
+# `as Promise<R>` on the axios.request call — which compiles clean against 1.19.0
+# and against older axios. Deferred: it adds a fifth template to keep in sync with
+# generator upgrades. Revert this pin when that override lands, or when axios
+# exports the symbol.
 CODEGEN_PARAMS_typescript-axios = \
 	-t $(TEMPLATES_PATH)/typescript \
 	--additional-properties=npmName=launchdarkly-api-typescript \
 	--additional-properties=npmVersion=$(TAG) \
 	--additional-properties=supportsES6=true \
-	--additional-properties=axiosVersion=^1.13.1 \
+	--additional-properties=axiosVersion=1.18.1 \
 	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 CODEGEN_PARAMS_ruby = \
 	-t $(TEMPLATES_PATH)/ruby \
@@ -170,6 +188,10 @@ push_test: push
 
 push_dry_run: GIT_PUSH_COMMAND=git push --dry-run
 push_dry_run: GIT_PUSH_DESC=Simulating the updates we would do
+# Without this prerequisite the target is only a set of variable assignments, so
+# `make push_dry_run` prints "Nothing to be done" and exits 0 — a rehearsal that
+# silently does nothing. push_test has always had it; this one was missing it.
+push_dry_run: push
 # for each client library, clone the repository and replace the contents with the newly generated client
 push:
 	mkdir $(CLIENT_CLONES_PATH); \
