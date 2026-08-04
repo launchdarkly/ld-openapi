@@ -3,6 +3,10 @@ name: CI (build + client samples)
   pull_request:
     branches:
       - main
+  # Run on demand against any branch. The sample jobs exercise LD_API_KEY against
+  # the real 'openapi' project, so this doubles as a check that that credential
+  # still works — the token audit can only confirm it reads, not that it writes.
+  workflow_dispatch:
 
 env:
   LD_API_KEY: ${{ secrets.LD_API_KEY }}
@@ -66,6 +70,24 @@ jobs:
         with:
           name: api-clients
           path: /tmp/api-clients
+  selfcheck:
+    name: Release automation selfcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure PyYAML
+        run: python3 -c "import yaml" 2>/dev/null || pip install --quiet pyyaml
+      # Trust-policy checks self-skip here: the policy lives in the private
+      # launchdarkly/.github-private, which GITHUB_TOKEN cannot read. Run this
+      # locally for the full set.
+      - name: Selfcheck
+        # GITHUB_TOKEN is enough to read the pinned action repos (all public), which
+        # is what the ACTION-INPUTS check needs. Without it that check resolves
+        # nothing and reports SKIP.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./scripts/release/selfcheck.sh
+
   test-go:
     runs-on: ubuntu-latest
     needs: build
@@ -114,7 +136,7 @@ jobs:
         with:
           name: targets
           path: targets
-      - uses: ruby/setup-ruby@3ff19f5e2baf30647122352b96108b1fbe250c64 # v1
+      - uses: ruby/setup-ruby@319994f95fa847cf3fb3cd3dbe89f6dcde9f178f # v1
         with:
           ruby-version: '2.7'
       - name: Prepare RubyGems / ffi
@@ -191,6 +213,7 @@ jobs:
     name: Check Success
     needs:
       - build
+      - selfcheck
       - test-go
       - test-python
       - test-ruby
