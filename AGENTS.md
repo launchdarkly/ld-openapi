@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to coding agents working with code in this repository.
 
 ## What this repo is
 
@@ -8,7 +8,7 @@ A code *generator*, not a library. It turns LaunchDarkly's OpenAPI spec into RES
 
 Two consequences that shape everything:
 
-1. **The spec is not in the repo.** `make` downloads it from `https://app.launchdarkly.com/api/v2/openapi.json` at build time, so build output depends on what is currently deployed to production.
+1. **The spec is not in the repo.** `make` downloads it from `https://app.launchdarkly.com/api/v2/openapi.json` at build time, so build output depends on what is currently deployed to production. `make SPEC_FILE=path` builds from a file instead; `release.yml` uses that to build exactly the spec preflight verified.
 2. **Almost all client code is generated.** The only hand-written, committed artifacts are the Makefile, the mustache template overrides, the samples, and the release scripts. Client source appears under `targets/` (gitignored) after a build.
 
 ## Build
@@ -102,7 +102,22 @@ Per-language flags live in `CODEGEN_PARAMS_<target>` — package names, registry
 
 `release.yml` automates the release runbook end to end (the process and its rationale are documented internally). Dispatch it with **no inputs** — version, bump type, and release notes are derived, and each precondition is an enforced gate that aborts with a specific reason.
 
-All inputs are optional escape hatches: `releaseVersion` (bare semver), `bumpType`, `dryRun`, `force` (delete tags left by a failed attempt), `openDownstreamPr`, `mirrorPublic`, `skipCiGate`, `skipSpecParity`.
+### The release PR
+
+Normally nobody dispatches anything. `release-pr.yml` runs hourly (or on a `gonfalon-spec-deployed` repository dispatch) and keeps one `chore: release X.Y.Z` PR open on branch `release/next`. It changes only `release-manifest.json` (version, plus the gonfalon commit and blob SHA of the spec production serves) and `CHANGELOG.md`. CI runs on it like any PR. **Merging it is the release:** the push changes `release-manifest.json`, which starts `release.yml` with every optional job on. Preflight (`RELEASE_MANIFEST`) takes the version and notes from the PR, fetches the spec from that gonfalon commit, checks its blob SHA, and hands those bytes to the build.
+
+- **The spec is pinned by gonfalon commit, not committed here.** gonfalon commits the published spec and production serves it byte for byte. `release-manifest.json` on main names the last release's commit, which is the baseline the next release PR diffs against.
+- **The bot owns `release/next`** and force-pushes it on every sync. Fix notes in gonfalon's `apidocs/CHANGELOG.md`; override the bump with a `release:major`, `release:minor` or `release:patch` label (applies on the next sync, or dispatch `release-pr.yml`).
+- **An approval covers one release:** the `release-manifest.json` at the commit it approved. main's rules keep approvals through a push, so every sync dismisses approvals whose manifest differs from the release it now offers (picking up main, or the heading's date moving, leaves the manifest alone and keeps them). As a backstop, preflight on a push fails unless the commit merged a `release/next` PR with an approval under the same rule, i.e. of the manifest that merged.
+- **The bump comes from the spec** (`scripts/release/sync-release-pr.sh`): major if oasdiff finds a breaking change or `client-surface.py` finds a removed or renamed schema, operationId or tag (those rename generated types, methods and API classes without changing the wire); minor for any other API change; patch for descriptions only. Diff against gonfalon's file, never the `api/openapi.yaml` bundled in api-client-go: openapi-generator rewrites it, so names look removed that never existed.
+- **Notes are the gonfalon changelog entries added since the last release's gonfalon commit** (`release-notes.py`), so they are right whether or not gonfalon's changelog PR for the last release has merged.
+- **The PR's CI tests production's spec as of the CI run**, which a deploy after the last sync can make newer than the manifest until the next sync. The release always ships the manifest's spec.
+- `release-pr.yml` pushes with the `ld-openapi-release-pr` OctoSTS identity, not `GITHUB_TOKEN`: pushes made with `GITHUB_TOKEN` start no workflows, so CI would never run on the PR. Its policy is in this repo (`.github/launchdarkly/`, read from main); `ld-openapi-spec-read`, for gonfalon, is in launchdarkly/.github-private.
+- **To retry a release PR's release, dispatch `release.yml` with `fromManifest`** (plus `force` if the failed attempt left tags). It releases exactly what the manifest on main records, as the push did. A dispatch without it derives everything from production and gonfalon main, which may have moved on.
+- **A release dispatched without `fromManifest` does not update `release-manifest.json`.** The next sync then fails, naming the newer `api-client-go` tag, rather than offering that release again. Set the manifest to what Preflight's summary prints. Merging that change starts `release.yml`, whose preflight stops it because no release PR was merged.
+- Dispatching with `dryRun` rehearses, as before.
+
+All inputs are optional escape hatches: `releaseVersion` (bare semver), `bumpType`, `dryRun`, `force` (delete tags left by a failed attempt), `openDownstreamPr`, `mirrorPublic`, `skipCiGate`, `skipSpecParity`, `fromManifest`.
 
 ### Job graph
 
@@ -121,14 +136,16 @@ Everything read from the source repo is pinned to the one commit Gate 1 settled 
 ### Post-release jobs
 
 - `verify-published` polls PyPI, RubyGems and npm as **hard** failures, plus the Go module proxy and Maven Central as **soft** warnings, then checks client repo tags. The Go proxy is soft on purpose: Go has no publish step, the tag is checked directly, and the proxy caches *negative* lookups — so a `go get` for a version before it exists (a rehearsal, say) makes it serve "unknown revision" for a while afterwards. That failed this job once on an otherwise complete release. It checks `v<version>` on Go and a **bare `<version>`** elsewhere, since that is all `make push` has created by then.
-- Two downstream PR jobs bump the published client in the repos that consume it, each calling that repo's own `make update-api-client-go`. Keeping each codemod in the repo it edits means the logic lives beside the imports it rewrites. Neither auto-merges: a major bump moves the Go module path (`api-client-go/vN`), so it rewrites imports across dozens to hundreds of files, and most API releases are major.
-- **Both downstream jobs are skipped on a rehearsal.** The pinned `pr-downstream` version has no `dryrun` input, so passing one was silently ignored and a rehearsal was attempting real PR creation. They also can't be meaningfully rehearsed: they bump *to* the version being released, which does not exist until it is published.
+- Two downstream jobs bump the published client in the repos that consume it, each through that repo's own `make update-api-client-go`. Keeping each codemod in the repo it edits means the logic lives beside the imports it rewrites. The terraform provider's runs here through `pr-downstream`. gonfalon's runs in gonfalon: `dispatch-gonfalon-bump.sh` dispatches its `update-api-client-go.yml` (with the `ld-openapi-gonfalon-dispatch` token) and waits for it, because the bump needs gonfalon's CI setup (private modules through its content cache, its Bazel config), which a runner here kept lacking. Neither auto-merges: a major bump moves the Go module path (`api-client-go/vN`), so it rewrites imports across dozens to hundreds of files, and most API releases are major.
+- A third downstream job records the release in gonfalon's `apidocs/CHANGELOG.md`, as its own PR so it does not wait on the bump's review. `gonfalon-changelog.py` moves only the entries this release shipped (its notes) from `[Unreleased]` into `## [X.Y.Z]`; entries merged after the release's gonfalon commit stay under `[Unreleased]`. A released entry that was edited in gonfalon since is recorded with its released text, and the job comments on the PR so someone can reconcile the two.
+- **The downstream jobs are skipped on a rehearsal.** The pinned `pr-downstream` version has no `dryrun` input, so passing one was silently ignored and a rehearsal was attempting real PR creation. They also can't be meaningfully rehearsed: they bump *to* the version being released, which does not exist until it is published.
 - **Reviewers are requested as a user, not a team.** A federated App installation token cannot request team reviewers. CODEOWNERS in each downstream repo still pulls in the owning team.
-- `mirror-public` squash-mirrors onto the public `launchdarkly/ld-openapi`. **Aborts on conflict rather than resolving** — that push is not practically reversible, and the public repo has diverged. Failure here does not invalidate the release.
+- `mirror-public` opens (or updates) a PR on the public `launchdarkly/ld-openapi`, from branch `mirror/sync`: one commit whose tree is private main's. The public main requires a PR, and that content becomes public, so a person merges it. **It aborts if the public repo has changes that did not come from here** (its tree matches no commit on private main); bring such changes into this repo first. It is its own workflow (`mirror-public.yml`), which `release.yml` calls and which can be dispatched to retry a failed mirror without releasing again. It pushes with the `ld-openapi-mirror` OctoSTS token (launchdarkly/.github-private), not `BOT_TOKEN`: a PAT cannot push workflow files without the `workflow` scope, and the sync usually changes some. Failure here does not invalidate the release.
+- This repo's workflows are mirrored too, and Actions runs in the public repo, so anything that needs this repo's credentials is guarded with `github.repository == 'launchdarkly/ld-openapi-private'`: the release, the release PR sync, and the nightly CI run. Keep that guard on any new scheduled or push-triggered job.
 
 ### Credentials
 
-`BOT_TOKEN` needs push on all five `api-client-*` repos and on the public `ld-openapi`; the registry credentials need publish rights; `LD_API_KEY` needs write on the project the samples use. Anything touching the spec's source repo or the downstream repos uses a token **minted at runtime**, not a stored secret.
+`BOT_TOKEN` needs push on all five `api-client-*` repos; the registry credentials need publish rights; `LD_API_KEY` needs write on the project the samples use. Anything touching the spec's source repo or the downstream repos uses a token **minted at runtime**, not a stored secret.
 
 Stored secrets are managed in internal infrastructure, not here. Where a parameter is created holding a placeholder and the real value written separately, there is a window where the secret exists but is the placeholder — the audit detects that and names it, rather than reporting an opaque authentication failure.
 

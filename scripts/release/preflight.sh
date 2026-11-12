@@ -22,6 +22,19 @@
 #   PARITY_INTERVAL      seconds between parity polls (default 60)
 #   SKIP_CI_GATE         true = don't require gonfalon main to be green
 #   SKIP_SPEC_PARITY     true = release what prod serves even if main is ahead
+#   RELEASE_MANIFEST     path to release-manifest.json: release what a merged
+#                        release PR recorded. Version, gonfalon commit and notes
+#                        come from the PR instead of being derived, and Gate 1
+#                        fetches the spec from that gonfalon commit and checks its
+#                        blob SHA. VERSION_OVERRIDE, BUMP_OVERRIDE and the parity
+#                        settings are ignored; FORCE and SKIP_CI_GATE still apply.
+#   RELEASE_COMMIT       with RELEASE_MANIFEST: the pushed commit. Preflight fails
+#                        unless it merged a release/next PR approved at its last
+#                        commit. Unset on a dispatch, where the dispatcher decides.
+#   REPO_TOKEN           read on this repo's pull requests, for RELEASE_COMMIT
+#   DRY_RUN              true = a rehearsal; only changes what the summary says
+#   SPEC_OUT             write the spec Gate 1 verified here, so the build ships
+#                        those bytes rather than downloading production's again
 #
 # Writes version/bump/changelog to $GITHUB_OUTPUT when running under Actions,
 # and always prints a human-readable summary.
@@ -58,6 +71,70 @@ GONFALON_TOKEN=${GONFALON_TOKEN:-}
 [ -n "${GONFALON_TOKEN}" ] || \
   fail "GONFALON_TOKEN must be set — it is what reads ${GONFALON}. In CI it comes from the octosts-action step; locally, pass a token with read access. BOT_TOKEN has no access there."
 gh_gonfalon() { GH_TOKEN="${GONFALON_TOKEN}" gh "$@"; }
+
+if [ -n "${RELEASE_MANIFEST:-}" ]; then
+  # --- Release PR mode: the merged PR already settled what to release ----------
+  version=$(jq -r .version "${RELEASE_MANIFEST}")
+  prev_version=$(jq -r .previousVersion "${RELEASE_MANIFEST}")
+  bump=$(jq -r .bump "${RELEASE_MANIFEST}")
+  gonfalon_sha=$(jq -r .gonfalonSha "${RELEASE_MANIFEST}")
+  spec_blob=$(jq -r .specBlob "${RELEASE_MANIFEST}")
+  grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$' <<<"${version}" || fail "${RELEASE_MANIFEST} has no valid version (got '${version}')"
+  if [ "${gonfalon_sha}" = "null" ] || [ "${spec_blob}" = "null" ]; then
+    fail "${RELEASE_MANIFEST} needs gonfalonSha and specBlob"
+  fi
+  note "Release PR mode: ${version} (${bump} from ${prev_version}), spec from ${GONFALON}@${gonfalon_sha:0:9}"
+
+  # On a push, the merge is the go-ahead, so check it was one: a release/next PR
+  # with an approval of this release. main's rules keep an approval through a
+  # push, and the bot can force-push a new spec between an approval and the merge.
+  # An approval counts when release-manifest.json at the commit it approved is
+  # the one that merged: the same rule sync-release-pr.sh uses to keep or
+  # dismiss approvals, so a push that only picked up main (which keeps them)
+  # does not block the release.
+  if [ -n "${RELEASE_COMMIT:-}" ]; then
+    note "Checking that ${RELEASE_COMMIT:0:9} merged an approved release PR"
+    repo=${GITHUB_REPOSITORY:-launchdarkly/ld-openapi-private}
+    pr=$(GH_TOKEN="${REPO_TOKEN:?REPO_TOKEN must be set to check the release PR}" gh api \
+      "repos/${repo}/commits/${RELEASE_COMMIT}/pulls" \
+      --jq '[.[] | select(.merged_at != null and .head.ref == "release/next")][0] // empty | "\(.number) \(.head.sha)"')
+    [ -n "${pr}" ] || fail "${RELEASE_COMMIT} changed ${RELEASE_MANIFEST} without merging a release/next PR, so nothing was released. If it should release, dispatch release.yml with fromManifest."
+    read -r pr_number pr_head <<<"${pr}"
+    merged_manifest=$(jq -S . "${RELEASE_MANIFEST}")
+    approvals=""
+    while read -r login commit; do
+      [ -n "${commit}" ] || continue
+      approved_manifest=$(GH_TOKEN="${REPO_TOKEN}" gh api "repos/${repo}/contents/release-manifest.json?ref=${commit}" \
+        -H "Accept: application/vnd.github.raw" 2>/dev/null | jq -S . 2>/dev/null || true)
+      if [ "${approved_manifest}" = "${merged_manifest}" ]; then
+        approvals+="${login}@${commit:0:9}"$'\n'
+      fi
+    done < <(GH_TOKEN="${REPO_TOKEN}" gh api --paginate "repos/${repo}/pulls/${pr_number}/reviews" \
+      --jq '.[] | select(.state == "APPROVED") | "\(.user.login) \(.commit_id)"')
+    [ -n "${approvals}" ] || fail "release PR #${pr_number} merged without an approval of the release it merged (${version} from ${GONFALON}@${gonfalon_sha:0:9}). Review what it releases, then dispatch release.yml with fromManifest."
+    echo "    #${pr_number} (head ${pr_head:0:9}), approved by $(grep . <<<"${approvals}" | sort -u | paste -sd, -)"
+  fi
+
+  # The spec is not committed here; the gonfalon commit pins it. The blob check
+  # catches a truncated download as well as a manifest edited by hand.
+  note "Gate 1: fetching ${SPEC_PATH} at ${GONFALON}@${gonfalon_sha:0:9}"
+  gh_gonfalon api "repos/${GONFALON}/contents/${SPEC_PATH}?ref=${gonfalon_sha}" \
+    -H "Accept: application/vnd.github.raw" > "${workdir}/prod-openapi.json" || \
+    fail "could not read ${SPEC_PATH} at ${GONFALON}@${gonfalon_sha}"
+  prod_blob=$(git hash-object "${workdir}/prod-openapi.json")
+  [ "${prod_blob}" = "${spec_blob}" ] || \
+    fail "${SPEC_PATH} at ${GONFALON}@${gonfalon_sha} is blob ${prod_blob}, but ${RELEASE_MANIFEST} says ${spec_blob}"
+  echo "    matches (blob ${prod_blob})"
+
+  awk -v h="## [${version}]" '
+    index($0, h) == 1 { capture = 1; next }
+    /^## \[/          { capture = 0 }
+    capture           { print }
+  ' CHANGELOG.md > "${workdir}/unreleased.md"
+  sed -i'' -e '/./,$!d' "${workdir}/unreleased.md"
+  grep -q '[^[:space:]]' "${workdir}/unreleased.md" || fail "CHANGELOG.md has no notes under ## [${version}]"
+  major=${version%%.*}
+else
 
 # --- Gate 1: prod serves exactly what gonfalon main has committed -------------
 # This replaces both the Slack "nothing mid-flight" check and the "wait for the
@@ -153,6 +230,12 @@ while :; do
   sleep "${PARITY_INTERVAL}"
 done
 
+fi
+
+# Hand the build the bytes Gate 1 checked: downloading production's spec again
+# could pick up a deploy that landed after the check.
+[ -z "${SPEC_OUT:-}" ] || cp "${workdir}/prod-openapi.json" "${SPEC_OUT}"
+
 # --- Gate 2: that gonfalon commit is green ------------------------------------
 # The runbook's "make sure CI is passing (basically: Gonfalon is currently in a
 # good state)", pinned to the commit whose spec we are about to ship.
@@ -181,6 +264,9 @@ if [ "${SKIP_CI_GATE:-false}" != "true" ]; then
 else
   echo "    Gate 2 skipped (SKIP_CI_GATE=true)"
 fi
+
+# The release PR settled notes, bump and version; the rest derives them.
+if [ -z "${RELEASE_MANIFEST:-}" ]; then
 
 # --- Changelog: extract the [Unreleased] body --------------------------------
 note "Reading ${CHANGELOG_PATH} at ${GONFALON}@${gonfalon_sha:0:9}"
@@ -259,6 +345,8 @@ else
 fi
 major=${version%%.*}
 
+fi
+
 # --- Gate 3: no colliding tags ----------------------------------------------
 # A re-run after a partial failure trips over tags the previous attempt created.
 # Non-Go repos get two tags per release: bare X.Y.Z from `make push`, and vX.Y.Z
@@ -314,6 +402,17 @@ if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
     echo "| gonfalon commit | [\`${gonfalon_sha:0:9}\`](https://github.com/${GONFALON}/commit/${gonfalon_sha}) |"
     echo "| Spec blob | \`${prod_blob}\` |"
     echo
+    if [ -z "${RELEASE_MANIFEST:-}" ] && [ "${DRY_RUN:-false}" != "true" ]; then
+      # A dispatched release does not update release-manifest.json, and the next
+      # release PR refuses to sync until main's names the latest release.
+      echo "Not released from a release PR. Update \`release-manifest.json\` on main to this, or the release PR stops syncing:"
+      echo
+      echo '```json'
+      jq -n --arg v "${version}" --arg g "${gonfalon_sha}" --arg s "${prod_blob}" \
+        '{version: $v, gonfalonSha: $g, specBlob: $s}'
+      echo '```'
+      echo
+    fi
     echo "<details><summary>Changelog</summary>"
     echo
     cat "${workdir}/unreleased.md"

@@ -36,7 +36,8 @@ OWNED_SCRIPTS=(
   scripts/release/token-audit.sh
   scripts/release/verify-published.sh
   scripts/release/mirror-public.sh
-  scripts/release/gonfalon-update.sh
+  scripts/release/dispatch-gonfalon-bump.sh
+  scripts/release/sync-release-pr.sh
   scripts/release/publish.sh
   scripts/release/selfcheck.sh
 )
@@ -165,10 +166,13 @@ sr = re.compile("^" + pol['subject_pattern'] + "$")
 problems = []
 if not sr.match(f"repo:{repo}:ref:refs/heads/main"):
     problems.append(f"subject_pattern does not match a dispatch on main")
+# Only workflows minting this policy's identity; release-pr.yml mints others,
+# whose policies this check does not read.
 minting = []
 for p in glob.glob('.github/workflows/*.yml'):
     doc = yaml.safe_load(open(p))
     if any('octosts-action' in str(s.get('uses',''))
+           and (s.get('with') or {}).get('identity') == 'ld-openapi-downstream'
            for j in (doc.get('jobs') or {}).values() for s in (j.get('steps') or [])):
         minting.append(os.path.basename(p))
 for f in sorted(minting):

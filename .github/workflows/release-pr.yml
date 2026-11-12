@@ -1,0 +1,81 @@
+name: Release PR
+
+# Keeps the "chore: release X.Y.Z" PR (branch release/next) in step with the
+# spec production serves. Merging it releases the clients. See
+# scripts/release/sync-release-pr.sh for how the version and notes are derived.
+on:
+  # Hourly fallback. Most runs exit after one download and a blob comparison.
+  schedule:
+    - cron: '23 * * * *'
+  # gonfalon's deploy pipeline can send this once a spec change reaches
+  # production, so the PR updates within minutes instead of within the hour.
+  repository_dispatch:
+    types: [gonfalon-spec-deployed]
+  # Also how to apply a release:* label right away.
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Build the branch and PR body, push nothing.'
+        required: false
+        type: boolean
+        default: false
+
+# Two syncs at once would race on the force-push.
+concurrency:
+  group: release-pr
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    name: Sync release PR
+    # Mirrored to the public launchdarkly/ld-openapi, where its tokens cannot be
+    # minted; only run here.
+    if: ${{ github.repository == 'launchdarkly/ld-openapi-private' }}
+    runs-on: ubuntu-latest
+    # Required for the OIDC tokens the octosts-action steps exchange.
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      # Pushes made with GITHUB_TOKEN start no workflows, so CI would never run
+      # on the release PR. An App installation token's pushes do. Write on this
+      # repo only: the policy is this repo's own
+      # .github/launchdarkly/ld-openapi-release-pr.sts.yaml.
+      - uses: launchdarkly/octosts-action@v1
+        id: sts-repo
+        with:
+          identity: ld-openapi-release-pr
+          scope: ${{ github.repository }}
+      # Read-only on gonfalon (ld-openapi-spec-read.sts.yaml). Not
+      # ld-openapi-downstream: that grants write on gonfalon and the terraform
+      # provider, which an hourly job has no use for.
+      - uses: launchdarkly/octosts-action@v1
+        id: sts-gonfalon
+        with:
+          identity: ld-openapi-spec-read
+          scope: launchdarkly
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.sts-repo.outputs.token }}
+      - name: Install oasdiff
+        env:
+          OASDIFF_VERSION: 1.34.1
+          OASDIFF_SHA256: 75775f65b0adebd26a8e013af51a799342dfdc6262d89efa9e3b7bdf89657d90
+        run: |
+          set -euo pipefail
+          tarball="oasdiff_${OASDIFF_VERSION}_linux_amd64.tar.gz"
+          curl -s -L --fail -o "$RUNNER_TEMP/$tarball" \
+            "https://github.com/oasdiff/oasdiff/releases/download/v${OASDIFF_VERSION}/${tarball}"
+          echo "${OASDIFF_SHA256}  $RUNNER_TEMP/$tarball" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/$tarball" -C "$RUNNER_TEMP" oasdiff
+          echo "OASDIFF=$RUNNER_TEMP/oasdiff" >> "$GITHUB_ENV"
+      - name: Sync release PR
+        env:
+          GH_TOKEN: ${{ steps.sts-repo.outputs.token }}
+          GONFALON_TOKEN: ${{ steps.sts-gonfalon.outputs.token }}
+          DRY_RUN: ${{ inputs.dryRun }}
+        run: ./scripts/release/sync-release-pr.sh

@@ -15,9 +15,6 @@ centralPortalPassword = ${CENTRAL_PORTAL_PASSWORD}
 systemProp.org.gradle.internal.launcher.welcomeMessageEnabled = false
 EOF
 
-# NPM token
-echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-
 # PyPI token
 echo -e "[pypi]\nusername=__token__\npassword=${PYPI_TOKEN}" > ~/.pypirc
 
