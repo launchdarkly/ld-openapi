@@ -7,6 +7,11 @@ name: CI (build + client samples)
   # the real 'openapi' project, so this doubles as a check that that credential
   # still works — the token audit can only confirm it reads, not that it writes.
   workflow_dispatch:
+  # Nightly, against whatever production serves that day. Client dependency
+  # versions float and the spec changes daily, so without this a broken build is
+  # found by whoever releases next (axios 1.19.0 was, weeks after it shipped).
+  schedule:
+    - cron: '17 9 * * *'
 
 env:
   LD_API_KEY: ${{ secrets.LD_API_KEY }}
@@ -15,7 +20,10 @@ permissions:
   contents: read
 
 jobs:
+  # The nightly run needs LD_API_KEY, which the public mirror
+  # (launchdarkly/ld-openapi) does not have; PRs there still run CI.
   build:
+    if: ${{ github.event_name != 'schedule' || github.repository == 'launchdarkly/ld-openapi-private' }}
     runs-on: ubuntu-latest
     container:
       image: 'ldcircleci/openapi-release:1'
@@ -72,6 +80,7 @@ jobs:
           path: /tmp/api-clients
   selfcheck:
     name: Release automation selfcheck
+    if: ${{ github.event_name != 'schedule' || github.repository == 'launchdarkly/ld-openapi-private' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -129,6 +138,11 @@ jobs:
   test-ruby:
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        ruby-version: ['3.3', '3.4', '4.0']
     steps:
       - uses: actions/checkout@v4
       - name: Download targets
@@ -136,17 +150,9 @@ jobs:
         with:
           name: targets
           path: targets
-      - uses: ruby/setup-ruby@319994f95fa847cf3fb3cd3dbe89f6dcde9f178f # v1
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
         with:
-          ruby-version: '2.7'
-      - name: Prepare RubyGems / ffi
-        run: |
-            # Update RubyGems to a version new enough for ffi 1.17.2
-            gem update --system 3.4.22 || gem update --system 3.3.22
-            gem --version
-
-            # Install ffi pinned to the last series that supports older Ruby/RubyGems
-            gem install ffi -v 1.17.2 --no-document
+          ruby-version: ${{ matrix.ruby-version }}
       - name: Install Gem
         run: |
           cd targets/api-client-ruby

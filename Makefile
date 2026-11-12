@@ -14,6 +14,9 @@ GENERATOR_JAR=openapi-generator-cli-${GENERATOR_VERSION}.jar
 GENERATOR_DOWNLOAD_URL=https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${GENERATOR_VERSION}/${GENERATOR_JAR}
 
 OPENAPI_JSON_URL=https://app.launchdarkly.com/api/v2/openapi.json
+# Set to build from a spec file instead of downloading production's. release.yml
+# passes the spec preflight verified, so the release ships exactly those bytes.
+SPEC_FILE ?=
 LATEST_API_VERSION=20240415 # the API version (for the LD-API-Version header value) corresponding to what is specified in this OpenAPI spec
 
 API_TARGETS ?= \
@@ -52,6 +55,7 @@ CODEGEN_PARAMS_go = \
     --additional-properties=packageName=ldapi \
 	--additional-properties=disallowAdditionalPropertiesIfNotPresent=false \
 	--additional-properties=generateInterfaces=true \
+	--additional-properties=useOneOfDiscriminatorLookup=true \
 	--additional-properties=apiNameSuffix=Api \
 	--additional-properties=email=support@launchdarkly.com \
 	--additional-properties=developerName=LaunchDarkly \
@@ -66,6 +70,7 @@ CODEGEN_PARAMS_java = \
 	--api-package com.launchdarkly.api.api \
 	--model-package com.launchdarkly.api.model \
 	--additional-properties=disallowAdditionalPropertiesIfNotPresent=false \
+	--additional-properties=useOneOfDiscriminatorLookup=true \
 	--additional-properties=artifactId=api-client \
 	--additional-properties=email=support@launchdarkly.com \
 	--additional-properties=developerName=LaunchDarkly \
@@ -82,6 +87,7 @@ CODEGEN_PARAMS_java = \
 CODEGEN_PARAMS_python = \
 	-t $(TEMPLATES_PATH)/python \
 	--additional-properties=packageName=launchdarkly_api \
+	--additional-properties=useOneOfDiscriminatorLookup=true \
 	--additional-properties=packageVersion=$(TAG) \
 	--additional-properties=launchDarklyApiVersion=${LATEST_API_VERSION}
 # TEMPORARY: axios is pinned to 1.18.1 rather than a floating ^1.13.1 range.
@@ -144,7 +150,7 @@ $(GENERATOR_JAR):
 	curl -s -L --fail ${GENERATOR_DOWNLOAD_URL} > $@
 
 $(TARGET_OPENAPI_JSON): $(GENERATOR_JAR) $(TARGETS_PATH)
-	curl -s -L --fail $(OPENAPI_JSON_URL) > $@
+	if [ -n "$(SPEC_FILE)" ]; then cp "$(SPEC_FILE)" $@; else curl -s -L --fail $(OPENAPI_JSON_URL) > $@; fi
 
 $(TARGETS_PATH):
 	mkdir -p $@

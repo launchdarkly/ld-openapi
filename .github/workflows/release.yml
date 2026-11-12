@@ -2,11 +2,27 @@ name: Release client libraries
 
 # Implements the full release runbook.
 #
-# Dispatch with no inputs for a normal release. Everything the runbook asks a
-# human to look up — whether gonfalon is healthy, whether prod is caught up, the
-# bump type, the version, the changelog body — is derived in the preflight job,
-# which aborts with a specific reason rather than releasing on a guess.
+# Normally runs when a release PR (release-pr.yml) merges: the push changes
+# release-manifest.json, and the version, spec and notes are the ones the PR
+# recorded. Every optional job runs, with the defaults below. Preflight checks
+# that the push merged a release PR with an approval of the manifest it merged.
+#
+# To retry a release PR's release, dispatch with fromManifest (and force if tags
+# were left behind): that releases the manifest's spec, version and notes.
+#
+# Dispatch with no inputs to release without a release PR. Afterwards, set
+# release-manifest.json on main to the release (Preflight's summary prints it),
+# or the release PR stops syncing.
+# Everything the runbook asks a human to look up — whether gonfalon is healthy,
+# whether prod is caught up, the bump type, the version, the changelog body — is
+# derived in the preflight job, which aborts with a specific reason rather than
+# releasing on a guess.
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - release-manifest.json
   workflow_dispatch:
     inputs:
       releaseVersion:
@@ -35,12 +51,17 @@ on:
         type: boolean
         default: true
       mirrorPublic:
-        description: 'Squash-mirror this repo onto the public launchdarkly/ld-openapi.'
+        description: 'Open or update a PR copying this repo onto the public launchdarkly/ld-openapi.'
         required: false
         type: boolean
         default: true
       skipCiGate:
         description: "Release even if gonfalon's main branch is red."
+        required: false
+        type: boolean
+        default: false
+      fromManifest:
+        description: "Release what release-manifest.json on this branch records, as a merged release PR does. For a release PR merge whose release failed: combine with force to retry it."
         required: false
         type: boolean
         default: false
@@ -61,8 +82,12 @@ jobs:
   # which is the case that forces the delete-the-tags-and-retry dance. A dry run
   # cannot cover this on its own: create-release is skipped, pr-downstream skips
   # PR creation, and the publish dry-run scripts never authenticate to a registry.
+  # This file is mirrored to the public launchdarkly/ld-openapi, where Actions
+  # runs too and none of the credentials exist. Every other job needs one of
+  # these two, so guarding them keeps a mirror sync from starting a release.
   token-audit:
     name: Token audit
+    if: ${{ github.repository == 'launchdarkly/ld-openapi-private' }}
     # A reusable workflow is capped by what its caller grants, so id-token has to
     # be granted here as well as inside token-audit.yml.
     permissions:
@@ -73,17 +98,19 @@ jobs:
       # Only demand the credentials this run will actually use, so a switched-off
       # job cannot block the release — and so the flow can be rehearsed before
       # those tokens have been created.
-      requireMirrorToken: ${{ inputs.mirrorPublic }}
-      requireDownstreamToken: ${{ inputs.openDownstreamPr }}
+      requireDownstreamToken: ${{ github.event_name == 'push' || inputs.openDownstreamPr }}
     secrets: inherit
 
   preflight:
     name: Preflight
+    if: ${{ github.repository == 'launchdarkly/ld-openapi-private' }}
     runs-on: ubuntu-latest
     # Required for the OIDC token the octosts-action step exchanges.
+    # pull-requests: read is for checking the merged release PR's approval.
     permissions:
       id-token: write
       contents: read
+      pull-requests: read
     outputs:
       version: ${{ steps.derive.outputs.version }}
       major: ${{ steps.derive.outputs.major }}
@@ -104,6 +131,7 @@ jobs:
         id: derive
         # Two tokens: the releaser token for the client repos (tag checks, and tag
         # deletes when force=true), and the federated token for reading gonfalon.
+        # REPO_TOKEN (GITHUB_TOKEN) only reads this repo's pull requests.
         env:
           GH_TOKEN: ${{ secrets.BOT_TOKEN }}
           GONFALON_TOKEN: ${{ steps.sts.outputs.token }}
@@ -112,7 +140,19 @@ jobs:
           FORCE: ${{ inputs.force }}
           SKIP_CI_GATE: ${{ inputs.skipCiGate }}
           SKIP_SPEC_PARITY: ${{ inputs.skipSpecParity }}
+          RELEASE_MANIFEST: ${{ (github.event_name == 'push' || inputs.fromManifest) && 'release-manifest.json' || '' }}
+          # On a push only: the merge has to be an approved release PR.
+          RELEASE_COMMIT: ${{ github.event_name == 'push' && github.sha || '' }}
+          REPO_TOKEN: ${{ github.token }}
+          DRY_RUN: ${{ inputs.dryRun }}
+          SPEC_OUT: ${{ runner.temp }}/openapi.json
         run: ./scripts/release/preflight.sh
+      - name: Upload the verified spec
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-spec
+          path: ${{ runner.temp }}/openapi.json
+          if-no-files-found: error
 
   release:
     name: Build and publish clients
@@ -127,7 +167,6 @@ jobs:
       GH_TOKEN: ${{ secrets.BOT_TOKEN }}
       PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       RUBYGEM_API_KEY: ${{ secrets.RUBYGEM_API_KEY }}
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
       CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
     permissions:
@@ -135,9 +174,15 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      # npm publishes through trusted publishing (OIDC), which needs npm 11.5.1+.
+      # The apt npm is far older, so Node and npm come from setup-node instead.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
       - name: Install dependencies
         run: |
-          sudo apt -q install -y unzip jq nodejs npm python3 python3-pip ruby
+          npm install --global npm@^11.5.1
+          sudo apt -q install -y unzip jq python3 python3-pip ruby
           # Install Go
           curl -s https://dl.google.com/go/go1.15.5.linux-amd64.tar.gz | sudo tar -xz -C /usr/local
           # Install yarn
@@ -161,12 +206,18 @@ jobs:
       - name: Prepare secrets
         run: |
           ./scripts/release/prepare.sh
+      - name: Download the verified spec
+        uses: actions/download-artifact@v4
+        with:
+          name: release-spec
+          path: ${{ runner.temp }}/release-spec
       - name: Build clients
         run: |
           export PATH=/opt/gradle/bin:/usr/local/go/bin:$HOME/.rubygems/bin:$PATH
           export GEM_HOME=$HOME/.rubygems
           java -XX:+PrintFlagsFinal -version | grep ThreadStackSize
-          make
+          # The spec preflight verified, not a fresh download from production.
+          make SPEC_FILE="${RUNNER_TEMP}/release-spec/openapi.json"
           # Verify that the generated client code can be built
           make BUILD_TARGETS="go java python ruby typescript-axios" build_clients
         # This step will:
@@ -223,60 +274,97 @@ jobs:
           tag: v${{ needs.preflight.outputs.version }}
           body: ${{ needs.preflight.outputs.changelog }}
 
-  downstream-gonfalon:
-    name: Gonfalon PR (changelog + api-client-go bump)
+  # A PR of its own, apart from the api-client-go bump: that one rewrites imports
+  # across hundreds of files on a major and can sit in review for days, and the
+  # changelog should not wait on it.
+  downstream-gonfalon-changelog:
+    name: Gonfalon PR (record the release in apidocs/CHANGELOG.md)
     needs: [preflight, verify-published]
-    # Skipped on a rehearsal. The pinned pr-downstream has no `dryrun` input, so
-    # passing one was silently ignored and a dry run would open a real PR; it only
-    # avoided doing so because the version it bumps to did not exist yet.
-    if: ${{ inputs.openDownstreamPr && !inputs.dryRun }}
+    if: ${{ (github.event_name == 'push' || inputs.openDownstreamPr) && !inputs.dryRun }}
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
-    # gonfalon's `make tidy` resolves Go modules from private launchdarkly repos.
-    # Without this, go consults proxy.golang.org for them and gets a 404. The
-    # equivalent workflow in launchdarkly/foundation sets the same variable.
-    env:
-      GOPRIVATE: github.com/launchdarkly/*
-    # gonfalon's `make tidy` and gazelle need bazel and a beefy runner, matching
-    # the gonfalon job in launchdarkly/foundation's pr-downstream workflow.
-    runs-on: runs-on=${{ github.run_id }}/runner=ub24-large-amd
     steps:
-      - uses: runs-on/action@15385172809cc0346c6821b00c3c3dd2598785b4 # v2.1.0
       # Checked out at the workspace root; pr-downstream clones gonfalon into a
-      # subdirectory, so the update script stays reachable by absolute path.
+      # subdirectory, so the script stays reachable by absolute path.
       - uses: actions/checkout@v4
-      - uses: bazel-contrib/setup-bazel@083175551ceeceebc757ebee2127fde78840ca77 # 0.18.0
-        with:
-          bazelisk-version: '1.x'
-          bazelisk-cache: true
+      - name: Write the release notes
+        env:
+          NOTES: ${{ needs.preflight.outputs.changelog }}
+        run: printf '%s\n' "$NOTES" > "$RUNNER_TEMP/release-notes.md"
       - uses: launchdarkly/octosts-action@v1
         id: sts
         with:
           identity: ld-openapi-downstream
           scope: launchdarkly
-      - uses: launchdarkly-labs/pr-downstream@08b3feb5df321ebfed2d0855493e81edbb06a2cf # v1.4.0
+      - uses: launchdarkly/pr-downstream@08b3feb5df321ebfed2d0855493e81edbb06a2cf # v1.4.0
+        id: pr
         with:
           repository: launchdarkly/gonfalon
           token: ${{ steps.sts.outputs.token }}
           author: launchdarkly-octoauth[bot]<226478175+launchdarkly-octoauth[bot]@users.noreply.github.com>
-          # A user, not a team: an OctoSTS App installation token cannot request team
-          # reviewers ("If requesting team reviewers a 'repo' scoped PAT is required"),
-          # which failed the job even though the PR was created. CODEOWNERS in the
-          # downstream repo still pulls in the owning team.
           reviewers: ${{ github.actor }}
-          title: '[bot] API ${{ needs.preflight.outputs.version }}: release changelog and bump api-client-go'
-          branch: bump-api-client-go/${{ needs.preflight.outputs.version }}
-          commit-message: '[bot] Release API ${{ needs.preflight.outputs.version }}: changelog + api-client-go bump'
-          # A major bump rewrites import paths across ~18 Go files and the Bazel
-          # graph, so this wants human eyes before it merges.
+          title: '[bot] API ${{ needs.preflight.outputs.version }}: record the release in apidocs/CHANGELOG.md'
+          branch: api-changelog/${{ needs.preflight.outputs.version }}
+          commit-message: '[bot] Record API ${{ needs.preflight.outputs.version }} in apidocs/CHANGELOG.md'
+          # Moves only the entries this release shipped. Entries merged after its
+          # gonfalon commit stay under [Unreleased].
+          update-command: python3 -I $GITHUB_WORKSPACE/scripts/release/gonfalon-changelog.py apidocs/CHANGELOG.md ${{ needs.preflight.outputs.version }} $(date -u +%Y-%m-%d) $RUNNER_TEMP/release-notes.md $RUNNER_TEMP/changelog-warnings.txt
           auto-merge: false
-          update-command: $GITHUB_WORKSPACE/scripts/release/gonfalon-update.sh ${{ needs.preflight.outputs.version }}
+      # pr-downstream takes no PR body, so a mismatch goes in a comment: an entry
+      # edited in gonfalon after the release shipped needs a human to reconcile.
+      - name: Flag entries edited since the release
+        if: ${{ steps.pr.outputs.pull-request-number != '' }}
+        env:
+          GH_TOKEN: ${{ steps.sts.outputs.token }}
+          PR: ${{ steps.pr.outputs.pull-request-number }}
+        run: |
+          set -euo pipefail
+          [ -s "$RUNNER_TEMP/changelog-warnings.txt" ] || exit 0
+          {
+            echo "These released entries were edited or moved in \`[Unreleased]\` after the release's gonfalon commit. The released text is recorded under the new version and the edited text stays under \`[Unreleased]\`; merge or drop the duplicates as needed:"
+            echo
+            sed 's/^/- /' "$RUNNER_TEMP/changelog-warnings.txt"
+          } > "$RUNNER_TEMP/comment.md"
+          gh pr comment "$PR" --repo launchdarkly/gonfalon --body-file "$RUNNER_TEMP/comment.md"
+
+  # The bump itself runs in gonfalon's own update-api-client-go.yml, with
+  # gonfalon's CI setup (private modules through the content cache, its Bazel
+  # config). Run here, it kept failing on what that setup provides. This job
+  # dispatches it and waits, so a failed bump still fails the release run.
+  downstream-gonfalon:
+    name: Gonfalon PR (api-client-go bump)
+    needs: [preflight, verify-published]
+    # Skipped on a rehearsal: the bump it opens is for a version that would not
+    # exist yet.
+    if: ${{ (github.event_name == 'push' || inputs.openDownstreamPr) && !inputs.dryRun }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      # actions: write on gonfalon only (launchdarkly/.github-private:
+      # ld-openapi-gonfalon-dispatch.sts.yaml), to dispatch and watch the run.
+      - uses: launchdarkly/octosts-action@v1
+        id: sts
+        with:
+          identity: ld-openapi-gonfalon-dispatch
+          scope: launchdarkly
+      - name: Dispatch gonfalon's update-api-client-go and wait for it
+        env:
+          GH_TOKEN: ${{ steps.sts.outputs.token }}
+          VERSION: ${{ needs.preflight.outputs.version }}
+          # A user, not a team; CODEOWNERS in gonfalon still pulls in the owners.
+          REVIEWER: ${{ github.actor }}
+        run: ./scripts/release/dispatch-gonfalon-bump.sh "$VERSION" "$REVIEWER"
 
   downstream-terraform-provider:
     name: Terraform provider PR (api-client-go bump)
     needs: [preflight, verify-published]
-    if: ${{ inputs.openDownstreamPr && !inputs.dryRun }}
+    if: ${{ (github.event_name == 'push' || inputs.openDownstreamPr) && !inputs.dryRun }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -287,7 +375,7 @@ jobs:
         with:
           identity: ld-openapi-downstream
           scope: launchdarkly
-      - uses: launchdarkly-labs/pr-downstream@08b3feb5df321ebfed2d0855493e81edbb06a2cf # v1.4.0
+      - uses: launchdarkly/pr-downstream@08b3feb5df321ebfed2d0855493e81edbb06a2cf # v1.4.0
         with:
           repository: launchdarkly/terraform-provider-launchdarkly
           token: ${{ steps.sts.outputs.token }}
@@ -303,15 +391,15 @@ jobs:
           auto-merge: false
           update-command: make update-api-client-go API_CLIENT_GO_VERSION=${{ needs.preflight.outputs.version }}
 
+  # Its own workflow so a failed mirror can be retried without releasing again.
   mirror-public:
     name: Mirror to public ld-openapi
     needs: [preflight, verify-published]
-    if: ${{ inputs.mirrorPublic }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Squash-mirror private main onto the public repo
-        env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          DRY_RUN: ${{ inputs.dryRun }}
-        run: ./scripts/release/mirror-public.sh "${{ needs.preflight.outputs.version }}"
+    if: ${{ github.event_name == 'push' || inputs.mirrorPublic }}
+    permissions:
+      id-token: write
+      contents: read
+    uses: ./.github/workflows/mirror-public.yml
+    with:
+      version: ${{ needs.preflight.outputs.version }}
+      dryRun: ${{ inputs.dryRun == true }}

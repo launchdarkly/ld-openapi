@@ -1,0 +1,17 @@
+# release-pr.yml: force-push release/next, open, edit or close the release PR,
+# and dismiss stale approvals. An App token, unlike GITHUB_TOKEN, starts CI on
+# its pushes. workflows: write is needed to push release/next after main
+# changes a workflow file. Pinned to release-pr.yml on main, its triggers and
+# this repo's IDs.
+issuer: https://token.actions.githubusercontent.com
+subject_pattern: repo:launchdarkly(@8039656)?/ld-openapi-private(@101676575)?:ref:refs/heads/main
+claim_pattern:
+  job_workflow_ref: launchdarkly/ld-openapi-private/\.github/workflows/release-pr\.yml@refs/heads/main
+  event_name: (schedule|repository_dispatch|workflow_dispatch)
+  repository_id: "101676575"
+  repository_owner_id: "8039656"
+
+permissions:
+  contents: write
+  pull_requests: write
+  workflows: write

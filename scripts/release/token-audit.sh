@@ -19,7 +19,6 @@ set -uo pipefail
 # Set to false when the corresponding job is switched off for this run, so a
 # missing credential cannot block a release that was never going to use it. This
 # also lets the flow be rehearsed before those tokens exist.
-REQUIRE_MIRROR_TOKEN=${REQUIRE_MIRROR_TOKEN:-true}
 REQUIRE_DOWNSTREAM_TOKEN=${REQUIRE_DOWNSTREAM_TOKEN:-true}
 
 pass=(); fail=(); unverified=(); skipped=()
@@ -73,7 +72,7 @@ check_repo_perm() {
 }
 
 echo "== GitHub: BOT_TOKEN =="
-echo "   used by: preflight tag checks, publish.sh push, create-release, mirror-public"
+echo "   used by: preflight tag checks, publish.sh push, create-release"
 for repo in api-client-go api-client-java api-client-python api-client-ruby api-client-typescript; do
   # push also covers creating tags and GitHub releases, which create-release needs.
   check_repo_perm "BOT_TOKEN" "${BOT_TOKEN:-}" "launchdarkly/${repo}" "push"
@@ -127,26 +126,17 @@ else
   fi
 fi
 
-echo
-echo "== GitHub: BOT_TOKEN on the public mirror target =="
-echo "   used by: mirror-public (squash push to launchdarkly/ld-openapi)"
-if [ "${REQUIRE_MIRROR_TOKEN}" = "true" ]; then
-  check_repo_perm "BOT_TOKEN" "${BOT_TOKEN:-}" "launchdarkly/ld-openapi" "push"
-else
-  skip "BOT_TOKEN on launchdarkly/ld-openapi: mirroring is disabled for this run"
-fi
+# The public mirror is not audited here: mirror-public.yml mints its own
+# ld-openapi-mirror token, and only that workflow's policy allows it.
 
 # --- Registries ---------------------------------------------------------------
 echo
 echo "== Registries =="
 
-if [ -z "${NPM_TOKEN:-}" ]; then
-  bad "NPM_TOKEN: secret is not set"
-elif user=$(curl -s -f -H "Authorization: Bearer ${NPM_TOKEN}" https://registry.npmjs.org/-/whoami | jq -r '.username' 2>/dev/null) && [ -n "${user}" ]; then
-  ok "NPM_TOKEN: authenticates as ${user}"
-else
-  bad "NPM_TOKEN: rejected by registry.npmjs.org/-/whoami"
-fi
+# npm publishes through trusted publishing: the release job's OIDC token is
+# exchanged for a short-lived publish token, so there is no stored credential
+# to check. It is proven only when npm publish succeeds.
+unver "npm: trusted publishing (OIDC) from release.yml; proven only at publish time"
 
 # RubyGems API keys are scoped. A key scoped to push_rubygem — all that releasing
 # needs, and the right level of privilege — is rejected by the profile endpoint,

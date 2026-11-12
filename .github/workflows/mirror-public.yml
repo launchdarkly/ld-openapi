@@ -1,0 +1,66 @@
+name: Mirror to public ld-openapi
+
+# Opens or updates the pull request copying this repo's main onto the public
+# launchdarkly/ld-openapi (scripts/release/mirror-public.sh). release.yml calls
+# it after every release. Dispatch it to retry a failed mirror without
+# releasing again.
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      dryRun:
+        required: false
+        type: boolean
+        default: false
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release the sync is for, shown in its PR title. Blank = release-manifest.json.'
+        required: false
+        type: string
+      dryRun:
+        description: 'Build the sync commit, push and open nothing.'
+        required: false
+        type: boolean
+        default: false
+
+# Two syncs at once would race on the mirror/sync force-push.
+concurrency:
+  group: mirror-public
+  cancel-in-progress: false
+
+# A reusable workflow is capped by what its caller grants, so release.yml grants
+# id-token too.
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  mirror:
+    name: Open the public ld-openapi mirror PR
+    # This file is mirrored too; its token can only be minted here.
+    if: ${{ github.repository == 'launchdarkly/ld-openapi-private' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      # Push and PR rights on launchdarkly/ld-openapi only, including workflows:
+      # write, since the sync usually changes .github/workflows. Policy:
+      # launchdarkly/.github-private ld-openapi-mirror.sts.yaml. A token minted
+      # from a reusable workflow names this file, not its caller, in the claim.
+      - uses: launchdarkly/octosts-action@v1
+        id: sts
+        with:
+          identity: ld-openapi-mirror
+          scope: launchdarkly
+      - name: Open or update the PR copying private main to the public repo
+        env:
+          PUBLIC_TOKEN: ${{ steps.sts.outputs.token }}
+          PRIVATE_TOKEN: ${{ github.token }}
+          DRY_RUN: ${{ inputs.dryRun }}
+          VERSION: ${{ inputs.version }}
+        run: ./scripts/release/mirror-public.sh "${VERSION:-$(jq -r .version release-manifest.json)}"
