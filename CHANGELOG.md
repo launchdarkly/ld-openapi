@@ -2,6 +2,47 @@
 
 All notable changes to the LaunchDarkly REST API clients.
 
+## [26.1.0] - 2026-11-18
+
+### Added
+
+- Added optional `disabled` and `description` to each rule in `GET /api/v2/projects/{projectKey}/ai-configs/{configKey}/targeting` and the `PATCH` response for the same path. A disabled rule doesn't match any contexts, so it doesn't serve its variation or rollout. As in the flags API, each field is left out when the rule doesn't set it.
+- Added a `creationDate` filter to `GET /api/v2/approval-requests`, for listing approval requests created before or after a time. It takes the `before` and `after` operators with Unix milliseconds or an RFC 3339 timestamp, and both are exclusive. For example, `filter=creationDate after 1794000000000` lists the approval requests created after that time.
+- Added optional `tools` to agent skills, for pinning AI tools to an agent skill. On create and update, each entry is a `SkillToolRef` with the tool's `key` and an optional `version`, and leaving `version` out pins the tool's latest version at the time of the request. In responses, each entry is a `PinnedSkillToolRef`, which always includes the pinned `version`. Tools are listed in the order they reach the agent, each tool key can appear once, a skill can pin tools only from its own project, up to 20 by default, and you need read access to each tool. On `PATCH`, leaving `tools` out keeps the current tools, and sending it replaces them all; a change to the tools or their order creates a new skill version. This field is being released gradually: until it is enabled for your account, requests that send `tools` return a `400`, and responses leave it out. Affected endpoints:
+  - `POST /api/v2/projects/{projectKey}/ai-configs/skills`
+  - `PATCH /api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}`
+  - `GET /api/v2/projects/{projectKey}/ai-configs/skills`
+  - `GET /api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}`
+  - `GET /api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}/versions`
+- Added optional `skills` and `skillsTotalCount` to `GET /api/v2/projects/{projectKey}/ai-tools/{toolKey}/references`. `skills` lists every agent skill version that pins a version of the tool, old versions included, as `ToolSkillReference` entries with `skillKey`, `skillVersion`, and `toolVersion`, ordered by skill key, then newest skill version first. `limit` and `offset` page `items` and `skills` separately. This field is being released gradually alongside agent skill `tools`, and responses leave it out until it is enabled for your account.
+- Added a `409` response to `DELETE /api/v2/projects/{projectKey}/ai-tools/{toolKey}`. A tool can't be deleted while any version of an agent skill pins it, and the error message names those skills. Removing the tool from a skill creates a new skill version, and older versions keep their pins, so delete the skill to free the tool.
+
+## [26.0.0] - 2026-11-14
+
+### Added
+
+- Added Flag release plans (beta) endpoints for creating, listing, viewing, updating, and deleting flag release plans. A flag release plan is a reusable release configuration for a flag across the environments in a project. For each environment, it sets the release order, the trigger that starts the release, and whether the release is immediate or runs an environment release plan. These are beta endpoints and require the `LD-API-Version: beta` header:
+  - `GET /api/v2/projects/{projectKey}/flag-release-plans`
+  - `POST /api/v2/projects/{projectKey}/flag-release-plans`
+  - `GET /api/v2/projects/{projectKey}/flag-release-plans/{planKey}`
+  - `PUT /api/v2/projects/{projectKey}/flag-release-plans/{planKey}`
+  - `DELETE /api/v2/projects/{projectKey}/flag-release-plans/{planKey}`
+
+### Fixed
+
+- Fixed `GET /api/v2/projects/{projectKey}/views` ignoring `expand=aiConfigsSummary`. Each view in the list now includes `aiConfigsSummary` with the `count` of AI Configs linked to it, as documented. Previously the field was only returned by `GET /api/v2/projects/{projectKey}/views/{viewKey}`.
+
+### Removed
+
+- Removed the Release policies (beta) endpoints from the public API documentation. The release policies API is being shut off in favor of environment release plans, and requests return `403` after shut-off. Use the Environment release plans (beta) endpoints instead. Affected endpoints:
+  - `GET /api/v2/projects/{projectKey}/release-policies`
+  - `POST /api/v2/projects/{projectKey}/release-policies`
+  - `POST /api/v2/projects/{projectKey}/release-policies/order`
+  - `GET /api/v2/projects/{projectKey}/release-policies/{policyKey}`
+  - `PUT /api/v2/projects/{projectKey}/release-policies/{policyKey}`
+  - `DELETE /api/v2/projects/{projectKey}/release-policies/{policyKey}`
+- Removed the unused `ReleasePoliciesAccessRep`, `ReleasePoliciesAccess`, `ReleasePoliciesAccessDenied`, `ReleasePoliciesAccessDeniedReason`, `ReleasePoliciesAccessAllowedRep`, and `ReleasePoliciesAccessAllowedReason` schemas, which were left in the public specification after the Release policies (beta) endpoints were removed. No endpoint referenced them.
+
 ## [25.2.0] - 2026-11-12
 
 ### Added
