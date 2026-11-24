@@ -2,6 +2,16 @@
 
 All notable changes to the LaunchDarkly REST API clients.
 
+## [26.2.0] - 2026-11-21
+
+### Added
+
+- Added `createdAt` and `updatedAt` to flag release plan responses, as Unix milliseconds. Affected endpoints:
+  - `GET /api/v2/projects/{projectKey}/flag-release-plans`
+  - `POST /api/v2/projects/{projectKey}/flag-release-plans`
+  - `GET /api/v2/projects/{projectKey}/flag-release-plans/{planKey}`
+  - `PUT /api/v2/projects/{projectKey}/flag-release-plans/{planKey}`
+
 ## [26.1.0] - 2026-11-18
 
 ### Added
