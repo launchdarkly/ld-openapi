@@ -1,7 +1,7 @@
 {
-  "version": "26.1.0",
-  "previousVersion": "26.0.0",
+  "version": "26.2.0",
+  "previousVersion": "26.1.0",
   "bump": "minor",
-  "gonfalonSha": "cc91a9dd8ebffccf28090d61317af0fcce183595",
-  "specBlob": "1f47a2d48ea2646e17107177b13c70f58deb7961"
+  "gonfalonSha": "a562323d7232ebb3d10b85c98b2ee94cdb14497d",
+  "specBlob": "3351bc6c10ec9b7188ecbfadefa88699d12c9c05"
 }
